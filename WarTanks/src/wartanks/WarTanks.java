@@ -6,6 +6,7 @@
 
 package wartanks;
 
+import map.Direction;
 import map.Map;
 import vehicle.*;
 
@@ -21,7 +22,7 @@ public class WarTanks {
 	 */
 	public static void main(String[] args) throws InterruptedException {
 		Map map = new Map("map16x8", 16, 8);
-		Tank tank1 = new Tank("tank1", map, 0, 0, "est");
+		Tank tank1 = new Tank("tank1", map, 0, 0, Direction.east);
 
 		map.addVehicle(tank1);
 		System.out.println(map.vehicles.getInfo());

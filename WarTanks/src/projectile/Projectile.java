@@ -6,6 +6,7 @@
 
 package projectile;
 
+import map.Direction;
 import map.Map;
 import map.Movable;
 
@@ -18,7 +19,7 @@ public abstract class Projectile implements Movable {
 	private Map map;
 	protected int posX;
 	protected int posY;
-	protected String direction;
+	protected Direction direction;
 
 	/*** Constructeurs ***/
 
@@ -30,7 +31,7 @@ public abstract class Projectile implements Movable {
 	 * @param posY
 	 * @param direction 
 	 */
-	public Projectile(Map map, int posX, int posY, String direction) {
+	public Projectile(Map map, int posX, int posY, Direction direction) {
 		this.map = map;
 		this.posX = posX;
 		this.posY = posY;
@@ -41,7 +42,7 @@ public abstract class Projectile implements Movable {
 
 	public int getPosX() {return this.posX;}
 	public int getPosY() {return this.posY;}
-	public String getDirection() {return this.direction;}
+	public Direction getDirection() {return this.direction;}
 
 	/*** Méthodes ***/
 
@@ -72,7 +73,7 @@ public abstract class Projectile implements Movable {
 	 * 
 	 * @param direction 
 	 */
-	public void rotate(String direction) {
+	public void rotate(Direction direction) {
 		this.direction = direction;
 	}
 }
