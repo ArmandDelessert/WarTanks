@@ -47,3 +47,6 @@ Thumbs.db
 ~*.ppt
 ~*.vsd
 ~*.xls
+
+# Auto add #
+/LWJGL_test/nbproject/private/
