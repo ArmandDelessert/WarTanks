@@ -3,11 +3,12 @@
 # Compilation folder #
 /WarTanks/build/
 /WarTanks/dist/
-/WarTanks/nbproject/
+/WarTanks/nbproject/private/
 /WarTanks/build.xml
 /WarTanks/manifest.mf
 
 /WarTanks2/dist/
+/WarTanks2/nbproject/private/
 
 # Compiled source #
 *.class
