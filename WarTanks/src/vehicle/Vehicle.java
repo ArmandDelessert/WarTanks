@@ -6,6 +6,7 @@
 
 package vehicle;
 
+import map.Direction;
 import map.Map;
 import map.Movable;
 
@@ -19,7 +20,7 @@ public abstract class Vehicle implements Movable {
 	protected Map map;
 	protected int posX;
 	protected int posY;
-	protected String direction;
+	protected Direction direction;
 
 	/*** Constructeurs ***/
 
@@ -32,7 +33,7 @@ public abstract class Vehicle implements Movable {
 	 * @param posY
 	 * @param direction 
 	 */
-	public Vehicle(String name, Map map, int posX, int posY, String direction) {
+	public Vehicle(String name, Map map, int posX, int posY, Direction direction) {
 		this.name = name;
 		this.map = map;
 		this.posX = posX;
@@ -45,7 +46,7 @@ public abstract class Vehicle implements Movable {
 	public String getName() {return this.name;}
 	public int getPosX() {return this.posX;}
 	public int getPosY() {return this.posY;}
-	public String getDirection() {return this.direction;}
+	public Direction getDirection() {return this.direction;}
 
 	/*** Méthodes ***/
 
@@ -76,10 +77,10 @@ public abstract class Vehicle implements Movable {
 	public void moveX(int moveX) {
 		// Changement de direction du véhicule
 		if (moveX > 0) {
-			this.direction = "est";
+			this.direction = Direction.east;
 		}
 		else if (moveX < 0) {
-			this.direction = "west";
+			this.direction = Direction.west;
 		}
 		// Déplacement du véhicule
 		if (this.posX + moveX >= 0 && this.posX + moveX < map.getSizeX()) {
@@ -95,10 +96,10 @@ public abstract class Vehicle implements Movable {
 	public void moveY(int moveY) {
 		// Changement de direction du véhicule
 		if (moveY > 0) {
-			this.direction = "north";
+			this.direction = Direction.north;
 		}
 		else if (moveY < 0) {
-			this.direction = "south";
+			this.direction = Direction.south;
 		}
 		// Déplacement du véhicule
 		if (this.posY + moveY >= 0 && this.posY + moveY < map.getSizeY()) {
@@ -111,7 +112,7 @@ public abstract class Vehicle implements Movable {
 	 * 
 	 * @param direction 
 	 */
-	public void rotate(String direction) {
+	public void rotate(Direction direction) {
 		this.direction = direction;
 	}
 }

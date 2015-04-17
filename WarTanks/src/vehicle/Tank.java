@@ -6,6 +6,7 @@
 
 package vehicle;
 
+import map.Direction;
 import map.Map;
 import projectile.Bullet;
 
@@ -27,7 +28,7 @@ public class Tank extends Vehicle {
 	 * @param posY
 	 * @param direction 
 	 */
-	public Tank(String name, Map map, int posX, int posY, String direction) {
+	public Tank(String name, Map map, int posX, int posY, Direction direction) {
 		super(name, map, posX, posY, direction);
 	}
 

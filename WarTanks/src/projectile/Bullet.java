@@ -6,6 +6,7 @@
 
 package projectile;
 
+import map.Direction;
 import map.Map;
 
 
@@ -25,7 +26,7 @@ public class Bullet extends Projectile {
 	 * @param posY
 	 * @param direction 
 	 */
-	public Bullet(Map map, int posX, int posY, String direction) {
+	public Bullet(Map map, int posX, int posY, Direction direction) {
 		super(map, posX, posY, direction);
 	}
 

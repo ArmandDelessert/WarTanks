@@ -8,12 +8,16 @@
 *.war
 *.ear
 
-# ------------ #
-build/
-nbproject/
-build.xml
-manifest.mf
-
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+<<<<<<< HEAD
 /WarTanks2/dist/
+=======
+
+# Compiled files
+/WarTanks/build/
+/WarTanks/dist/
+/WarTanks/nbproject/
+/WarTanks/build.xml
+/WarTanks/manifest.mf
+>>>>>>> 49d7090dae9454aec125023e8663fd6da7709171

@@ -32,5 +32,5 @@ public interface Movable {
 	 * 
 	 * @param direction 
 	 */
-	public void rotate(String direction);
+	public void rotate(Direction direction);
 }
