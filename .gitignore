@@ -10,6 +10,9 @@
 /WarTanks2/dist/
 /WarTanks2/nbproject/private/
 
+/LWJGL_test/dist/
+/LWJGL_test/nbproject/private/
+
 # Compiled source #
 *.class
 
