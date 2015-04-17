@@ -38,5 +38,12 @@ desktop.ini
 Thumbs.db
 
 # Microsoft Office tmp files #
-~$*.docx
-~$*.xlsx
+~*.docx
+~*.pptx
+~*.vsdx
+~*.xlsx
+
+~*.doc
+~*.ppt
+~*.vsd
+~*.xls
