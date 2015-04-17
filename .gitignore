@@ -1,23 +1,42 @@
-*.class
+# Gitignore file #
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
+# Compilation folder #
+/WarTanks/build/
+/WarTanks/dist/
+/WarTanks/nbproject/
+/WarTanks/build.xml
+/WarTanks/manifest.mf
+
+/WarTanks2/dist/
+
+# Compiled source #
+*.class
 
 # Package Files #
 *.jar
 *.war
 *.ear
 
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
-<<<<<<< HEAD
-/WarTanks2/dist/
-=======
 
-# Compiled files
-/WarTanks/build/
-/WarTanks/dist/
-/WarTanks/nbproject/
-/WarTanks/build.xml
-/WarTanks/manifest.mf
->>>>>>> 49d7090dae9454aec125023e8663fd6da7709171
+# Backup files #
+*.bak
+*~
+
+# OS generated files #
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+desktop.ini
+Thumbs.db
+
+# Microsoft Office tmp files #
+~$*.docx
+~$*.xlsx

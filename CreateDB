@@ -1,9 +1,0 @@
-CREATE TABLE user(
-	id int(11) NOT NULL AUTO_INCREMENT,
-	user_name varchar (255) NOT NULL UNIQUE,
-	pass_word varchar (255) NOT NULL,
-	name varchar(255),
-	last_name varchar(255),
-	admin boolean DEFAULT 0,
-	PRIMARY KEY (id)
-);
