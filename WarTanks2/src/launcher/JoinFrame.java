@@ -5,9 +5,12 @@
  */
 package launcher;
 
+import Slick2d.Game;
 import java.awt.GridLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import org.newdawn.slick.AppGameContainer;
+import org.newdawn.slick.SlickException;
 
 /**
  *
@@ -27,6 +30,7 @@ public class JoinFrame extends JFrame{
         gl.setVgap(5); //Cinq pixels d'espace entre les lignes (V comme Vertical) 
         this.setLayout(gl);
         this.setResizable(false);
+       
     }
     
 }
