@@ -1,35 +1,53 @@
-# Gitignore file #
+#----------------------------------------#
+# Gitignore file                         #
+# WarTanks NetBeans project              #
+#----------------------------------------#
 
 # Compilation folder #
+######################
+
+# WarTanks #
 /WarTanks/build/
 /WarTanks/dist/
 /WarTanks/nbproject/private/
-/WarTanks/build.xml
-/WarTanks/manifest.mf
 
+# WarTanks2 #
+/WarTanks2/build/
 /WarTanks2/dist/
 /WarTanks2/nbproject/private/
 
+# LWJGL_test #
+/LWJGL_test/build/
 /LWJGL_test/dist/
 /LWJGL_test/nbproject/private/
 
+
 # Compiled source #
+###################
 *.class
 
+
 # Package Files #
+#################
 *.jar
 *.war
 *.ear
+
+
+# Backup files #
+################
+*.bak
+*~
+
+
+# Other files #
+###############
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
-
-# Backup files #
-*.bak
-*~
 
 # OS generated files #
 .DS_Store
@@ -52,4 +70,7 @@ Thumbs.db
 ~*.vsd
 ~*.xls
 
+
 # Auto add #
+############
+
