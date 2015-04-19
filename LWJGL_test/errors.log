@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2015-04-19T14:11:34</date>
+  <millis>1429445494151</millis>
+  <sequence>0</sequence>
+  <logger>lwjgl_test.Main</logger>
+  <level>SEVERE</level>
+  <class>lwjgl_test.Main</class>
+  <method>main</method>
+  <thread>1</thread>
+  <message>java.lang.SecurityException: sealing violation: package org.lwjgl.opengl is sealed</message>
+  <exception>
+    <message>java.lang.SecurityException: sealing violation: package org.lwjgl.opengl is sealed</message>
+    <frame>
+      <class>java.net.URLClassLoader</class>
+      <method>getAndVerifyPackage</method>
+      <line>394</line>
+    </frame>
+    <frame>
+      <class>java.net.URLClassLoader</class>
+      <method>defineClass</method>
+      <line>423</line>
+    </frame>
+    <frame>
+      <class>java.net.URLClassLoader</class>
+      <method>access$100</method>
+      <line>73</line>
+    </frame>
+    <frame>
+      <class>java.net.URLClassLoader$1</class>
+      <method>run</method>
+      <line>367</line>
+    </frame>
+    <frame>
+      <class>java.net.URLClassLoader$1</class>
+      <method>run</method>
+      <line>361</line>
+    </frame>
+    <frame>
+      <class>java.security.AccessController</class>
+      <method>doPrivileged</method>
+    </frame>
+    <frame>
+      <class>java.net.URLClassLoader</class>
+      <method>findClass</method>
+      <line>360</line>
+    </frame>
+    <frame>
+      <class>java.lang.ClassLoader</class>
+      <method>loadClass</method>
+      <line>424</line>
+    </frame>
+    <frame>
+      <class>sun.misc.Launcher$AppClassLoader</class>
+      <method>loadClass</method>
+      <line>308</line>
+    </frame>
+    <frame>
+      <class>java.lang.ClassLoader</class>
+      <method>loadClass</method>
+      <line>357</line>
+    </frame>
+    <frame>
+      <class>lwjgl_test.Main</class>
+      <method>create</method>
+      <line>98</line>
+    </frame>
+    <frame>
+      <class>lwjgl_test.Main</class>
+      <method>main</method>
+      <line>76</line>
+    </frame>
+  </exception>
+</record>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+</log>
