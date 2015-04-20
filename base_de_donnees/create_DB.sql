@@ -10,8 +10,8 @@ Description : This file is used to create the database for the WarTanks project.
 # Create the table that contains maps
 CREATE TABLE maps(
 	id int(11) NOT NULL AUTO_INCREMENT,
-	map_name varchar (255) NOT NULL UNIQUE,
-	description TEXT (255) NOT NULL,
+	map_name varchar(255) NOT NULL UNIQUE,
+	description text(255) NOT NULL,
 	image varchar(255),
 	size int(11),
 	nb_player int(11),
