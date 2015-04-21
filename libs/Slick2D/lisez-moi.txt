@@ -3,5 +3,9 @@
 Lien de téléchargement :
 http://slick.ninjacave.com/
 
+Installation avec Eclipse : http://slick.ninjacave.com/wiki/index.php?title=Setting_up_Slick2D_with_Eclipse
+
+Installation avec NetBeans : http://slick.ninjacave.com/wiki/index.php?title=Setting_up_Slick2D_with_NetBeansIDE
+
 Lien vers la java doc :
 http://slick.ninjacave.com/javadoc/

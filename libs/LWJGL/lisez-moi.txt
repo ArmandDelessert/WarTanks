@@ -3,5 +3,7 @@
 Lien de téléchargement :
 http://legacy.lwjgl.org/download.php
 
+Instructions d'installation pour NetBeans : http://wiki.lwjgl.org/index.php?title=Setting_Up_LWJGL_with_NetBeans
+
 Lien vers la java doc :
 http://legacy.lwjgl.org/javadoc/
