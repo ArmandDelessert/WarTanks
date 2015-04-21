@@ -1,0 +1,7 @@
+	Slick2D
+
+Lien de téléchargement :
+http://slick.ninjacave.com/
+
+Lien vers la java doc :
+http://slick.ninjacave.com/javadoc/
