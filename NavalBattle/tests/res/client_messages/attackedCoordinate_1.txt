@@ -1,0 +1,9 @@
+<?xml version="1.0" standalone="yes"?>
+<request type="attackedCoordinate" protocol="1.0">
+	<username>Luc</username>
+	<coordinates>
+		<coordinate x="5" y="5" type="mine" />
+		<coordinate x="5" y="6" type="damaged" />
+		<coordinate x="6" y="6" type="sinked" />
+	</coordinates>
+</request>

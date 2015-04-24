@@ -1,0 +1,8 @@
+NEW_NICKNAME=Nouveau pseudo: 
+MODIFY=Modifier
+CANCEL=Annuler
+ERROR_CONNECTED_TO_A_SERVER_TITLE=Opération impossible
+ERROR_CONNECTED_TO_A_SERVER_CONTENT=Opération impossible, vous êtes connecté à un serveur.
+SPECIFY_YOUR_USERNAME_FIRST_LAUNCH=Veuillez spécifier votre pseudo.
+MINIMUM_LENGTH_ERROR_CONTENT=Le pseudo doit être de 3 caractères minimum.
+MINIMUM_LENGTH_ERROR_TITLE=Longueur minimale

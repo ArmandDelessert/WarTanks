@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<client_config>
+  <last_parameters>
+    <server_name>MonServeur</server_name>
+    <map_size>S</map_size>
+    <mode>1 versus AI</mode>
+    <authorization state="disabled" type="shared_secret">
+      <password/>
+    </authorization>
+    <specials>
+      <special name="mines" state="enabled"/>
+      <special name="satellite" state="enabled"/>
+    </specials>
+  </last_parameters>
+</client_config>

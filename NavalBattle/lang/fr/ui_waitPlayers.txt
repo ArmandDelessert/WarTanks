@@ -1,0 +1,4 @@
+YOU_ARE_CONNECTED_TO=Vous êtes connecté au serveur
+ON=sur
+PLEASE_WAIT=Veuillez patienter. En attente de joueurs...
+DISCONNECT=Déconnecter

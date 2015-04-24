@@ -1,0 +1,4 @@
+<?xml version="1.0" standalone="yes"?>
+<response type="positionMyBoats" protocol="1.0">
+   <result>success</result>
+</response>

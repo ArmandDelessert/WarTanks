@@ -1,0 +1,5 @@
+<?xml version="1.0" standalone="yes" ?>
+<request type="endOfGame" protocol="1.0">
+   <type>winner</type>
+   <winner>Paul</winner>
+</request>

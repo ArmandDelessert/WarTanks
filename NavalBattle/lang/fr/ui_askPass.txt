@@ -1,0 +1,6 @@
+SERVER_NEEDS_PASS=Ce serveur nécessite un mot de passe pour s'y connecter.
+PASSWORD=Mot de passe: 
+CONNECT=Connecter
+CANCEL=Annuler
+ERROR=Erreur
+ERROR_NO_PASSWORD_SPECIFIED=Aucun mot de passe spécifié

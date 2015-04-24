@@ -1,0 +1,12 @@
+BACK=Retour
+LOCAL_IP_ADDRESS=Adresse IP locale: 
+EXTERNAL_IP_ADDRESS=Adresse IP externe: 
+PASSWORD=Mot de passe: 
+CURRENT_GAME=Partie en cours: 
+HISTORY=Historique: 
+ICON= 
+WINNER=Vainqueur
+LOSER=Perdant
+DATE=Date de la partie
+CANNOT_GET_EXTERNAL_IP_ADDR=Une erreur est survenue
+CANNOT_GET_INTERNAL_IP_ADDR=Une erreur est survenue

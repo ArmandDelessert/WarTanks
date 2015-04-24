@@ -1,0 +1,11 @@
+SERVER=Serveur
+WINDOW_TITLE=Bataille navale
+EDIT_PSEUDO=Modifier le pseudo
+SERVER_STATS=Statistiques du serveur
+LIST_SERVERS=Afficher la liste des serveurs
+CONFIG_USERNAME=Configurer pseudo
+QUIT=Quitter
+QUESTION_STOP_SERVER_MESSAGE=Voulez-vous arrêter le serveur ?
+QUESTION_STOP_SERVER_TITLE=Arrêter le serveur ?
+ERROR_CONNECTED_TO_A_SERVER_TITLE=Opération impossible
+ERROR_CONNECTED_TO_A_SERVER_CONTENT=Opération impossible, vous êtes connecté à un serveur.

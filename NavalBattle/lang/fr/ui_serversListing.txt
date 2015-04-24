@@ -1,0 +1,10 @@
+SPECIFY_MANUALLY=Spécifier manuellement
+CONNECT=Connecter
+CANCEL=Annuler
+PASS_PROTECTED=Protégé
+NAME=Nom du serveur
+PLAYERS=Joueurs
+FREE_SPACE_AVAILABLE=Libre
+ERROR=Erreur
+ERROR_NO_SERVER_SELECTED=Aucun serveur sélectionné
+HOST_NAME=Hôte

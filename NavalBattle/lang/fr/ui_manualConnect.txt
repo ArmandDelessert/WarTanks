@@ -1,0 +1,4 @@
+IP_ADDRESS=Adresse IP ou nom d'hôte du serveur: 
+CONNECT=Connecter
+CANCEL=Annuler
+CANNOT_CONNECT_TO_SERVER=Impossible de se connecter au serveur spécifié.

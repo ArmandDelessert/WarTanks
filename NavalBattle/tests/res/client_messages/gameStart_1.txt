@@ -1,0 +1,4 @@
+<?xml version="1.0" standalone="yes" ?>
+<request type="gameStart" protocol="1.0">
+   <first_to_play>Luc</first_to_play>
+</request>
