@@ -21,6 +21,11 @@
 /LWJGL_test/dist/
 /LWJGL_test/nbproject/private/
 
+# NavalBattle #
+/NavalBattle/build/
+/NavalBattle/dist/
+/NavalBattle/nbproject/private/
+
 
 # Compiled source #
 ###################
@@ -85,4 +90,3 @@ Thumbs.db
 
 # Auto add #
 ############
-
