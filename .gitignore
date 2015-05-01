@@ -11,6 +11,11 @@
 /WarTanks/dist/
 /WarTanks/nbproject/private/
 
+# ClientServer #
+/ClientServer/build/
+/ClientServer/dist/
+/ClientServer/nbproject/private/
+
 # LWJGL_test #
 /LWJGL_test/build/
 /LWJGL_test/dist/
