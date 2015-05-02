@@ -20,6 +20,7 @@ public class Main {
 
 	private static Thread client;
 	private static Thread server;
+
 	private static final String ip = "localhost";
 	private static final int port = 1991;
 

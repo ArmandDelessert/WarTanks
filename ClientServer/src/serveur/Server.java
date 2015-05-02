@@ -8,6 +8,7 @@ package serveur;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Level;
@@ -34,7 +35,7 @@ public class Server implements Runnable {
 		try {
 			socket = new ServerSocket(numeroPort);
 		} catch (IOException ex) {
-			throw new IOException("Problème interne à Server.Server() lors de la création du socket !");
+			throw new IOException("Problème interne à Server.Server() lors de la création du socket.");
 		}
 
 		// Hello from server
@@ -84,12 +85,14 @@ public class Server implements Runnable {
 	private class ClientHandler implements Runnable {
 
 		private InputStream is;
+		private OutputStream os;
 
 		public ClientHandler(Socket socket) throws IOException {
 			try {
 				is = socket.getInputStream();
+				os = socket.getOutputStream();
 			} catch (IOException ex) {
-				throw new IOException("Problème interne à Server.ServerHandler.ServerHandler() lors de la création du socket.getInputStream().");
+				throw new IOException("Problème interne à Server.ClientHandler.ClientHandler() lors de la création du socket.getInputStream() ou du socket.getOutputStream().");
 			}
 
 			// Hello from clientHandler
@@ -113,24 +116,59 @@ public class Server implements Runnable {
 
 		/**
 		 * 
+		 * @param message
 		 * @throws IOException 
 		 */
-		private void clientHandler() throws IOException {
+		public void sendStringMessage(String message) throws IOException {
+
+			// Envoi d'un message au client
+			try {
+				os.write(message.getBytes());
+			}
+			catch (IOException ex) {
+				throw new IOException("Problème interne à ClientHandler.sendStringMessage() lors de l'envoie d'un message au client.");
+			}
+		}
+
+		/**
+		 * 
+		 * @return
+		 * @throws IOException 
+		 */
+		public String receiveStringMessage() throws IOException {
 
 			int messageSize = 1024;
 			byte message[] = new byte[messageSize];
 
-			// Écoute du client
+			// Réception d'un message du client
 			try {
 				is.read(message, 0, messageSize);
-
-				// Affichage du message reçu
-				System.out.println(this.getClass() + ": I receive this message from the client:");
-				System.out.println(new String(message));
-
-			} catch (IOException ex) {
-				throw new IOException("Problème interne à Server.ServerHandler.run() lors de la lecture du message reçu.");
 			}
+			catch (IOException ex) {
+				throw new IOException("Problème interne à ClientHandler.receiveStringMessage() lors de la réception du message.");
+			}
+
+			return new String(message);
+		}
+
+		/**
+		 * 
+		 * @throws IOException 
+		 */
+		private void clientHandler() throws IOException {
+
+			String message;
+
+			// Écoute du client
+			message = receiveStringMessage();
+
+			// Affichage du message reçu
+			System.out.println("[" + this.getClass() + "]: " + "I receive this message from the client:");
+			System.out.println(message);
+
+			// Envoie d'une réponse au client
+			System.out.println("[" + this.getClass() + "]: " + "I send \"Hello World!\" to the client.");
+			sendStringMessage("Hello World from <" + this.getClass() + ">!");
 		}
 	}
 }
