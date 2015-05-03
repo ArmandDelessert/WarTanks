@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="32" tileheight="32" nextobjectid="1">
+ <tileset firstgid="1" name="test1" tilewidth="32" tileheight="32">
+  <image source="../../../../../projet/WarTanks/WarTanks2/src/ressources/map/tuiles/LPC Base Assets/tiles/barrel.png" width="128" height="64"/>
+ </tileset>
+ <tileset firstgid="9" name="grass" tilewidth="32" tileheight="32">
+  <image source="../../../../../projet/WarTanks/WarTanks2/src/ressources/map/tuiles/LPC Base Assets/tiles/grass.png" width="96" height="192"/>
+ </tileset>
+ <tileset firstgid="27" name="bridges" tilewidth="32" tileheight="32">
+  <image source="../../../../../projet/WarTanks/WarTanks2/src/ressources/map/tuiles/LPC Base Assets/tiles/bridges.png" width="192" height="224"/>
+ </tileset>
+ <tileset firstgid="69" name="buckets" tilewidth="32" tileheight="32">
+  <image source="../../../../../projet/WarTanks/WarTanks2/src/ressources/map/tuiles/LPC Base Assets/tiles/buckets.png" width="96" height="64"/>
+ </tileset>
+ <tileset firstgid="75" name="castle_lightsources" tilewidth="32" tileheight="32">
+  <image source="../../../../../projet/WarTanks/WarTanks2/src/ressources/map/tuiles/LPC Base Assets/tiles/castle_lightsources.png" width="160" height="128"/>
+ </tileset>
+ <tileset firstgid="95" name="castlefloors_outside" tilewidth="32" tileheight="32">
+  <image source="../../../../../projet/WarTanks/WarTanks2/src/ressources/map/tuiles/LPC Base Assets/tiles/castlefloors_outside.png" width="128" height="160"/>
+ </tileset>
+ <tileset firstgid="115" name="watergrass" tilewidth="32" tileheight="32">
+  <image source="../../../../../projet/WarTanks/WarTanks2/src/ressources/map/tuiles/LPC Base Assets/tiles/watergrass.png" width="96" height="192"/>
+ </tileset>
+ <tileset firstgid="133" name="tuto-slick2d-037-tuile-logic" tilewidth="32" tileheight="32">
+  <image source="../../tuto-slick2d-037-tuile-logic.png" width="160" height="160"/>
+ </tileset>
+ <layer name="Calque de Tile 1" width="30" height="30">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+2TMQ4AIQgE+YOV/P+htsbIwUYg5EIxUQsdQGAi4gCmAm8rC+cM70z0ejsRrxTL7T3LXyD5anlbegP933Mv1aKK97WftV5D3Wi+yH3P+f3q3/POePRa5zFifrUZQtG8llr/0etNZW9EDKi3qckoEEPTNLksueYpHxAOAAA=
+  </data>
+ </layer>
+ <layer name="Calque 2" width="30" height="30">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+2USwqAMAwFAwoqeFzF/+/mvo2g0iwE00L7BmZXmBBKREhqZDAP0C1g+eH9AEeH0/+jPZjh4nCNvNvANkC3g73SrQy72p7rl766VqTW3eB+8/rT1l1tjsNzN2Ys7gEhhBCRE9GIcpYQDgAA
+  </data>
+ </layer>
+ <layer name="Calque 3" width="30" height="30">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC2NgGAWjgDigMUD26o3aO2rvqL2j9g4Re4HlpMMAWT0KRsEoGAWjYBSQBQD2Nf7PEA4AAA==
+  </data>
+ </layer>
+ <layer name="logic" width="30" height="30">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3OOwoAIAxEQS9v4weD6H1NYZFCO5EUb2Bhm7AJAfCpacT0vCPXizeKppoed+r1gl122fWyOzTT9P5p9/RHMr8AAODVAjGh2o8QDgAA
+  </data>
+ </layer>
+</map>
