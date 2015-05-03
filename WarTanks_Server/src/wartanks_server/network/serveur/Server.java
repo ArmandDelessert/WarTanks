@@ -14,14 +14,13 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
 /**
  * Classe Server
  * 
  * @author Armand
  */
 public class Server implements Runnable {
-
-	public boolean running = true;
 
 	private ServerSocket socket;
 
@@ -67,7 +66,7 @@ public class Server implements Runnable {
 		ClientHandler newServerHandler;
 		Socket newSocket;
 
-		while (running) {
+		while (true) {
 			try {
 				newSocket = socket.accept();
 
@@ -78,8 +77,6 @@ public class Server implements Runnable {
 				throw new IOException("Problème interne à Server.clientWaiting() lors de la création du ServerHandler.");
 			}
 		}
-
-		Thread.currentThread().stop();
 	}
 
 	/**
@@ -172,8 +169,6 @@ public class Server implements Runnable {
 			// Envoie d'une réponse au client
 			System.out.println("[" + this.getClass() + "]: " + "I send \"Hello World!\" to the client.");
 			sendStringMessage("Hello World from <" + this.getClass() + ">!");
-
-			Thread.currentThread().stop();
 		}
 	}
 }

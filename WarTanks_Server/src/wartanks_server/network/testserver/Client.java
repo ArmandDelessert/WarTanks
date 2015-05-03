@@ -2,9 +2,6 @@
  * Projet : ClientServer
  * Auteur : Armand Delessert
  * Date   : 01.05.2015
- * 
- * Description :
- * Client de test de la communication client-serveur.
  */
 
 package client;
@@ -15,6 +12,7 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 
 /**
  * Classe Client
@@ -117,7 +115,5 @@ public class Client implements Runnable {
 		// Affichage du message reçu
 		System.out.println("[" + this.getClass() + "]: " + "I receive this message from the server:");
 		System.out.println(message);
-
-		Thread.currentThread().stop();
 	}
 }
