@@ -1,16 +1,19 @@
 /**
  * Projet : ClientServer
  * Auteur : Armand Delessert
- * Date   : 01.05.2015
+ * Date   : 05.05.2015
  * 
  * Description :
- * Serveur de test de la communication client-serveur.
+ * Serveur de test du protocole de communication client-serveur pour le jeu WarTanks.
  */
 
 package serveur;
 
+import clientserver.Message;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -20,11 +23,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Classe Server
- * 
- * @author Armand
+ *
+ * @author Armand Delessert
  */
-public class Server implements Runnable {
+public class ServerTestSerialization implements Runnable {
 
 	public boolean running = true;
 	private List<ClientHandler> clientHandlerList;
@@ -36,7 +38,7 @@ public class Server implements Runnable {
 	 * @param numeroPort
 	 * @throws IOException 
 	 */
-	public Server(int numeroPort) throws IOException {
+	public ServerTestSerialization(int numeroPort) throws IOException {
 
 		clientHandlerList = new LinkedList<>();
 
@@ -81,7 +83,6 @@ public class Server implements Runnable {
 
 				// Création d'un serveur spécifique au client
 				newServerHandler = new ClientHandler(newSocket);
-				clientHandlerList.add(newServerHandler);
 				newServerHandler.run();
 			} catch (IOException ex) {
 				throw new IOException("Problème interne à Server.clientWaiting() lors de la création du ServerHandler.");
@@ -129,6 +130,8 @@ public class Server implements Runnable {
 			} catch (IOException ex) {
 				System.out.println(ex);
 				Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+			} catch (ClassNotFoundException ex) {
+				Logger.getLogger(ServerTestSerialization.class.getName()).log(Level.SEVERE, null, ex);
 			}
 		}
 
@@ -169,27 +172,68 @@ public class Server implements Runnable {
 
 		/**
 		 * 
+		 * @param message 
+		 * @throws java.io.IOException 
+		 */
+		public void sendMessage(Message message) throws IOException {
+
+			// Envoi d'un message au client
+			try {
+				// Sérialisation et envoi du message
+				ObjectOutputStream outputSer = new ObjectOutputStream(outputStream);
+				outputSer.writeObject(message);
+			} catch (IOException ex) {
+				throw new IOException("Problème interne à ClientHandler.sendMessage() lors de l'envoie d'un message au client.");
+			}
+		}
+
+		/**
+		 * 
+		 * @return 
+		 * @throws java.io.IOException 
+		 * @throws java.lang.ClassNotFoundException 
+		 */
+		public Message receiveMessage() throws IOException, ClassNotFoundException {
+
+			Message message;
+
+			// Réception d'un message du client
+			try {
+				// Réception et désérialisation du message
+				ObjectInputStream inputSer = new ObjectInputStream(inputStream);
+				message = (Message)inputSer.readObject();
+			} catch (IOException ex) {
+				throw new IOException("Problème interne à ClientHandler.receiveMessage() lors de la réception du message.");
+			}
+
+			return message;
+		}
+
+		/**
+		 * 
 		 * @throws IOException 
 		 */
-		private void clientHandler() throws IOException {
+		private void clientHandler() throws IOException, ClassNotFoundException {
 
-			String message;
+			Message receivedMessage = new Message("Armand Delessert", "Ça marche pas !");
+			Message sendedMessage = new Message("Armand Delessert", "Hello World from <" + this.getClass() + ">!");
 
 			// Écoute du client
-			message = receiveStringMessage();
+			receivedMessage = receiveMessage();
 
 			// Affichage du message reçu
 			System.out.println("[" + this.getClass() + "]: " + "I receive this message from the client:");
-			System.out.println(message);
+			receivedMessage.afficher();
 
 			// Envoie d'une réponse au client
 			System.out.println("[" + this.getClass() + "]: " + "I send \"Hello World!\" to the client.");
-			sendStringMessage("Hello World from <" + this.getClass() + ">!");
+			sendMessage(sendedMessage);
 
 			// Fin du clientHandler
 			inputStream.close();
 			outputStream.close();
 			socket.close(); // Fermer le socket du clientHandler et non celui du serveur
+			Thread.currentThread().stop();
 			Thread.currentThread().stop();
 		}
 	}
