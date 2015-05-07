@@ -29,7 +29,8 @@ import java.util.logging.Logger;
 public class ServerTestSerialization implements Runnable {
 
 	public boolean running = true;
-	private List<ClientHandler> clientHandlerList;
+	private int nbClientHandler;
+//private List<ClientHandler> clientHandlerList;
 
 	private ServerSocket socket;
 
@@ -40,7 +41,7 @@ public class ServerTestSerialization implements Runnable {
 	 */
 	public ServerTestSerialization(int numeroPort) throws IOException {
 
-		clientHandlerList = new LinkedList<>();
+//	clientHandlerList = new LinkedList<>();
 
 		// Création du socket d'écoute des clients
 		try {
@@ -77,20 +78,27 @@ public class ServerTestSerialization implements Runnable {
 		ClientHandler newServerHandler;
 		Socket newSocket;
 
+		nbClientHandler = 0;
 		while (running) {
 			try {
 				newSocket = socket.accept();
 
 				// Création d'un serveur spécifique au client
 				newServerHandler = new ClientHandler(newSocket);
+//			clientHandlerList.add(newServerHandler);
 				newServerHandler.run();
+				nbClientHandler++;
 			} catch (IOException ex) {
 				throw new IOException("Problème interne à Server.clientWaiting() lors de la création du ServerHandler.");
 			}
 		}
 
 		// Arrêt du serveur
-		while (clientHandlerList.size() > 0); // Attente de la fin des clientHandler
+//	while (clientHandlerList.size() > 0); // Attente de la fin des clientHandler
+		if (nbClientHandler > 0) {
+			System.out.println("nbClientHandler : " + nbClientHandler);
+		}
+
 		socket.close();
 		Thread.currentThread().stop();
 	}
@@ -233,7 +241,12 @@ public class ServerTestSerialization implements Runnable {
 			inputStream.close();
 			outputStream.close();
 			socket.close(); // Fermer le socket du clientHandler et non celui du serveur
-			Thread.currentThread().stop();
+
+			nbClientHandler--;
+			if (nbClientHandler == 0) {
+				running = false; // Fin du serveur lorsqu'il n'y a plus de client à servir
+			}
+
 			Thread.currentThread().stop();
 		}
 	}

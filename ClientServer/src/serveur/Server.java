@@ -27,7 +27,8 @@ import java.util.logging.Logger;
 public class Server implements Runnable {
 
 	public boolean running = true;
-	private List<ClientHandler> clientHandlerList;
+	private int nbClientHandler;
+//private List<ClientHandler> clientHandlerList;
 
 	private ServerSocket socket;
 
@@ -38,7 +39,7 @@ public class Server implements Runnable {
 	 */
 	public Server(int numeroPort) throws IOException {
 
-		clientHandlerList = new LinkedList<>();
+//	clientHandlerList = new LinkedList<>();
 
 		// Création du socket d'écoute des clients
 		try {
@@ -81,15 +82,20 @@ public class Server implements Runnable {
 
 				// Création d'un serveur spécifique au client
 				newServerHandler = new ClientHandler(newSocket);
-				clientHandlerList.add(newServerHandler);
+//			clientHandlerList.add(newServerHandler);
 				newServerHandler.run();
+				nbClientHandler++;
 			} catch (IOException ex) {
 				throw new IOException("Problème interne à Server.clientWaiting() lors de la création du ServerHandler.");
 			}
 		}
 
 		// Arrêt du serveur
-		while (clientHandlerList.size() > 0); // Attente de la fin des clientHandler
+//	while (clientHandlerList.size() > 0); // Attente de la fin des clientHandler
+		if (nbClientHandler > 0) {
+			System.out.println("nbClientHandler : " + nbClientHandler);
+		}
+
 		socket.close();
 		Thread.currentThread().stop();
 	}
@@ -190,6 +196,12 @@ public class Server implements Runnable {
 			inputStream.close();
 			outputStream.close();
 			socket.close(); // Fermer le socket du clientHandler et non celui du serveur
+
+			nbClientHandler--;
+			if (nbClientHandler == 0) {
+				running = false; // Fin du serveur lorsqu'il n'y a plus de client à servir
+			}
+
 			Thread.currentThread().stop();
 		}
 	}
