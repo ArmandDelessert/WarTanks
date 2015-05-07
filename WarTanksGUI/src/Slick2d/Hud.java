@@ -12,17 +12,23 @@ import org.newdawn.slick.SlickException;
 
 /**
  *
- *         this.defeat = new Image("src/ressources/UI/defeat.png");
+ * this.defeat = new Image("src/ressources/UI/defeat.png");
+ *
  * @author Simon
  */
 public class Hud {
 
     private Image playerbars;
     private Image actionbar;
+    private Image bonus;
     private static final int P_BAR_X = 10;
     private static final int P_BAR_Y = 10;
     private static final int P_BAR2_X = 210;
-    private static final int P_BAR2_Y = 536;
+    private static final int P_BAR2_Y = 525;
+
+    private static final int P_BONUS_X = 255;
+    private static final int P_BONUS_Y = 525+35;
+    
     
 
     public void init() throws SlickException {
@@ -34,6 +40,11 @@ public class Hud {
         g.resetTransform();
         g.drawImage(this.playerbars, P_BAR_X, P_BAR_Y);
         g.drawImage(this.actionbar, P_BAR2_X, P_BAR2_Y);
+        
+    }
+    public void addBonus(String name) throws SlickException
+    {
+        this.bonus = new Image(name);
     }
 
 }
