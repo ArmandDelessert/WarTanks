@@ -11,6 +11,11 @@
 /WarTanks/dist/
 /WarTanks/nbproject/private/
 
+# WarTanksGUI #
+/WarTanksGUI/build/
+/WarTanksGUI/dist/
+/WarTanksGUI/nbproject/private/
+
 # ClientServer #
 /ClientServer/build/
 /ClientServer/dist/
