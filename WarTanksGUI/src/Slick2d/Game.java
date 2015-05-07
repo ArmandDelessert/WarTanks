@@ -9,6 +9,8 @@ package Slick2d;
  *
  * @author Simon
  */
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -17,11 +19,13 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.Music;
 import org.newdawn.slick.Sound;
+import org.newdawn.slick.geom.Vector2f;
 
 public class Game extends BasicGame {
 
     Sound shot;
     Music background;
+    private Bullet b;
     private GameContainer container;
     private Map map = new Map();
     private Player player = new Player(map);
@@ -137,8 +141,29 @@ public class Game extends BasicGame {
                     shot.play();
                     break;
                 case Input.KEY_H:
-                    System.out.println("shoot");
+                    System.out.println("HP");
                     player.setHp();
+                    break;
+                case Input.KEY_B:
+                    System.out.println("bonus");
+                     {
+                        try {
+                            hud.addBonus("src/ressources/UI/bonus/bonus1.png");
+                        } catch (SlickException ex) {
+                            Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                    break;
+                case Input.KEY_Q:
+                    System.out.println("mine");
+                    Bulletv2 b = new Bulletv2(map);
+                     {
+                        try {
+                            b.init();
+                        } catch (SlickException ex) {
+                            Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
                     break;
             }
         }

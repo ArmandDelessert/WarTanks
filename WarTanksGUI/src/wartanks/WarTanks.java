@@ -19,7 +19,7 @@ public class WarTanks {
      * @param args the command line arguments
      * @throws java.lang.InterruptedException
      */
-    public static void main(String[] args) throws InterruptedException, IOException, SlickException {
+    public static void main(String[] args) throws IOException, SlickException{
         LauncherFrame laucher = new LauncherFrame();
         AppGameContainer app = new AppGameContainer(new Game(), 800, 600, false);
         app.setShowFPS(false);

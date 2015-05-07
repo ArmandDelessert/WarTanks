@@ -7,7 +7,6 @@ package Slick2d;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
-import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
@@ -63,9 +62,8 @@ public class Player {
             if (this.moving) {
                 float futurX = getFuturX(delta);
                 float futurY = getFuturY(delta);
-                boolean collision = false;
-                //= this.map.isCollision(futurX, futurY);
-                boolean slowed = this.map.isSlowed(futurX, futurY);
+                boolean collision = this.map.isCollision(futurX, futurY);
+                boolean slowed = this.map.isCollision(futurX, futurY);
                 if (collision) {
                     this.moving = false;
                 } else {
