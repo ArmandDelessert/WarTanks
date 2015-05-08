@@ -1,34 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="32" tileheight="32" nextobjectid="1">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="32" tileheight="32">
  <tileset firstgid="1" name="dirt" tilewidth="32" tileheight="32">
   <image source="../tuiles/LPC Base Assets/tiles/dirt.png" width="96" height="192"/>
  </tileset>
  <tileset firstgid="19" name="grass" tilewidth="32" tileheight="32">
   <image source="../tuiles/LPC Base Assets/tiles/grass.png" width="96" height="192"/>
  </tileset>
+ <tileset firstgid="37" name="lava" tilewidth="32" tileheight="32">
+  <image source="../../../../../../sprites/LPC Base Assets/tiles/lava.png" width="96" height="192"/>
+ </tileset>
+ <tileset firstgid="55" name="tuto-slick2d-037-tuile-logic" tilewidth="32" tileheight="32">
+  <image source="../../tuto-slick2d-037-tuile-logic.png" width="160" height="160"/>
+ </tileset>
  <layer name="Calque de Tile 1" width="32" height="32">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+3BAQ0AAADCoPdPbQ8HFAAAAPBuEQAcxwAQAAA=
+   H4sIAAAAAAAAA+3OyQ0AIAwDwfTDDf33hj9pIRFoR/J7bQYAAPCOolWtJfW7NhJ/eNd/zOC+d5e2tRPcz+oCwA8ulHAcbAAQAAA=
   </data>
  </layer>
  <layer name="Calque 2" width="32" height="32">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+3BAQ0AAADCoPdPbQ8HFAAAAPBuEQAcxwAQAAA=
+   H4sIAAAAAAAAA+3BAQ0AAADCoPdPbQ8HFAAAAPBuEQAcxwAQAAA=
   </data>
  </layer>
  <layer name="Calque 3" width="32" height="32">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+3DAQkAAAwEocvy/UOux1Bw1VRVVdXXDzHBL+0AEAAA
-  </data>
- </layer>
- <layer name="logic" width="32" height="32">
-  <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+3BAQ0AAADCoPdPbQ8HFAAAAPBuEQAcxwAQAAA=
+   H4sIAAAAAAAAA+3DAQkAAAwEocvy/UOux1Bw1VRVVdXXDzHBL+0AEAAA
   </data>
  </layer>
  <layer name="slow" width="32" height="32">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+1WOQ7AMAzK1rv9/2/r0RN2FR9RaiRmCJAorRUKeizElbglaezEg3g66iONi3gTH0f9CI0oROwFQdoL9+fhVeqS+9Nu29In96fdXcQdRIi4HyhjKX+LflDGUv4W/aCMpfxner96MPrb542/7mDW3rXn8uq99pyD0ffs7e/LHy4DPbt8AdT/ciYAEAAA
+   H4sIAAAAAAAAA+1WOQ7AMAzK1rv9/2/r0RN2FR9RaiRmCJAorRUKeizElbglaezEg3g66iONi3gTH0f9CI0oROwFQdoL9+fhVeqS+9Nu29In96fdXcQdRIi4HyhjKX+LflDGUv4W/aCMpfxner96MPrb542/7mDW3rXn8uq99pyD0ffs7e/LHy4DPbt8AdT/ciYAEAAA
+  </data>
+ </layer>
+ <layer name="lava" width="32" height="32">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA+3N2wkAMAyAwOzTd7v/bnWLEPDAbyMkSZJUQaNOI+k/adFO+h+69JL+klTdB37Ony4AEAAA
+  </data>
+ </layer>
+ <layer name="logic" width="32" height="32">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA+3NsQkAAAzDsHzV/z/rmrVjQQLPTgAA+GAqfwCuFsd4jnAAEAAA
   </data>
  </layer>
 </map>
