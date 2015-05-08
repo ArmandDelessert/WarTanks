@@ -10,6 +10,8 @@
 /WarTanks/build/
 /WarTanks/dist/
 /WarTanks/nbproject/private/
+# Protection contre la modification de la configuration du projet
+/WarTanks/nbproject/
 
 # WarTanksGUI #
 /WarTanksGUI/build/
