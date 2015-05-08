@@ -25,6 +25,14 @@ public class Player {
     private Animation[] animations = new Animation[8];
 
     private Map map;
+    
+    private final int height = 32;
+    private final int width = 32;
+    
+    public static final int UP = 0;
+    public static final int LEFT = 1;
+    public static final int DOWN = 2;
+    public static final int RIGHT = 3;
 
     public Player(Map map) {
         this.map = map;
@@ -33,7 +41,7 @@ public class Player {
     }
 
     public void init() throws SlickException {
-        SpriteSheet spriteSheet = new SpriteSheet("src/ressources/tanks/MulticolorTanks2.png", 32, 32);
+        SpriteSheet spriteSheet = new SpriteSheet("src/ressources/tanks/MulticolorTanks2.png", this.width, this.height);
         this.animations[0] = loadAnimation(spriteSheet, 0, 1, 0);
         this.animations[1] = loadAnimation(spriteSheet, 0, 1, 1);
         this.animations[2] = loadAnimation(spriteSheet, 0, 1, 2);
@@ -62,8 +70,8 @@ public class Player {
             if (this.moving) {
                 float futurX = getFuturX(delta);
                 float futurY = getFuturY(delta);
-                boolean collision = this.map.isCollision(futurX, futurY);
-                boolean slowed = this.map.isCollision(futurX, futurY);
+                boolean collision = this.map.isCollision(futurX, futurY, this.width, this.height, this.direction);
+                boolean slowed = this.map.isCollision(futurX, futurY, this.width, this.height, this.direction);
                 if (collision) {
                     this.moving = false;
                 } else {
@@ -77,16 +85,16 @@ public class Player {
                     speed = 0.1f;
                 }
                 switch (this.direction) {
-                    case 0:
+                    case UP:
                         this.y -= speed * delta;
                         break;
-                    case 1:
+                    case LEFT:
                         this.x -= speed * delta;
                         break;
-                    case 2:
+                    case DOWN:
                         this.y += speed * delta;
                         break;
-                    case 3:
+                    case RIGHT:
                         this.x += speed * delta;
                         break;
                 }
@@ -113,10 +121,10 @@ public class Player {
     public float getFuturY(int delta) {
         float futurY = this.y;
         switch (this.direction) {
-            case 0:
+            case UP:
                 futurY = this.y - .1f * delta;
                 break;
-            case 2:
+            case DOWN:
                 futurY = this.y + .1f * delta;
                 break;
         }

@@ -44,16 +44,43 @@ public class Map {
         //this.tiledMap.render(0, 0, 2);
     }
 
-    public boolean isCollision(float x, float y) {
+    public boolean isCollision(float x, float y, int width, int height, int direction) {
         int tileW = this.tiledMap.getTileWidth();
         int tileH = this.tiledMap.getTileHeight();
         int logicLayer = this.tiledMap.getLayerIndex("logic");
-        Image tile = this.tiledMap.getTileImage((int) x / tileW, (int) y / tileH, logicLayer);
-        boolean collision = tile != null;
+        Image tile = null;
+        boolean collision;
+
+
+        // Coin haut - gauche
+        if(this.tiledMap.getTileImage((int) (x) / tileW, (int) (y) / tileH, logicLayer) != null) {
+            tile = this.tiledMap.getTileImage((int) (x) / tileW, (int) (y) / tileH, logicLayer);
+            
+            // Coin haut - droite
+        } else if (this.tiledMap.getTileImage((int) (x+width) / tileW, (int) (y) / tileH, logicLayer) != null) {
+            tile = this.tiledMap.getTileImage((int) (x+width) / tileW, (int) (y) / tileH, logicLayer);
+            
+            // Coin bas - gauche
+        } else if (this.tiledMap.getTileImage((int) x / tileW, (int) (y+height) / tileH, logicLayer) != null) {
+            tile = this.tiledMap.getTileImage((int) x / tileW, (int) (y+height) / tileH, logicLayer);
+            // Coin bas - droite
+        } else if (this.tiledMap.getTileImage((int) (x+width) / tileW, (int) (y+height) / tileH, logicLayer) != null) {
+            tile = this.tiledMap.getTileImage((int) (x+width) / tileW, (int) (y+height) / tileH, logicLayer);
+        }
+
+        collision = tile != null;
+        
+        
         if (collision) {
             Color color = tile.getColor((int) x % tileW, (int) y % tileH);
             collision = color.getAlpha() > 0;
         }
+        
+        // Map border collisions management
+        collision = collision || y+height-2 > this.tiledMap.getHeight()*tileH || y-2 < 0 ||
+                    x+width-2 > this.tiledMap.getWidth()*tileW || x-2 < 0;
+        
+        
         return collision;
     }
 
