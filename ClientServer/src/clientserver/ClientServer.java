@@ -64,7 +64,7 @@ public class ClientServer {
 
 		} catch (IOException e) { System.out.println(e); }
 */
-
+/*
 		// Création du serveur et d'un client pour les tests
 		try {
 			server1 = new Thread(new ServerTestSerialization(port1));
@@ -77,5 +77,6 @@ public class ClientServer {
 			server1.join();
 
 		} catch (IOException e) { System.out.println(e); }
+*/
 	}
 }
