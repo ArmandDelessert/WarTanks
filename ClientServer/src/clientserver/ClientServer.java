@@ -37,6 +37,7 @@ public class ClientServer {
 	public static void main(String[] args) throws InterruptedException {
 
 		// Création du serveur et d'un client pour les tests
+		System.out.println("Test 1 : Création du serveur et d'un client pour une communication.");
 		try {
 			server1 = new Thread(new Server(port1));
 			server1.start();
