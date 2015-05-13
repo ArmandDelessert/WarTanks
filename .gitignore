@@ -23,6 +23,11 @@
 /ClientServer/dist/
 /ClientServer/nbproject/private/
 
+# KryoNet_test #
+/KryoNet_test/build/
+/KryoNet_test/dist/
+/KryoNet_test/nbproject/private/
+
 # LWJGL_test #
 /LWJGL_test/build/
 /LWJGL_test/dist/
