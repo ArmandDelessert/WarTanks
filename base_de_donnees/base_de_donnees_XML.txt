@@ -1,6 +1,5 @@
 		Base de données XML
 
-
 	Contenu de la base de données des scores :
 Date de la partie (aaa.mm.jj_hh:mm)
 Nom de la carte
@@ -10,7 +9,6 @@ Noms des joueurs
 	Nombre de joueurs détruits (nb d'adversaires que le joueur détruit)
 	Nombre de destructions (nb fois que le joueur est détruit)
 
-
 	Contenu de la base de données des cartes :
 ID
 Nom de la map
@@ -19,3 +17,5 @@ Nombre de joueur max
 Description
 Nom du fichier de la map
 Nom du fichier de la miniature
+
+Faire également une fonction de lecture et une fonction d'écriture pour chacune de ces 2 bases de données.
