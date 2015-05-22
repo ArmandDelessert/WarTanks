@@ -16,26 +16,29 @@ import org.newdawn.slick.SpriteSheet;
  * @author Simon
  */
 public class Ennemy {
-    
+
     int playerID = 1; //sera attribuer par le serveur
     private float x = 350, y = 350;
+    private Explosion e;
     private int HP;
+    private boolean kaboomed = false;
     private float speed;
     private int direction = 0;
     private boolean moving = false;
     private Animation[] animations = new Animation[8];
+    private Animation[] diedAnimation = new Animation[32];
 
     private Map map;
-    
+
     private final int height = 32;
     private final int width = 32;
-    
+
     public static final int UP = 0;
     public static final int LEFT = 1;
     public static final int DOWN = 2;
     public static final int RIGHT = 3;
 
-    public Ennemy(Map map, int x, int y,int randDirection,int id) {
+    public Ennemy(Map map, int x, int y, int randDirection, int id) {
         this.x = x;
         this.y = y;
         this.direction = randDirection;
@@ -55,6 +58,8 @@ public class Ennemy {
         this.animations[5] = loadAnimation(spriteSheet, 1, 8, 1);
         this.animations[6] = loadAnimation(spriteSheet, 1, 8, 2);
         this.animations[7] = loadAnimation(spriteSheet, 1, 8, 3);
+        e = new Explosion(map, (int) x-16, (int) y-16);
+        e.init();
     }
 
     private Animation loadAnimation(SpriteSheet spriteSheet, int startX, int endX, int y) {
@@ -68,6 +73,10 @@ public class Ennemy {
     public void render(Graphics g) throws SlickException {
         g.setColor(new Color(0, 0, 0, .5f));
         g.drawAnimation(animations[direction + (moving ? 4 : 0)], x, y);
+        if (HP == 0) {
+            e.render(g);
+        }
+        kaboomed = true;
     }
 
     public void update(int delta) throws SlickException {
@@ -104,8 +113,16 @@ public class Ennemy {
                         break;
                 }
             }
-        }else  {
-            //mort
+        } else {
+            SpriteSheet spriteSheet = new SpriteSheet("src/ressources/tanks/MulticolorTanksBlack.png", this.width, this.height);
+            this.animations[0] = loadAnimation(spriteSheet, 0, 1, 0);
+            this.animations[1] = loadAnimation(spriteSheet, 0, 1, 1);
+            this.animations[2] = loadAnimation(spriteSheet, 0, 1, 2);
+            this.animations[3] = loadAnimation(spriteSheet, 0, 1, 3);
+            this.animations[4] = loadAnimation(spriteSheet, 1, 8, 0);
+            this.animations[5] = loadAnimation(spriteSheet, 1, 8, 1);
+            this.animations[6] = loadAnimation(spriteSheet, 1, 8, 2);
+            this.animations[7] = loadAnimation(spriteSheet, 1, 8, 3);
 
         }
     }
@@ -167,16 +184,21 @@ public class Ennemy {
     public void setMoving(boolean moving) {
         this.moving = moving;
     }
-    void setHp()
-    {
-        HP--;
+
+    void setHp() {
+        if(HP == 0)
+        {
+            HP = 0;
+        }else{
+            HP--;
+        }
     }
-    void setHp(int HP)
-    {
+
+    void setHp(int HP) {
         this.HP = HP;
     }
-    int getHP()
-    {
+
+    int getHP() {
         return HP;
     }
 }
