@@ -51,9 +51,6 @@ public class Map {
         Image tile = null;
         boolean collision;
 
-<<<<<<< HEAD
-
-        
         // Coin haut - gauche
         if(this.tiledMap.getTileImage((int) (x) / tileW, (int) (y) / tileH, logicLayer) != null && (direction == Player.UP || direction == Player.LEFT)) {
             tile = this.tiledMap.getTileImage((int) (x) / tileW, (int) (y) / tileH, logicLayer);
@@ -69,23 +66,6 @@ public class Map {
         } else if (this.tiledMap.getTileImage((int) (x+width-2) / tileW, (int) (y+height-2) / tileH, logicLayer) != null && (direction == Player.DOWN || direction == Player.RIGHT)) {
             tile = this.tiledMap.getTileImage((int) (x+width-2) / tileW, (int) (y+height-2) / tileH, logicLayer);
         }
-=======
-//        // Coin haut - gauche
-//        if (this.tiledMap.getTileImage((int) (x) / tileW, (int) (y) / tileH, logicLayer) != null) {
-//            tile = this.tiledMap.getTileImage((int) (x) / tileW, (int) (y) / tileH, logicLayer);
-//
-//            // Coin haut - droite
-//        } else if (this.tiledMap.getTileImage((int) (x + width) / tileW, (int) (y) / tileH, logicLayer) != null) {
-//            tile = this.tiledMap.getTileImage((int) (x + width) / tileW, (int) (y) / tileH, logicLayer);
-//
-//            // Coin bas - gauche
-//        } else if (this.tiledMap.getTileImage((int) x / tileW, (int) (y + height) / tileH, logicLayer) != null) {
-//            tile = this.tiledMap.getTileImage((int) x / tileW, (int) (y + height) / tileH, logicLayer);
-//            // Coin bas - droite
-//        } else if (this.tiledMap.getTileImage((int) (x + width) / tileW, (int) (y + height) / tileH, logicLayer) != null) {
-//            tile = this.tiledMap.getTileImage((int) (x + width) / tileW, (int) (y + height) / tileH, logicLayer);
-//        }
->>>>>>> 6e60ea0d47aca972ccc850ccd136b5339799832b
 
         collision = tile != null;
 
