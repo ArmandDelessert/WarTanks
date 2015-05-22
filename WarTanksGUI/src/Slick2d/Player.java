@@ -5,6 +5,13 @@
  */
 package Slick2d;
 
+import java.util.LinkedList;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
@@ -15,29 +22,38 @@ import org.newdawn.slick.SpriteSheet;
  *
  * @author Simon
  */
-public class Player {
+public class Player extends Observable {
 
+    int playerID = 1; //sera attribuer par le serveur
     private float x = 300, y = 300;
     private int HP;
     private float speed;
     private int direction = 0;
     private boolean moving = false;
+    private LinkedList listBonus = new LinkedList();
+    private LinkedList listBullet = new LinkedList();
+    private LinkedList listEnnemy = new LinkedList();
+
     private Animation[] animations = new Animation[8];
 
     private Map map;
-    
+
     private final int height = 32;
     private final int width = 32;
-    
+
     public static final int UP = 0;
     public static final int LEFT = 1;
     public static final int DOWN = 2;
     public static final int RIGHT = 3;
 
-    public Player(Map map) {
+    public Player(Map map, int x, int y,int randDirection,int id, Observer o) {
         this.map = map;
+        this.x = x;
+        this.y = y;
+        this.direction = direction;
         HP = 3;
         speed = .1f;
+        this.addObserver(o);
     }
 
     public void init() throws SlickException {
@@ -60,29 +76,26 @@ public class Player {
         return animation;
     }
 
-    public void render(Graphics g) throws SlickException {
+    public synchronized void render(Graphics g) throws SlickException {
+        
+        for (int i = 0 ; i < listBullet.size(); i++) {
+            ((Bullet) listBullet.get(i)).render(g);
+        }
         g.setColor(new Color(0, 0, 0, .5f));
         g.drawAnimation(animations[direction + (moving ? 4 : 0)], x, y);
     }
 
-    public void update(int delta) throws SlickException {
+    public synchronized void update(int delta) throws SlickException {
         if (HP > 0) {
             if (this.moving) {
                 float futurX = getFuturX(delta);
                 float futurY = getFuturY(delta);
                 boolean collision = this.map.isCollision(futurX, futurY, this.width, this.height, this.direction);
-                boolean slowed = this.map.isCollision(futurX, futurY, this.width, this.height, this.direction);
                 if (collision) {
                     this.moving = false;
                 } else {
                     this.x = futurX;
                     this.y = futurY;
-                }
-
-                if (slowed) {
-                    speed = 0.02f;
-                } else {
-                    speed = 0.1f;
                 }
                 switch (this.direction) {
                     case UP:
@@ -99,7 +112,13 @@ public class Player {
                         break;
                 }
             }
-        }else  {
+            for (int i = 0; i < listBullet.size(); i++) {
+                ((Bullet) listBullet.get(i)).update(delta);
+                if (((Bullet) listBullet.get(i)).getCollison()) {
+                    listBullet.remove(i);
+                }
+            }
+        } else {
             //mort
 
         }
@@ -109,10 +128,10 @@ public class Player {
         float futurX = this.x;
         switch (this.direction) {
             case 1:
-                futurX = this.x - .1f * delta;
+                futurX = this.x - speed * delta;
                 break;
             case 3:
-                futurX = this.x + .1f * delta;
+                futurX = this.x + speed * delta;
                 break;
         }
         return futurX;
@@ -122,10 +141,10 @@ public class Player {
         float futurY = this.y;
         switch (this.direction) {
             case UP:
-                futurY = this.y - .1f * delta;
+                futurY = this.y - speed * delta;
                 break;
             case DOWN:
-                futurY = this.y + .1f * delta;
+                futurY = this.y + speed * delta;
                 break;
         }
         return futurY;
@@ -162,16 +181,144 @@ public class Player {
     public void setMoving(boolean moving) {
         this.moving = moving;
     }
-    void setHp()
-    {
+
+    void setHp() {
         HP--;
     }
-    void setHp(int HP)
-    {
+
+    void setHp(int HP) {
         this.HP = HP;
     }
-    int getHP()
-    {
+
+    int getHP() {
         return HP;
     }
+
+    void addBonus(Bonus b) {
+        System.out.println(b.name);
+        b.setAvaliable(3);
+        listBonus.add(b);
+        setChanged();
+        this.notifyObservers(b);
+    }
+
+    void shoot() throws SlickException {
+        listBullet.add(new Bullet(map, (int) x, (int) y, direction));
+    }
+
+    void setEnnemyList(LinkedList ennemyList) {
+        this.listEnnemy = ennemyList;
+    }
+
+    LinkedList getlistBullet() {
+        return listBullet;
+    }
+
+    Bonus getBonus(int index) {
+        if (index < listBonus.size()) {
+            return (Bonus) listBonus.get(index);
+        }
+        return null;
+    }
+
+    LinkedList getListBonus() {
+        return listBonus;
+    }
+
+    void lauchSpell(int type) throws SlickException {
+        switch (type) {
+            case 1:
+                playerLauncheSpeedUp();
+                break;
+            case 2:
+                playerLauncheMine();
+                break;
+            case 6:
+                playerLauncheMultiShoot();
+                break;
+            case 8 :
+                playerlauncheALPHASTRIK();
+            case 9:
+                playerLauncheHeal();
+                break;
+
+        }
+    }
+
+    void playerLauncheLaser() {
+
+    }
+
+    void playerLauncheMine() {
+        try {
+            listBullet.add(new Mine(map, (int) x, (int) y, direction));
+        } catch (SlickException ex) {
+            Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    void playerLauncheSpeedUp() {
+        if (speed == .1f) {
+            speed = .2f;
+            System.out.println(speed);
+            TimerTask task;
+            task = new TimerTask() {
+                @Override
+                public void run() {
+                    System.out.println("SpeedDown");
+                    speed = .1f;
+                }
+            };
+            Timer timer = new Timer();
+            timer.schedule(task, 10 * 1000);
+        }
+    }
+
+    void playerLauncheHeal() {
+        this.HP++;
+    }
+
+    void playerLauncheMultiShoot() throws SlickException {
+        listBullet.add(new Bullet(map, (int) x, (int) y, 0));
+        listBullet.add(new Bullet(map, (int) x, (int) y, 1));
+        listBullet.add(new Bullet(map, (int) x, (int) y, 2));
+        listBullet.add(new Bullet(map, (int) x, (int) y, 3));
+
+//        TimerTask task;
+//        task = new TimerTask() {
+//            @Override
+//            public synchronized void run() {
+//                try {
+//                    listBullet.add(new Bullet(map, (int) x, (int) y, 0));
+//                    listBullet.add(new Bullet(map, (int) x, (int) y, 1));
+//                    listBullet.add(new Bullet(map, (int) x, (int) y, 2));
+//                    listBullet.add(new Bullet(map, (int) x, (int) y, 3));
+//                } catch (SlickException ex) {
+//                    Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//            }
+//        };
+//        Timer timer = new Timer();
+//        timer.scheduleAtFixedRate(task, 0,2 * 1000);
+    }
+    void playerlauncheALPHASTRIK()
+    {
+        try {
+            if(direction == UP)
+            {
+                listBullet.add(new AlphaStrick(map, (int) x, (int) y - 160, direction));
+            }
+            if(direction == DOWN)
+            {
+                listBullet.add(new AlphaStrick(map, (int) x, (int) y + 160, direction));
+            }
+        } catch (SlickException ex) {
+            Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
+        }  
+    }
+
+    LinkedList listEnnemy() {
+        return listEnnemy;
+    }
+
 }

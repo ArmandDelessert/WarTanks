@@ -9,51 +9,115 @@ package Slick2d;
  *
  * @author Simon
  */
+import java.util.LinkedList;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static org.lwjgl.opengl.Display.getHeight;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.Music;
 import org.newdawn.slick.Sound;
-import org.newdawn.slick.geom.Vector2f;
 
 public class Game extends BasicGame {
 
+    int nbrPlayer = 10;
+    int nbrBonus = 10;
+    int gameTimeSec = 30;
     Sound shot;
     Music background;
-    private Bullet b;
     private GameContainer container;
     private Map map = new Map();
-    private Player player = new Player(map);
-    private float xCamera = player.getX(), yCamera = player.getY();
-    private Hud hud = new Hud();
+    private int dead = 0;
+    private LinkedList listBonus = new LinkedList();
+    private LinkedList listEnnemy = new LinkedList();
+
+    private Hud hud;
+    private Player player;
+    private float xCamera;
+    private float yCamera;
 
     public Game() throws SlickException {
         super("Wartanks");
         shot = new Sound("src/ressources/sound/2.ogg");
     }
 
+    Bonus bonusFactory() {
+        int type = (int) (Math.random() * (9 + 1 - 1)) + 1;
+        int randx = (int) (Math.random() * (32 * (this.map.getWidth() - 1)));
+        int randy = (int) (Math.random() * (32 * (this.map.getHeight() - 1)));
+        return new Bonus(map, type, randx, randy);
+    }
+
+    Ennemy ennemyFactory(int ID) {
+        int randx = (int) (Math.random() * (32 * (this.map.getWidth() - 1)));
+        int randy = (int) (Math.random() * (32 * (this.map.getHeight() - 1)));
+        int randDirection = (int) (Math.random() * (3 + 1 - 1)) + 1;
+        return new Ennemy(map, randx, randy, randDirection, ID);
+    }
+    Player playerFactory(int ID)
+    {
+        int randx = (int) (Math.random() * (32 * (this.map.getWidth() - 1)));
+        int randy = (int) (Math.random() * (32 * (this.map.getHeight() - 1)));
+        int randDirection = (int) (Math.random() * (3 + 1 - 1)) + 1;
+        return new Player(map, randx, randy, gameTimeSec, randDirection, hud);
+    }
+
     @Override
     public void init(GameContainer container) throws SlickException {
         this.container = container;
         this.map.init();
+        
+        hud = new Hud(container);
+        player = playerFactory(dead);
+        xCamera = player.getX();
+        yCamera = player.getY();
+        this.map.init();
         this.player.init();
+        dead = 0;
+
+        for (int i = 0; i < nbrBonus; i++) {
+            listBonus.add(bonusFactory());
+        }
+
+        for (int i = 0; i < nbrPlayer; i++) {
+            listEnnemy.add(ennemyFactory(i));
+        }
+        for (Object listBonu : listBonus) {
+            ((Bonus) listBonu).init();
+        }
+
+        for (Object listEnnemy1 : listEnnemy) {
+            ((Ennemy) listEnnemy1).init();
+        }
+        player.setEnnemyList(listEnnemy);
         background = new Music("src/ressources/sound/1.ogg");
         background.setVolume(.05f);
         background.loop();
         this.hud.init();
+        hud.setLisEnnemyList(listEnnemy);
     }
 
     @Override
-    public void render(GameContainer container, Graphics g) throws SlickException {
+    public synchronized void render(GameContainer container, Graphics g) throws SlickException {
         g.translate(container.getWidth() / 2 - (int) xCamera, container.getHeight() / 2
                 - (int) yCamera);
         this.map.renderBackground();
         this.player.render(g);
+        for (Object listBonu : listBonus) {
+            ((Bonus) listBonu).render(g);
+        }
+        for (int i = 0; i < listEnnemy.size(); i++) {
+            ((Ennemy) listEnnemy.get(i)).render(g);
+            if (((Ennemy) listEnnemy.get(i)).getHP() <= 0) {
+
+            }
+        }
         this.map.renderForeground();
         this.hud.render(g);
         if (player.getHP() == 0) {
@@ -62,13 +126,158 @@ public class Game extends BasicGame {
             defeat.init();
             defeat.render(g);
         }
+        dead = 0;
+        for (int i = 0; i < listEnnemy.size(); i++) {
+            if (((Ennemy) listEnnemy.get(i)).getHP() > 0) {
+                break;
+            } else {
+                dead++;
+            }
+        }
+        if (dead == listEnnemy.size()) {
+            Victory victory = new Victory();
+            victory.init();
+            victory.render(g);
+            player.getListBonus().clear();
+            this.listBonus.clear();
+            listEnnemy.clear();
+            this.init(container);
+
+        }
+
     }
 
     @Override
     public void update(GameContainer container, int delta) throws SlickException {
         this.player.update(delta);
         updateCamera(container);
+        for (int i = 0; i < listEnnemy.size(); i++) {
+            ((Ennemy) listEnnemy.get(i)).update(delta);
+            isColisionWithEnnemy((Ennemy) listEnnemy.get(i), delta);
+            for (int y = 0; y < player.getlistBullet().size(); y++) {
+                if (isCollisionBulletEnnemy((Ennemy) listEnnemy.get(i), (Bullet) player.getlistBullet().get(y), delta)) {
+                    ((Ennemy) listEnnemy.get(i)).setHp();
+                    hud.setLisEnnemyList(listEnnemy);
+                    System.out.println("boooom");
+                    if (!(player.getlistBullet().get(y) instanceof AlphaStrick)) {
+                        player.getlistBullet().remove(y);
+                    } else {
+                        if (((AlphaStrick) player.getlistBullet().get(y)).getExplosion().isFinished()) {
+                            player.getlistBullet().remove(y);
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+        for (int y = 0; y < player.getlistBullet().size(); y++) {
+            if ((player.getlistBullet().get(y) instanceof AlphaStrick)) {
+                if (((AlphaStrick) player.getlistBullet().get(y)).getExplosion().isFinished()) {
+                    player.getlistBullet().remove(y);
+                }
+            }
+        }
+        isCollisionWithBonus(delta);
+    }
 
+    public boolean isCollisionBulletEnnemy(Ennemy e, Bullet b, int delta) {
+        return (e.getX() > b.getX() || e.getX() + 32 > b.getX())
+                && (e.getX() < b.getX() + b.getWidth())
+                && (e.getY() > b.getY() || e.getY() + 32 > b.getY())
+                && (e.getY() < b.getY() + b.getHeight());
+    }
+
+    public void isColisionWithEnnemy(Ennemy e, int delta) {
+
+        //direction droite
+        if (isbetween(player.getFuturX(delta) + 26, e.getX(), e.getX() + 26) && player.getDirection() == 3
+                && (isbetween(player.getFuturY(delta), e.getY(), e.getY() + 26))) {
+            player.setMoving(false);
+        }
+        if (isbetween(player.getFuturX(delta) + 26, e.getX(), e.getX() + 26) && player.getDirection() == 3
+                && (isbetween(player.getFuturY(delta) + 26, e.getY(), e.getY() + 26))) {
+            player.setMoving(false);
+        }
+
+        //direction haut
+        if (isbetween(player.getFuturX(delta), e.getX(), e.getX() + 25) && player.getDirection() == 0
+                && (isbetween(player.getFuturY(delta), e.getY(), e.getY() + 28))) {
+            player.setMoving(false);
+        }
+        if (isbetween(player.getFuturX(delta) + 25, e.getX(), e.getX() + 25) && player.getDirection() == 0
+                && (isbetween(player.getFuturY(delta), e.getY(), e.getY() + 28))) {
+            player.setMoving(false);
+        }
+
+        //direction bas
+        if (isbetween(player.getFuturX(delta), e.getX(), e.getX() + 25) && player.getDirection() == 2
+                && (isbetween(player.getFuturY(delta) + 28, e.getY(), e.getY() + 28))) {
+            player.setMoving(false);
+        }
+        if (isbetween(player.getFuturX(delta) + 25, e.getX(), e.getX() + 25) && player.getDirection() == 2
+                && (isbetween(player.getFuturY(delta) + 28, e.getY(), e.getY() + 26))) {
+            player.setMoving(false);
+        }
+        //direction gauche
+        if (isbetween(player.getFuturX(delta), e.getX(), e.getX() + 26) && player.getDirection() == 1
+                && (isbetween(player.getFuturY(delta), e.getY(), e.getY() + 26))) {
+            player.setMoving(false);
+        }
+        if (isbetween(player.getFuturX(delta), e.getX(), e.getX() + 26) && player.getDirection() == 1
+                && (isbetween(player.getFuturY(delta) + 26, e.getY(), e.getY() + 26))) {
+            player.setMoving(false);
+        }
+
+    }
+
+    public void isCollisionWithBonus(int delta) throws SlickException {
+        int reload = 0;
+        for (int i = 0; i < listBonus.size(); i++) {
+            if ((this.player.getX() > ((Bonus) listBonus.get(i)).getX() || this.player.getX() + 32 > ((Bonus) listBonus.get(i)).getX())
+                    && (this.player.getX() < ((Bonus) listBonus.get(i)).getX() + ((Bonus) listBonus.get(i)).getWidth())
+                    && (this.player.getY() > ((Bonus) listBonus.get(i)).getY() || this.player.getY() + 32 > ((Bonus) listBonus.get(i)).getY())
+                    && this.player.getY() < ((Bonus) listBonus.get(i)).getY() + ((Bonus) listBonus.get(i)).getHeight()) {
+                // si on n'a pas 5 bonus on ajout le bonus
+                if (player.getListBonus().size() < 5) {
+                    reload = 0;
+                    for (int y = 0; y < player.getListBonus().size(); y++) {
+                        if (((Bonus) player.getListBonus().get(y)).getType() == ((Bonus) listBonus.get(i)).getType()) {
+                            ((Bonus) player.getListBonus().get(y)).setAvaliable(((Bonus) player.getListBonus().get(y)).getAvaliable() + 3);
+                            System.out.println("reload");
+                            reload = 1;
+                            break;
+                        }
+                    }
+                    if (reload == 0) {
+                        player.addBonus((Bonus) listBonus.get(i));
+                        System.out.println("add");
+                    }
+                } else {
+                    //si non on va chercher si le joueur possed le bonus
+                    for (int y = 0; y < player.getListBonus().size(); y++) {
+                        if (((Bonus) player.getListBonus().get(y)).getType() == ((Bonus) listBonus.get(i)).getType()) {
+                            ((Bonus) player.getListBonus().get(y)).setAvaliable(((Bonus) player.getListBonus().get(y)).getAvaliable() + 3);
+                            System.out.println("reload");
+                            break;
+                        } else if (((Bonus) player.getListBonus().get(y)).getAvaliable() == 0) {
+                            player.getListBonus().set(y, ((Bonus) listBonus.get(i)));
+                            System.out.println("change");
+                            ((Bonus) player.getListBonus().get(y)).setAvaliable(((Bonus) player.getListBonus().get(y)).getAvaliable() + 3);
+                            hud.getListBonus().set(y, new Image("src/ressources/UI/bonus/bonus" + ((Bonus) listBonus.get(i)).getType() + ".png"));
+                            break;
+                        } else {
+                            System.out.println("nothing");
+                        }
+                    }
+                }
+                listBonus.remove(i);
+            }
+
+        }
+    }
+
+    private boolean isbetween(double val, double b1, double b2) {
+        return val >= b1 && val < b2;
     }
 
     private boolean isInTrigger(int id) {
@@ -116,6 +325,16 @@ public class Game extends BasicGame {
         }
     }
 
+    Map getMap() {
+        return map;
+    }
+
+    /**
+     *
+     * @param key
+     * @param c
+     * @throws SlickException
+     */
     @Override
     public void keyPressed(int key, char c) {
         if (player.getHP() > 0) {
@@ -138,31 +357,88 @@ public class Game extends BasicGame {
                     break;
                 case Input.KEY_SPACE:
                     System.out.println("shoot");
-                    shot.play();
-                    break;
-                case Input.KEY_H:
-                    System.out.println("HP");
-                    player.setHp();
-                    break;
-                case Input.KEY_B:
-                    System.out.println("bonus");
                      {
                         try {
-                            hud.addBonus("src/ressources/UI/bonus/bonus1.png");
+                            player.shoot();
                         } catch (SlickException ex) {
                             Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
+                    shot.play();
                     break;
                 case Input.KEY_Q:
-                    System.out.println("mine");
-                    Bulletv2 b = new Bulletv2(map);
-                     {
+                    System.out.println("");
+                    if (player.getListBonus().size() > 0 && ((Bonus) player.getBonus(0)).getAvaliable() > 0) {
+                        System.out.println("launch spell Q");
+                        System.out.println(((Bonus) player.getBonus(0)).getAvaliable());
                         try {
-                            b.init();
+                            player.lauchSpell(((Bonus) player.getBonus(0)).getType());
                         } catch (SlickException ex) {
                             Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
                         }
+                        ((Bonus) player.getBonus(0)).setAvaliable(((Bonus) player.getBonus(0)).getAvaliable() - 1);
+                    } else {
+                        System.out.println("empty");
+                    }
+                    break;
+                case Input.KEY_W:
+                    System.out.println("");
+                    if (player.getListBonus().size() > 1 && ((Bonus) player.getBonus(1)).getAvaliable() > 0) {
+                        System.out.println("launch spell W");
+                        System.out.println(((Bonus) player.getBonus(1)).getAvaliable());
+                        try {
+                            player.lauchSpell(((Bonus) player.getBonus(1)).getType());
+                        } catch (SlickException ex) {
+                            Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        ((Bonus) player.getBonus(1)).setAvaliable(((Bonus) player.getBonus(1)).getAvaliable() - 1);
+                    } else {
+                        System.out.println("empty");
+                    }
+                    break;
+                case Input.KEY_E:
+                    System.out.println("");
+                    if (player.getListBonus().size() > 2 && ((Bonus) player.getBonus(2)).getAvaliable() > 0) {
+                        System.out.println("launch spell E");
+                        System.out.println(((Bonus) player.getBonus(2)).getAvaliable());
+                        try {
+                            player.lauchSpell(((Bonus) player.getBonus(2)).getType());
+                        } catch (SlickException ex) {
+                            Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        ((Bonus) player.getBonus(2)).setAvaliable(((Bonus) player.getBonus(2)).getAvaliable() - 1);
+                    } else {
+                        System.out.println("empty");
+                    }
+                    break;
+                case Input.KEY_R:
+                    System.out.println("");
+                    if (player.getListBonus().size() > 3 && ((Bonus) player.getBonus(3)).getAvaliable() > 0) {
+                        System.out.println("launch spell R");
+                        System.out.println(((Bonus) player.getBonus(3)).getAvaliable());
+                        try {
+                            player.lauchSpell(((Bonus) player.getBonus(3)).getType());
+                        } catch (SlickException ex) {
+                            Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        ((Bonus) player.getBonus(3)).setAvaliable(((Bonus) player.getBonus(3)).getAvaliable() - 1);
+                    } else {
+                        System.out.println("empty");
+                    }
+                    break;
+                case Input.KEY_T:
+                    System.out.println("");
+                    if (player.getListBonus().size() > 4 && ((Bonus) player.getBonus(4)).getAvaliable() > 0) {
+                        System.out.println("launch spell T");
+                        System.out.println(((Bonus) player.getBonus(4)).getAvaliable());
+                        try {
+                            player.lauchSpell(((Bonus) player.getBonus(4)).getType());
+                        } catch (SlickException ex) {
+                            Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        ((Bonus) player.getBonus(4)).setAvaliable(((Bonus) player.getBonus(4)).getAvaliable() - 1);
+                    } else {
+                        System.out.println("empty");
                     }
                     break;
             }
