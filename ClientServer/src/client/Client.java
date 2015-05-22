@@ -119,7 +119,7 @@ public class Client implements Runnable {
 		// Fin du client
 		inputStream.close();
 		outputStream.close();
-		socket.close();
+//	socket.close();
 		Thread.currentThread().stop();
 	}
 }

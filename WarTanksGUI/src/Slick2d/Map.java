@@ -51,6 +51,7 @@ public class Map {
         Image tile = null;
         boolean collision;
 
+<<<<<<< HEAD
 
         
         // Coin haut - gauche
@@ -68,20 +69,35 @@ public class Map {
         } else if (this.tiledMap.getTileImage((int) (x+width-2) / tileW, (int) (y+height-2) / tileH, logicLayer) != null && (direction == Player.DOWN || direction == Player.RIGHT)) {
             tile = this.tiledMap.getTileImage((int) (x+width-2) / tileW, (int) (y+height-2) / tileH, logicLayer);
         }
+=======
+//        // Coin haut - gauche
+//        if (this.tiledMap.getTileImage((int) (x) / tileW, (int) (y) / tileH, logicLayer) != null) {
+//            tile = this.tiledMap.getTileImage((int) (x) / tileW, (int) (y) / tileH, logicLayer);
+//
+//            // Coin haut - droite
+//        } else if (this.tiledMap.getTileImage((int) (x + width) / tileW, (int) (y) / tileH, logicLayer) != null) {
+//            tile = this.tiledMap.getTileImage((int) (x + width) / tileW, (int) (y) / tileH, logicLayer);
+//
+//            // Coin bas - gauche
+//        } else if (this.tiledMap.getTileImage((int) x / tileW, (int) (y + height) / tileH, logicLayer) != null) {
+//            tile = this.tiledMap.getTileImage((int) x / tileW, (int) (y + height) / tileH, logicLayer);
+//            // Coin bas - droite
+//        } else if (this.tiledMap.getTileImage((int) (x + width) / tileW, (int) (y + height) / tileH, logicLayer) != null) {
+//            tile = this.tiledMap.getTileImage((int) (x + width) / tileW, (int) (y + height) / tileH, logicLayer);
+//        }
+>>>>>>> 6e60ea0d47aca972ccc850ccd136b5339799832b
 
         collision = tile != null;
-        
-        
+
         if (collision) {
             Color color = tile.getColor((int) x % tileW, (int) y % tileH);
             collision = color.getAlpha() > 0;
         }
-        
+
         // Map border collisions management
-        collision = collision || y+height-2 > this.tiledMap.getHeight()*tileH || y-2 < 0 ||
-                    x+width-2 > this.tiledMap.getWidth()*tileW || x-2 < 0;
-        
-        
+        collision = collision || (y + height - 2 > this.tiledMap.getHeight() * tileH && direction == 2)|| (y - 2 < 0 && direction == 0)
+                || (x + width - 2 > this.tiledMap.getWidth() * tileW && direction == 3) || (x - 2 < 0 && direction == 1);
+
         return collision;
     }
 
@@ -92,6 +108,7 @@ public class Map {
         Image tile = this.tiledMap.getTileImage((int) x / tileW, (int) y / tileH, logicLayer);
         boolean collision = tile != null;
         if (collision) {
+            System.out.println("slowed");
             Color color = tile.getColor((int) x % tileW, (int) y % tileH);
             collision = color.getAlpha() > 0;
         }
@@ -128,6 +145,13 @@ public class Map {
 
     public String getObjectProperty(int objectID, String propertyName, String def) {
         return this.tiledMap.getObjectProperty(0, objectID, propertyName, def);
+    }
+
+    public int getHeight() {
+        return this.tiledMap.getHeight();
+    }
+    public int getWidth() {
+        return this.tiledMap.getWidth();
     }
 
 }

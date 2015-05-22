@@ -37,6 +37,7 @@ public class ClientServer {
 	public static void main(String[] args) throws InterruptedException {
 
 		// Création du serveur et d'un client pour les tests
+		System.out.println("Test 1 : Création du serveur et d'un client pour une communication.");
 		try {
 			server1 = new Thread(new Server(port1));
 			server1.start();
@@ -64,7 +65,7 @@ public class ClientServer {
 
 		} catch (IOException e) { System.out.println(e); }
 */
-
+/*
 		// Création du serveur et d'un client pour les tests
 		try {
 			server1 = new Thread(new ServerTestSerialization(port1));
@@ -77,5 +78,6 @@ public class ClientServer {
 			server1.join();
 
 		} catch (IOException e) { System.out.println(e); }
+*/
 	}
 }

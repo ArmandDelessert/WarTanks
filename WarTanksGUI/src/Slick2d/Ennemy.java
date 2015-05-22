@@ -8,7 +8,6 @@ package Slick2d;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 
@@ -16,28 +15,59 @@ import org.newdawn.slick.SpriteSheet;
  *
  * @author Simon
  */
-public class Bulletv2 {
-
-    private float x = 300, y = 300;
+public class Ennemy {
+    
+    int playerID = 1; //sera attribuer par le serveur
+    private float x = 350, y = 350;
     private int HP;
     private float speed;
     private int direction = 0;
     private boolean moving = false;
-    Image bullet;
+    private Animation[] animations = new Animation[8];
 
     private Map map;
+    
+    private final int height = 32;
+    private final int width = 32;
+    
+    public static final int UP = 0;
+    public static final int LEFT = 1;
+    public static final int DOWN = 2;
+    public static final int RIGHT = 3;
 
-    public Bulletv2(Map map) {
+    public Ennemy(Map map, int x, int y,int randDirection,int id) {
+        this.x = x;
+        this.y = y;
+        this.direction = randDirection;
         this.map = map;
+        HP = 3;
+        playerID = id;
         speed = .1f;
     }
 
     public void init() throws SlickException {
-
+        SpriteSheet spriteSheet = new SpriteSheet("src/ressources/tanks/MulticolorTanks2.png", this.width, this.height);
+        this.animations[0] = loadAnimation(spriteSheet, 0, 1, 0);
+        this.animations[1] = loadAnimation(spriteSheet, 0, 1, 1);
+        this.animations[2] = loadAnimation(spriteSheet, 0, 1, 2);
+        this.animations[3] = loadAnimation(spriteSheet, 0, 1, 3);
+        this.animations[4] = loadAnimation(spriteSheet, 1, 8, 0);
+        this.animations[5] = loadAnimation(spriteSheet, 1, 8, 1);
+        this.animations[6] = loadAnimation(spriteSheet, 1, 8, 2);
+        this.animations[7] = loadAnimation(spriteSheet, 1, 8, 3);
     }
+
+    private Animation loadAnimation(SpriteSheet spriteSheet, int startX, int endX, int y) {
+        Animation animation = new Animation();
+        for (int x = startX; x < endX; x++) {
+            animation.addFrame(spriteSheet.getSprite(x, y), 100);
+        }
+        return animation;
+    }
+
     public void render(Graphics g) throws SlickException {
         g.setColor(new Color(0, 0, 0, .5f));
-        g.drawOval(x, y, 10, 10);
+        g.drawAnimation(animations[direction + (moving ? 4 : 0)], x, y);
     }
 
     public void update(int delta) throws SlickException {
@@ -45,9 +75,8 @@ public class Bulletv2 {
             if (this.moving) {
                 float futurX = getFuturX(delta);
                 float futurY = getFuturY(delta);
-                boolean collision = this.map.isCollision(futurX, futurY);
-                
-                boolean slowed = this.map.isSlowed(futurX, futurY);
+                boolean collision = this.map.isCollision(futurX, futurY, this.width, this.height, this.direction);
+                boolean slowed = this.map.isCollision(futurX, futurY, this.width, this.height, this.direction);
                 if (collision) {
                     this.moving = false;
                 } else {
@@ -61,16 +90,16 @@ public class Bulletv2 {
                     speed = 0.1f;
                 }
                 switch (this.direction) {
-                    case 0:
+                    case UP:
                         this.y -= speed * delta;
                         break;
-                    case 1:
+                    case LEFT:
                         this.x -= speed * delta;
                         break;
-                    case 2:
+                    case DOWN:
                         this.y += speed * delta;
                         break;
-                    case 3:
+                    case RIGHT:
                         this.x += speed * delta;
                         break;
                 }
@@ -97,10 +126,10 @@ public class Bulletv2 {
     public float getFuturY(int delta) {
         float futurY = this.y;
         switch (this.direction) {
-            case 0:
+            case UP:
                 futurY = this.y - .1f * delta;
                 break;
-            case 2:
+            case DOWN:
                 futurY = this.y + .1f * delta;
                 break;
         }
@@ -137,5 +166,17 @@ public class Bulletv2 {
 
     public void setMoving(boolean moving) {
         this.moving = moving;
+    }
+    void setHp()
+    {
+        HP--;
+    }
+    void setHp(int HP)
+    {
+        this.HP = HP;
+    }
+    int getHP()
+    {
+        return HP;
     }
 }

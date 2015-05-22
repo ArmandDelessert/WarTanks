@@ -9,6 +9,7 @@
 
 package serveur;
 
+import com.sun.media.jfxmediaimpl.MediaDisposer.Disposable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -24,7 +25,7 @@ import java.util.logging.Logger;
  * 
  * @author Armand
  */
-public class Server implements Runnable {
+public class Server implements Runnable, Disposable {
 
 	public boolean running = true;
 	private int nbClientHandler;
@@ -73,7 +74,7 @@ public class Server implements Runnable {
 	 */
 	private void clientWaiting() throws IOException {
 
-		ClientHandler newServerHandler;
+		ClientHandler newClientHandler;
 		Socket newSocket;
 
 		while (running) {
@@ -81,10 +82,11 @@ public class Server implements Runnable {
 				newSocket = socket.accept();
 
 				// Création d'un serveur spécifique au client
-				newServerHandler = new ClientHandler(newSocket);
+				newClientHandler = new ClientHandler(newSocket);
 //			clientHandlerList.add(newServerHandler);
-				newServerHandler.run();
 				nbClientHandler++;
+				System.out.println("nbClientHandler : " + nbClientHandler);
+				newClientHandler.run();
 			} catch (IOException ex) {
 				throw new IOException("Problème interne à Server.clientWaiting() lors de la création du ServerHandler.");
 			}
@@ -92,12 +94,25 @@ public class Server implements Runnable {
 
 		// Arrêt du serveur
 //	while (clientHandlerList.size() > 0); // Attente de la fin des clientHandler
-		if (nbClientHandler > 0) {
-			System.out.println("nbClientHandler : " + nbClientHandler);
-		}
-
+		System.out.println("Server : J'a fini !");
 		socket.close();
 		Thread.currentThread().stop();
+	}
+
+	/**
+	 * 
+	 */
+	@Override
+	public void dispose() {
+
+		if (this.socket != null)
+		{
+			try {
+				socket.close();
+			} catch (IOException ex) {
+				Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+			}
+		}
 	}
 
 	/**
@@ -195,9 +210,10 @@ public class Server implements Runnable {
 			// Fin du clientHandler
 			inputStream.close();
 			outputStream.close();
-			socket.close(); // Fermer le socket du clientHandler et non celui du serveur
+//		socket.close(); // Fermer le socket du clientHandler et non celui du serveur
 
 			nbClientHandler--;
+			System.out.println("nbClientHandler restants : " + nbClientHandler);
 			if (nbClientHandler == 0) {
 				running = false; // Fin du serveur lorsqu'il n'y a plus de client à servir
 			}
