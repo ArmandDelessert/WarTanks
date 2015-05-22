@@ -52,20 +52,21 @@ public class Map {
         boolean collision;
 
 
+        
         // Coin haut - gauche
-        if(this.tiledMap.getTileImage((int) (x) / tileW, (int) (y) / tileH, logicLayer) != null) {
+        if(this.tiledMap.getTileImage((int) (x) / tileW, (int) (y) / tileH, logicLayer) != null && (direction == Player.UP || direction == Player.LEFT)) {
             tile = this.tiledMap.getTileImage((int) (x) / tileW, (int) (y) / tileH, logicLayer);
             
             // Coin haut - droite
-        } else if (this.tiledMap.getTileImage((int) (x+width) / tileW, (int) (y) / tileH, logicLayer) != null) {
-            tile = this.tiledMap.getTileImage((int) (x+width) / tileW, (int) (y) / tileH, logicLayer);
+        } else if (this.tiledMap.getTileImage((int) (x+width-2) / tileW, (int) (y) / tileH, logicLayer) != null && (direction == Player.UP || direction == Player.RIGHT)) {
+            tile = this.tiledMap.getTileImage((int) (x+width-2) / tileW, (int) (y) / tileH, logicLayer);
             
             // Coin bas - gauche
-        } else if (this.tiledMap.getTileImage((int) x / tileW, (int) (y+height) / tileH, logicLayer) != null) {
-            tile = this.tiledMap.getTileImage((int) x / tileW, (int) (y+height) / tileH, logicLayer);
+        } else if (this.tiledMap.getTileImage((int) (x) / tileW, (int) (y+height-2) / tileH, logicLayer) != null && (direction == Player.DOWN || direction == Player.LEFT)) {
+            tile = this.tiledMap.getTileImage((int) (x) / tileW, (int) (y+height-2) / tileH, logicLayer);
             // Coin bas - droite
-        } else if (this.tiledMap.getTileImage((int) (x+width) / tileW, (int) (y+height) / tileH, logicLayer) != null) {
-            tile = this.tiledMap.getTileImage((int) (x+width) / tileW, (int) (y+height) / tileH, logicLayer);
+        } else if (this.tiledMap.getTileImage((int) (x+width-2) / tileW, (int) (y+height-2) / tileH, logicLayer) != null && (direction == Player.DOWN || direction == Player.RIGHT)) {
+            tile = this.tiledMap.getTileImage((int) (x+width-2) / tileW, (int) (y+height-2) / tileH, logicLayer);
         }
 
         collision = tile != null;
