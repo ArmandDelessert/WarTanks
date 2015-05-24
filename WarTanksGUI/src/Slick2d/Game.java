@@ -142,9 +142,7 @@ public class Game extends BasicGame {
             this.listBonus.clear();
             listEnnemy.clear();
             this.init(container);
-
         }
-
     }
 
     @Override
