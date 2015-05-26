@@ -51,7 +51,7 @@ public class Game extends BasicGame {
         int type = (int) (Math.random() * (9 + 1 - 1)) + 1;
         int randx = (int) (Math.random() * (32 * (this.map.getWidth() - 1)));
         int randy = (int) (Math.random() * (32 * (this.map.getHeight() - 1)));
-        return new Bonus(map, type, randx, randy);
+        return new Bonus(map, 4, randx, randy);
     }
 
     Ennemy ennemyFactory(int ID) {
@@ -108,7 +108,7 @@ public class Game extends BasicGame {
         g.translate(container.getWidth() / 2 - (int) xCamera, container.getHeight() / 2
                 - (int) yCamera);
         this.map.renderBackground();
-        this.player.render(g);
+        
         for (Object listBonu : listBonus) {
             ((Bonus) listBonu).render(g);
         }
@@ -118,14 +118,10 @@ public class Game extends BasicGame {
 
             }
         }
+        this.player.render(g);
         this.map.renderForeground();
         this.hud.render(g);
-        if (player.getHP() == 0) {
-            //mort
-            Defeat defeat = new Defeat();
-            defeat.init();
-            defeat.render(g);
-        }
+       
         dead = 0;
         for (int i = 0; i < listEnnemy.size(); i++) {
             if (((Ennemy) listEnnemy.get(i)).getHP() > 0) {
@@ -133,6 +129,13 @@ public class Game extends BasicGame {
             } else {
                 dead++;
             }
+        }
+        
+        if (player.getHP() == 0) {
+            //mort
+            Defeat defeat = new Defeat();
+            defeat.init();
+            defeat.render(g);
         }
         if (dead == listEnnemy.size()) {
             Victory victory = new Victory();
@@ -143,6 +146,7 @@ public class Game extends BasicGame {
             listEnnemy.clear();
             this.init(container);
         }
+        
     }
 
     @Override
@@ -154,12 +158,16 @@ public class Game extends BasicGame {
             isColisionWithEnnemy((Ennemy) listEnnemy.get(i), delta);
             for (int y = 0; y < player.getlistBullet().size(); y++) {
                 if (isCollisionBulletEnnemy((Ennemy) listEnnemy.get(i), (Bullet) player.getlistBullet().get(y), delta)) {
-                    ((Ennemy) listEnnemy.get(i)).setHp();
+                    if(player.getlistBullet().get(y) instanceof AlphaStrick && ((AlphaStrick) player.getlistBullet().get(y)).getStrick() == false)
+                        ((Ennemy) listEnnemy.get(i)).setHp();
+                    else if (!(player.getlistBullet().get(y) instanceof AlphaStrick))
+                        ((Ennemy) listEnnemy.get(i)).setHp();
                     hud.setLisEnnemyList(listEnnemy);
                     System.out.println("boooom");
                     if (!(player.getlistBullet().get(y) instanceof AlphaStrick)) {
                         player.getlistBullet().remove(y);
                     } else {
+                        ((AlphaStrick) player.getlistBullet().get(y)).setStrick(true);
                         if (((AlphaStrick) player.getlistBullet().get(y)).getExplosion().isFinished()) {
                             player.getlistBullet().remove(y);
                         }
@@ -179,9 +187,9 @@ public class Game extends BasicGame {
     }
 
     public boolean isCollisionBulletEnnemy(Ennemy e, Bullet b, int delta) {
-        return (e.getX() > b.getX() || e.getX() + 32 > b.getX())
+        return (e.getX() > b.getX() || e.getX() + 28 > b.getX())
                 && (e.getX() < b.getX() + b.getWidth())
-                && (e.getY() > b.getY() || e.getY() + 32 > b.getY())
+                && (e.getY() > b.getY() || e.getY() + 28 > b.getY())
                 && (e.getY() < b.getY() + b.getHeight());
     }
 

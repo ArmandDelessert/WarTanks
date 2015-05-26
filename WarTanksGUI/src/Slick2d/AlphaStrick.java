@@ -22,6 +22,7 @@ public class AlphaStrick extends Bullet {
 
     private Image glyphe;
     private Map map;
+    private boolean strick = false;
     private boolean collision;
     private final float height = 64;
     private final float width = 64;
@@ -89,6 +90,14 @@ public class AlphaStrick extends Bullet {
     public Explosion getExplosion()
     {
         return e;
+    }
+    public void setStrick(boolean b)
+    {
+        this.strick = b;
+    }
+    public boolean getStrick()
+    {
+        return strick;
     }
 
 }

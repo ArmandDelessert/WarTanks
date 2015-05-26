@@ -236,6 +236,9 @@ public class Player extends Observable {
             case 6:
                 playerLauncheMultiShoot();
                 break;
+            case 4:
+                playerLauncheLaser();
+                break;
             case 8:
                 playerlauncheALPHASTRIK();
             case 9:
@@ -246,7 +249,11 @@ public class Player extends Observable {
     }
 
     void playerLauncheLaser() {
-
+        try {
+            listBullet.add(new Laser(map, (int) x, (int) y, direction));
+        } catch (SlickException ex) {
+            Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     void playerLauncheMine() {
@@ -283,23 +290,6 @@ public class Player extends Observable {
         listBullet.add(new Bullet(map, (int) x, (int) y, 1));
         listBullet.add(new Bullet(map, (int) x, (int) y, 2));
         listBullet.add(new Bullet(map, (int) x, (int) y, 3));
-
-//        TimerTask task;
-//        task = new TimerTask() {
-//            @Override
-//            public synchronized void run() {
-//                try {
-//                    listBullet.add(new Bullet(map, (int) x, (int) y, 0));
-//                    listBullet.add(new Bullet(map, (int) x, (int) y, 1));
-//                    listBullet.add(new Bullet(map, (int) x, (int) y, 2));
-//                    listBullet.add(new Bullet(map, (int) x, (int) y, 3));
-//                } catch (SlickException ex) {
-//                    Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
-//                }
-//            }
-//        };
-//        Timer timer = new Timer();
-//        timer.scheduleAtFixedRate(task, 0,2 * 1000);
     }
 
     void playerlauncheALPHASTRIK() {
@@ -309,6 +299,13 @@ public class Player extends Observable {
             }
             if (direction == DOWN) {
                 listBullet.add(new AlphaStrick(map, (int) x, (int) y + 160, direction));
+            }
+            if(direction == RIGHT){
+                listBullet.add(new AlphaStrick(map, (int) x + 160, (int) y-16, direction));
+            }
+            if(direction == LEFT)
+            {
+                listBullet.add(new AlphaStrick(map, (int) x - 160, (int) y-16, direction));
             }
         } catch (SlickException ex) {
             Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
