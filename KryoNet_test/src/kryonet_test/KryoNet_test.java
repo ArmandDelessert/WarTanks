@@ -59,7 +59,7 @@ public class KryoNet_test {
 				if (object instanceof SomeRequest) {
 					// Affichage de la requête reçue
 					SomeRequest request = (SomeRequest)object;
-					System.out.println("[" + "Server" + "]: " + "I receive this message from the client:");
+					System.out.println("[" + "Server" + "]: " + "I receive this request from the client:");
 					System.out.println(request.text);
 
 					// Envoie d'une réponse au client
