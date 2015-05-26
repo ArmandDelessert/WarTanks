@@ -28,7 +28,7 @@ public class Mine extends Bullet {
     public Mine(Map map, int x, int y, int direction) throws SlickException {
         super(map, x, y, direction);
         this.map = map;
-        this.x = x + 20;
+        this.x = x;
         this.y = y;
         this.init();
     }

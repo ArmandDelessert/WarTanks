@@ -75,8 +75,8 @@ public class Map {
         }
 
         // Map border collisions management
-        collision = collision || (y + height - 2 > this.tiledMap.getHeight() * tileH && direction == 2)|| (y - 2 < 0 && direction == 0)
-                || (x + width - 2 > this.tiledMap.getWidth() * tileW && direction == 3) || (x - 2 < 0 && direction == 1);
+        collision = collision || (y + height > this.tiledMap.getHeight() * tileH && direction == 2)|| (y < 0 && direction == 0)
+                || (x + width > this.tiledMap.getWidth() * tileW && direction == 3) || (x < 0 && direction == 1);
 
         return collision;
     }

@@ -46,8 +46,11 @@ public class Player extends Observable {
     public static final int DOWN = 2;
     public static final int RIGHT = 3;
 
-    public Player(Map map, Observer o) {
+    public Player(Map map, int x, int y, int randDirection, int id, Observer o) {
         this.map = map;
+        this.x = x;
+        this.y = y;
+        this.direction = direction;
         HP = 3;
         speed = .1f;
         this.addObserver(o);
@@ -73,16 +76,16 @@ public class Player extends Observable {
         return animation;
     }
 
-    public void render(Graphics g) throws SlickException {
-        for (Object listBullet1 : listBullet) {
-            ((Bullet) listBullet1).render(g);
+    public synchronized void render(Graphics g) throws SlickException {
+
+        for (int i = 0; i < listBullet.size(); i++) {
+            ((Bullet) listBullet.get(i)).render(g);
         }
         g.setColor(new Color(0, 0, 0, .5f));
         g.drawAnimation(animations[direction + (moving ? 4 : 0)], x, y);
-
     }
 
-    public void update(int delta) throws SlickException {
+    public synchronized void update(int delta) throws SlickException {
         if (HP > 0) {
             if (this.moving) {
                 float futurX = getFuturX(delta);
@@ -93,20 +96,20 @@ public class Player extends Observable {
                 } else {
                     this.x = futurX;
                     this.y = futurY;
-                }
-                switch (this.direction) {
-                    case UP:
-                        this.y -= speed * delta;
-                        break;
-                    case LEFT:
-                        this.x -= speed * delta;
-                        break;
-                    case DOWN:
-                        this.y += speed * delta;
-                        break;
-                    case RIGHT:
-                        this.x += speed * delta;
-                        break;
+                    switch (this.direction) {
+                        case UP:
+                            this.y -= speed * delta;
+                            break;
+                        case LEFT:
+                            this.x -= speed * delta;
+                            break;
+                        case DOWN:
+                            this.y += speed * delta;
+                            break;
+                        case RIGHT:
+                            this.x += speed * delta;
+                            break;
+                    }
                 }
             }
             for (int i = 0; i < listBullet.size(); i++) {
@@ -199,10 +202,6 @@ public class Player extends Observable {
         this.notifyObservers(b);
     }
 
-    void removeBonus(int i) {
-        listBonus.remove(i);
-    }
-
     void shoot() throws SlickException {
         listBullet.add(new Bullet(map, (int) x, (int) y, direction));
     }
@@ -226,7 +225,7 @@ public class Player extends Observable {
         return listBonus;
     }
 
-    void lauchSpell(int type) throws SlickException{
+    void lauchSpell(int type) throws SlickException {
         switch (type) {
             case 1:
                 playerLauncheSpeedUp();
@@ -234,6 +233,14 @@ public class Player extends Observable {
             case 2:
                 playerLauncheMine();
                 break;
+            case 6:
+                playerLauncheMultiShoot();
+                break;
+            case 4:
+                playerLauncheLaser();
+                break;
+            case 8:
+                playerlauncheALPHASTRIK();
             case 9:
                 playerLauncheHeal();
                 break;
@@ -242,7 +249,11 @@ public class Player extends Observable {
     }
 
     void playerLauncheLaser() {
-
+        try {
+            listBullet.add(new Laser(map, (int) x, (int) y, direction));
+        } catch (SlickException ex) {
+            Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     void playerLauncheMine() {
@@ -272,6 +283,37 @@ public class Player extends Observable {
 
     void playerLauncheHeal() {
         this.HP++;
+    }
+
+    void playerLauncheMultiShoot() throws SlickException {
+        listBullet.add(new Bullet(map, (int) x, (int) y, 0));
+        listBullet.add(new Bullet(map, (int) x, (int) y, 1));
+        listBullet.add(new Bullet(map, (int) x, (int) y, 2));
+        listBullet.add(new Bullet(map, (int) x, (int) y, 3));
+    }
+
+    void playerlauncheALPHASTRIK() {
+        try {
+            if (direction == UP) {
+                listBullet.add(new AlphaStrick(map, (int) x, (int) y - 160, direction));
+            }
+            if (direction == DOWN) {
+                listBullet.add(new AlphaStrick(map, (int) x, (int) y + 160, direction));
+            }
+            if(direction == RIGHT){
+                listBullet.add(new AlphaStrick(map, (int) x + 160, (int) y-16, direction));
+            }
+            if(direction == LEFT)
+            {
+                listBullet.add(new AlphaStrick(map, (int) x - 160, (int) y-16, direction));
+            }
+        } catch (SlickException ex) {
+            Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    LinkedList listEnnemy() {
+        return listEnnemy;
     }
 
 }
