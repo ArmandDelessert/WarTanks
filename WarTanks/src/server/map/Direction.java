@@ -4,7 +4,7 @@
  * Date   : 06.04.2015
  */
 
-package map;
+package server.map;
 
 /**
  * 

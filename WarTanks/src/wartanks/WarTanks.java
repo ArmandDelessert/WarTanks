@@ -9,7 +9,11 @@
 
 package wartanks;
 
-import gamemanager.GameManager;
+import client_test.network.Client_test;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import server.gamemanager.GameManager;
 
 /**
  *
@@ -22,6 +26,25 @@ public class WarTanks {
 	 */
 	public static void main(String[] args) {
 
-		new GameManager().run();
+		Thread client, gameManager;
+		String ip = "localhost";
+		int numeroPort = 1991;
+
+		// Lancement du serveur
+		gameManager = new Thread(new GameManager());
+		gameManager.start();
+
+		// Création d'un client pour les tests
+		System.out.println("Création d'un client pour tester la communication.");
+		try {
+			client = new Thread(new Client_test());
+			client.start();
+			client.join();
+
+//		} catch (IOException e) {
+//			System.out.println(e);
+		} catch (InterruptedException ex) {
+			Logger.getLogger(WarTanks.class.getName()).log(Level.SEVERE, null, ex);
+		}
 	}
 }
