@@ -9,9 +9,12 @@
 
 package serveur;
 
+import clientserver.Message;
 import com.sun.media.jfxmediaimpl.MediaDisposer.Disposable;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -19,6 +22,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import protocol.InfoClient;
 
 /**
  * Classe Server
@@ -124,6 +128,13 @@ public class Server implements Runnable, Disposable {
 		private InputStream inputStream;
 		private OutputStream outputStream;
 
+		InfoClient infoClient;
+
+		/**
+		 * 
+		 * @param s
+		 * @throws IOException 
+		 */
 		public ClientHandler(Socket s) throws IOException {
 
 			socket = s;
@@ -148,6 +159,9 @@ public class Server implements Runnable, Disposable {
 			try {
 				clientHandler();
 			} catch (IOException ex) {
+				System.out.println(ex);
+				Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+			} catch (ClassNotFoundException ex) {
 				System.out.println(ex);
 				Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
 			}
@@ -190,22 +204,94 @@ public class Server implements Runnable, Disposable {
 
 		/**
 		 * 
+		 * @param message 
+		 * @throws java.io.IOException 
+		 */
+		public void sendMessage(Message message) throws IOException {
+
+			// Envoi d'un message au client
+			try {
+				// Sérialisation et envoi du message
+				ObjectOutputStream outputSer = new ObjectOutputStream(outputStream);
+				outputSer.writeObject(message);
+			} catch (IOException ex) {
+				throw new IOException("Problème interne à ClientHandler.sendMessage() lors de l'envoie d'un message au client.");
+			}
+		}
+
+		/**
+		 * 
+		 * @return 
+		 * @throws java.io.IOException 
+		 * @throws java.lang.ClassNotFoundException 
+		 */
+		public Message receiveMessage() throws IOException, ClassNotFoundException {
+
+			Message message;
+
+			// Réception d'un message du client
+			try {
+				// Réception et désérialisation du message
+				ObjectInputStream inputSer = new ObjectInputStream(inputStream);
+				message = (Message)inputSer.readObject();
+			} catch (IOException ex) {
+				throw new IOException("Problème interne à ClientHandler.receiveMessage() lors de la réception du message.");
+			}
+
+			return message;
+		}
+
+		/**
+		 * 
+		 * @return
+		 * @throws IOException
+		 * @throws ClassNotFoundException 
+		 */
+		public InfoClient receiveInfoClient() throws IOException, ClassNotFoundException {
+
+			InfoClient infoClient;
+
+			// Réception d'un message du client
+			try {
+				// Réception et désérialisation du message
+				ObjectInputStream inputSer = new ObjectInputStream(inputStream);
+				infoClient = (InfoClient)inputSer.readObject();
+			} catch (IOException ex) {
+				throw new IOException("Problème interne à ClientHandler.receiveInfoClient().");
+			}
+
+			return infoClient;
+		}
+
+		/**
+		 * 
 		 * @throws IOException 
 		 */
-		private void clientHandler() throws IOException {
+		private void clientHandler() throws IOException, ClassNotFoundException {
 
-			String message;
+			// Réception des infos du client
+			infoClient = receiveInfoClient();
+			System.out.println("infoClient : " + infoClient.numero + " " + infoClient.nomJoueur);
+
+/*
+//		String message;
+			Message receivedMessage = new Message("Armand Delessert", "Ça marche pas !");
+			Message sendedMessage = new Message("Armand Delessert", "Hello World from <" + this.getClass() + ">!");
 
 			// Écoute du client
-			message = receiveStringMessage();
+//		message = receiveStringMessage();
+			receivedMessage = receiveMessage();
 
 			// Affichage du message reçu
 			System.out.println("[" + this.getClass() + "]: " + "I receive this message from the client:");
-			System.out.println(message);
+//		System.out.println(message);
+			receivedMessage.afficher();
 
 			// Envoie d'une réponse au client
 			System.out.println("[" + this.getClass() + "]: " + "I send \"Hello World!\" to the client.");
-			sendStringMessage("Hello World from <" + this.getClass() + ">!");
+//		sendStringMessage("Hello World from <" + this.getClass() + ">!");
+			sendMessage(sendedMessage);
+*/
 
 			// Fin du clientHandler
 			inputStream.close();

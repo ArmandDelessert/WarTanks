@@ -12,6 +12,7 @@ package clientserver;
 import client.Client;
 import client.ClientTestSerialization;
 import java.io.IOException;
+import protocol.InfoClient;
 import serveur.Server;
 import serveur.ServerTestSerialization;
 
@@ -42,7 +43,8 @@ public class ClientServer {
 			server1 = new Thread(new Server(port1));
 			server1.start();
 
-			client1 = new Thread(new Client(ip, port1));
+//		client1 = new Thread(new Client(ip, port1));
+			client1 = new Thread(new Client(new InfoClient(1, "Joueur1", ip, port1)));
 			client1.start();
 
 			client1.join();
@@ -53,6 +55,7 @@ public class ClientServer {
 /*
 		// Création de 2 clients et d'un serveur
 		// Test de 2 connexions en parallèle
+		System.out.println("Test 2 : Création du serveur et de 2 clients pour une communication.");
 		try {
 			server1 = new Thread(new Server(port1));
 			server1.start();
@@ -62,6 +65,10 @@ public class ClientServer {
 
 			client2 = new Thread(new Client(ip, port1));
 			client2.start();
+
+			client1.join();
+			client2.join();
+			server1.join();
 
 		} catch (IOException e) { System.out.println(e); }
 */
