@@ -34,7 +34,7 @@ public class KryoNet_test {
 		int numPortUDP = 54777;
 
 		/**
-		 * Crlation d'un serveur
+		 * Création d'un serveur
 		 */
 
 		Server server = new Server();
