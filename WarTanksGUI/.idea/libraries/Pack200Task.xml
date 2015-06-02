@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Pack200Task">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/libs/slick/Pack200Task.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

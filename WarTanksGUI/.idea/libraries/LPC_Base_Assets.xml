@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="LPC Base Assets">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/build/classes/ressources/map/tuiles/LPC Base Assets.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

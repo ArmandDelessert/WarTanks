@@ -1,0 +1,16 @@
+<component name="libraryTable">
+  <library name="lib1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/dist/lib/jorbis-0.0.15.jar!/" />
+      <root url="jar://$PROJECT_DIR$/dist/lib/lwjgl.zip!/" />
+      <root url="jar://$PROJECT_DIR$/dist/lib/MarteEngine.jar!/" />
+      <root url="jar://$PROJECT_DIR$/dist/lib/jinput.jar!/" />
+      <root url="jar://$PROJECT_DIR$/dist/lib/jogg-0.0.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/dist/lib/slick.jar!/" />
+      <root url="jar://$PROJECT_DIR$/dist/lib/lwjgl.jar!/" />
+      <root url="jar://$PROJECT_DIR$/dist/lib/slick.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

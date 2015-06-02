@@ -6,16 +6,12 @@
 package Slick2d;
 
 import java.util.LinkedList;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.newdawn.slick.Animation;
-import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Sound;
 import org.newdawn.slick.SpriteSheet;
 
 /**
@@ -26,6 +22,7 @@ public class Explosion {
 
     int playerID = 1; //sera attribuer par le serveur
     private float x = 300, y = 300;
+    Sound shot;
     private LinkedList listBullet = new LinkedList();
     boolean finished = false;
 
@@ -41,10 +38,11 @@ public class Explosion {
     public static final int DOWN = 2;
     public static final int RIGHT = 3;
 
-    public Explosion(Map map, int x, int y) {
+    public Explosion(Map map, int x, int y) throws SlickException {
         this.map = map;
         this.x = x;
         this.y = y;
+        shot = new Sound("src/ressources/sound/DeathFlash.ogg");
     }
 
     public void init() throws SlickException {
@@ -55,6 +53,7 @@ public class Explosion {
 
     private Animation loadAnimation(SpriteSheet spriteSheet, int startX, int endX, int y) {
         Animation animation = new Animation();
+        
         for (int x = startX; x < 14; x++) {
             animation.addFrame(spriteSheet.getSprite(x, y), 50);
         }
