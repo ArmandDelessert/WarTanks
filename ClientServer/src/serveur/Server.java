@@ -18,6 +18,7 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -44,7 +45,7 @@ public class Server implements Runnable, Disposable {
 	 */
 	public Server(int numeroPort) throws IOException {
 
-//	clientHandlerList = new LinkedList<>();
+		clientHandlerList = new LinkedList();
 
 		// Création du socket d'écoute des clients
 		try {
