@@ -18,11 +18,10 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import protocol.InfoClient;
+import protocol.InfoPlayer;
 
 /**
  * Classe Server
@@ -65,8 +64,7 @@ public class Server implements Runnable, Disposable {
 
 		try {
 			clientWaiting();
-		}
-		catch (IOException ex) {
+		} catch (IOException ex) {
 			System.out.println(ex);
 			Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
 		}
@@ -90,7 +88,7 @@ public class Server implements Runnable, Disposable {
 //			clientHandlerList.add(newServerHandler);
 				nbClientHandler++;
 				System.out.println("nbClientHandler : " + nbClientHandler);
-				newClientHandler.run();
+				newClientHandler.start();
 			} catch (IOException ex) {
 				throw new IOException("Problème interne à Server.clientWaiting() lors de la création du ServerHandler.");
 			}
@@ -122,11 +120,13 @@ public class Server implements Runnable, Disposable {
 	/**
 	 * Classe interne ClientHandler
 	 */
-	private class ClientHandler implements Runnable {
+	private class ClientHandler extends Thread {
 
 		private Socket socket;
 		private InputStream inputStream;
+		private ObjectInputStream inputSer;
 		private OutputStream outputStream;
+		private ObjectOutputStream outputSer;
 
 		InfoClient infoClient;
 
@@ -135,13 +135,18 @@ public class Server implements Runnable, Disposable {
 		 * @param s
 		 * @throws IOException 
 		 */
-		public ClientHandler(Socket s) throws IOException {
+		public ClientHandler(Socket s)  throws IOException {
 
 			socket = s;
 
 			try {
+				System.out.println("ClientHandler1");
 				inputStream = socket.getInputStream();
+				System.out.println("ClientHandler2");
+				inputSer = new ObjectInputStream(inputStream);
+				System.out.println("ClientHandler3");
 				outputStream = socket.getOutputStream();
+				outputSer = new ObjectOutputStream(outputStream);
 			} catch (IOException ex) {
 				throw new IOException("Problème interne à Server.ClientHandler.ClientHandler() lors de la création du socket.getInputStream() ou du socket.getOutputStream().");
 			}
@@ -158,10 +163,7 @@ public class Server implements Runnable, Disposable {
 
 			try {
 				clientHandler();
-			} catch (IOException ex) {
-				System.out.println(ex);
-				Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-			} catch (ClassNotFoundException ex) {
+			} catch (IOException | ClassNotFoundException ex) {
 				System.out.println(ex);
 				Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
 			}
@@ -212,10 +214,25 @@ public class Server implements Runnable, Disposable {
 			// Envoi d'un message au client
 			try {
 				// Sérialisation et envoi du message
-				ObjectOutputStream outputSer = new ObjectOutputStream(outputStream);
 				outputSer.writeObject(message);
 			} catch (IOException ex) {
 				throw new IOException("Problème interne à ClientHandler.sendMessage() lors de l'envoie d'un message au client.");
+			}
+		}
+
+		/**
+		 * 
+		 * @param message 
+		 * @throws java.io.IOException 
+		 */
+		public void sendInfoPlayer(InfoPlayer infoPlayer) throws IOException {
+
+			// Envoi d'un message au client
+			try {
+				// Sérialisation et envoi du message
+				outputSer.writeObject(infoPlayer);
+			} catch (IOException ex) {
+				throw new IOException("Problème interne à ClientHandler.sendInfoPlayer().");
 			}
 		}
 
@@ -232,7 +249,6 @@ public class Server implements Runnable, Disposable {
 			// Réception d'un message du client
 			try {
 				// Réception et désérialisation du message
-				ObjectInputStream inputSer = new ObjectInputStream(inputStream);
 				message = (Message)inputSer.readObject();
 			} catch (IOException ex) {
 				throw new IOException("Problème interne à ClientHandler.receiveMessage() lors de la réception du message.");
@@ -249,18 +265,17 @@ public class Server implements Runnable, Disposable {
 		 */
 		public InfoClient receiveInfoClient() throws IOException, ClassNotFoundException {
 
-			InfoClient infoClient;
+			InfoClient receivedInfoClient;
 
 			// Réception d'un message du client
 			try {
 				// Réception et désérialisation du message
-				ObjectInputStream inputSer = new ObjectInputStream(inputStream);
-				infoClient = (InfoClient)inputSer.readObject();
+				receivedInfoClient = (InfoClient)inputSer.readObject();
 			} catch (IOException ex) {
 				throw new IOException("Problème interne à ClientHandler.receiveInfoClient().");
 			}
 
-			return infoClient;
+			return receivedInfoClient;
 		}
 
 		/**
@@ -271,7 +286,13 @@ public class Server implements Runnable, Disposable {
 
 			// Réception des infos du client
 			infoClient = receiveInfoClient();
-			System.out.println("infoClient : " + infoClient.numero + " " + infoClient.nomJoueur);
+			System.out.println("infoClient.id = " + infoClient.id);
+
+			System.out.println("Serveur : Youhouuu!");
+
+			// Envoie d'une confirmation et des infos du joueur
+			sendStringMessage("OK");
+			sendInfoPlayer(new InfoPlayer(1, "Joueur1", "Blue"));
 
 /*
 //		String message;
@@ -296,7 +317,7 @@ public class Server implements Runnable, Disposable {
 			// Fin du clientHandler
 			inputStream.close();
 			outputStream.close();
-//		socket.close(); // Fermer le socket du clientHandler et non celui du serveur
+//		socket.close(); // Le socket du ClientHandler est déjà clos
 
 			nbClientHandler--;
 			System.out.println("nbClientHandler restants : " + nbClientHandler);

@@ -10,11 +10,9 @@
 package clientserver;
 
 import client.Client;
-import client.ClientTestSerialization;
 import java.io.IOException;
 import protocol.InfoClient;
 import serveur.Server;
-import serveur.ServerTestSerialization;
 
 /**
  *
@@ -43,8 +41,7 @@ public class ClientServer {
 			server1 = new Thread(new Server(port1));
 			server1.start();
 
-//		client1 = new Thread(new Client(ip, port1));
-			client1 = new Thread(new Client(new InfoClient(1, "Joueur1", ip, port1)));
+			client1 = new Thread(new Client(new InfoClient(1, ip, port1)));
 			client1.start();
 
 			client1.join();
@@ -68,20 +65,6 @@ public class ClientServer {
 
 			client1.join();
 			client2.join();
-			server1.join();
-
-		} catch (IOException e) { System.out.println(e); }
-*/
-/*
-		// Création du serveur et d'un client pour les tests
-		try {
-			server1 = new Thread(new ServerTestSerialization(port1));
-			server1.start();
-
-			client1 = new Thread(new ClientTestSerialization(ip, port1));
-			client1.start();
-
-			client1.join();
 			server1.join();
 
 		} catch (IOException e) { System.out.println(e); }
