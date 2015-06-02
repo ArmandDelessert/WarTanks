@@ -51,22 +51,6 @@ public class Map {
         Image tile = null;
         boolean collision;
 
-//        // Coin haut - gauche
-//        if (this.tiledMap.getTileImage((int) (x) / tileW, (int) (y) / tileH, logicLayer) != null) {
-//            tile = this.tiledMap.getTileImage((int) (x) / tileW, (int) (y) / tileH, logicLayer);
-//
-//            // Coin haut - droite
-//        } else if (this.tiledMap.getTileImage((int) (x + width) / tileW, (int) (y) / tileH, logicLayer) != null) {
-//            tile = this.tiledMap.getTileImage((int) (x + width) / tileW, (int) (y) / tileH, logicLayer);
-//
-//            // Coin bas - gauche
-//        } else if (this.tiledMap.getTileImage((int) x / tileW, (int) (y + height) / tileH, logicLayer) != null) {
-//            tile = this.tiledMap.getTileImage((int) x / tileW, (int) (y + height) / tileH, logicLayer);
-//            // Coin bas - droite
-//        } else if (this.tiledMap.getTileImage((int) (x + width) / tileW, (int) (y + height) / tileH, logicLayer) != null) {
-//            tile = this.tiledMap.getTileImage((int) (x + width) / tileW, (int) (y + height) / tileH, logicLayer);
-//        }
-
         collision = tile != null;
 
         if (collision) {
