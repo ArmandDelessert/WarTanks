@@ -84,6 +84,8 @@ public class Client implements Runnable {
 	 */
 	public void sendStringMessage(String message) throws IOException {
 
+		message = message.concat("\0"); // Ajout du caractère EOF
+
 		// Envoi d'un message au client
 		try {
 			outputStream.write(message.getBytes());
@@ -109,7 +111,9 @@ public class Client implements Runnable {
 			throw new IOException("Problème interne à ClientHandler.receiveStringMessage() lors de la réception du message.");
 		}
 
-		return new String(message);
+		// Suppression des caractères '\0' en trop
+		String s = new String(message);
+		return s.substring(0, s.indexOf('\0'));
 	}
 
 	/**
@@ -195,21 +199,21 @@ public class Client implements Runnable {
 		// Le client s'annonce au serveur
 		sendInfoClient(this.infoClient);
 
-		System.out.println("Client : Youhouuu!");
-
 		// Le client attend la confirmation du serveur
 		String confirmation = receiveStringMessage();
 		switch (confirmation) {
+			case "OKsr":
+				System.out.println("[" + this.getClass() + "]: " + "Réponse du serveur : OKsr");
 			case "OK":
-				System.out.println("Connecté au serveur");
+				System.out.println("[" + this.getClass() + "]: " + "Connecté au serveur");
 				this.infoPlayer = receiveInfoPlayer();
-				System.out.println("infoPlayer.name = " + infoPlayer.name);
+				System.out.println("[" + this.getClass() + "]: " + "infoPlayer reçu : " + "infoPlayer.id = " + infoPlayer.id + " ; " + "infoPlayer.name = " + infoPlayer.name);
 				break;
 			case "Refused":
 				System.out.println("ERREUR : Connexion au serveur refusée.");
 				break;
 			default:
-				System.out.println("Le serveur a répondu : " + confirmation);
+				System.out.println("[" + this.getClass() + "]: " + "Le serveur a répondu : " + confirmation);
 				System.out.println("ERREUR : La réponse du serveur est invalide.");
 				break;
 		}
@@ -241,6 +245,7 @@ public class Client implements Runnable {
 		outputStream.close();
 		inputStream.close();
 //	socket.close(); // Le socket du client est déjà clos
-		Thread.currentThread().stop();
+
+		System.out.println("[" + this.getClass() + "]: " + "I have finished my work.");
 	}
 }
