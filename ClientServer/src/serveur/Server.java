@@ -18,6 +18,7 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import protocol.InfoClient;
@@ -32,7 +33,7 @@ public class Server implements Runnable, Disposable {
 
 	public boolean running = true;
 	private int nbClientHandler;
-//private List<ClientHandler> clientHandlerList;
+	private List clientHandlerList;
 
 	private ServerSocket socket;
 
@@ -85,7 +86,7 @@ public class Server implements Runnable, Disposable {
 
 				// Création d'un serveur spécifique au client
 				newClientHandler = new ClientHandler(newSocket);
-//			clientHandlerList.add(newServerHandler);
+				clientHandlerList.add(newClientHandler);
 				nbClientHandler++;
 				System.out.println("nbClientHandler : " + nbClientHandler);
 				newClientHandler.start();
@@ -95,8 +96,9 @@ public class Server implements Runnable, Disposable {
 		}
 
 		// Arrêt du serveur
-//	while (clientHandlerList.size() > 0); // Attente de la fin des clientHandler
-		System.out.println("Server : J'a fini !");
+		System.out.println("Serveur : J'a fini !");
+		while (clientHandlerList.size() > 0); // Attente de la fin des clientHandler
+		System.out.println("Fermeture du serveur.");
 		socket.close();
 		Thread.currentThread().stop();
 	}
@@ -123,10 +125,10 @@ public class Server implements Runnable, Disposable {
 	private class ClientHandler extends Thread {
 
 		private Socket socket;
-		private InputStream inputStream;
-		private ObjectInputStream inputSer;
 		private OutputStream outputStream;
 		private ObjectOutputStream outputSer;
+		private InputStream inputStream;
+		private ObjectInputStream inputSer;
 
 		InfoClient infoClient;
 
@@ -135,18 +137,15 @@ public class Server implements Runnable, Disposable {
 		 * @param s
 		 * @throws IOException 
 		 */
-		public ClientHandler(Socket s)  throws IOException {
+		public ClientHandler(Socket s) throws IOException {
 
 			socket = s;
 
 			try {
-				System.out.println("ClientHandler1");
-				inputStream = socket.getInputStream();
-				System.out.println("ClientHandler2");
-				inputSer = new ObjectInputStream(inputStream);
-				System.out.println("ClientHandler3");
 				outputStream = socket.getOutputStream();
 				outputSer = new ObjectOutputStream(outputStream);
+				inputStream = socket.getInputStream();
+				inputSer = new ObjectInputStream(inputStream);
 			} catch (IOException ex) {
 				throw new IOException("Problème interne à Server.ClientHandler.ClientHandler() lors de la création du socket.getInputStream() ou du socket.getOutputStream().");
 			}
@@ -315,8 +314,8 @@ public class Server implements Runnable, Disposable {
 */
 
 			// Fin du clientHandler
-			inputStream.close();
 			outputStream.close();
+			inputStream.close();
 //		socket.close(); // Le socket du ClientHandler est déjà clos
 
 			nbClientHandler--;

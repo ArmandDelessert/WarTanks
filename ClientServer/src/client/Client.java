@@ -29,10 +29,10 @@ import protocol.InfoPlayer;
 public class Client implements Runnable {
 
 	private Socket socket;
-	private InputStream inputStream;
-	private ObjectInputStream inputSer;
 	private OutputStream outputStream;
 	private ObjectOutputStream outputSer;
+	private InputStream inputStream;
+	private ObjectInputStream inputSer;
 
 	InfoClient infoClient;
 	InfoPlayer infoPlayer;
@@ -49,10 +49,10 @@ public class Client implements Runnable {
 		// Création du socket de connexion au serveur
 		try {
 			socket = new Socket(infoClient.ip, infoClient.numeroPort);
-			inputStream = socket.getInputStream();
-			inputSer = new ObjectInputStream(inputStream);
 			outputStream = socket.getOutputStream();
 			outputSer = new ObjectOutputStream(outputStream);
+			inputStream = socket.getInputStream();
+			inputSer = new ObjectInputStream(inputStream);
 		} catch (IOException ex) {
 			throw new IOException("Problème interne à Client.Client() lors de la création du socket ou lors de la création du socket.getInputStream() ou du socket.getOutputStream().");
 		}
@@ -209,6 +209,7 @@ public class Client implements Runnable {
 				System.out.println("ERREUR : Connexion au serveur refusée.");
 				break;
 			default:
+				System.out.println("Le serveur a répondu : " + confirmation);
 				System.out.println("ERREUR : La réponse du serveur est invalide.");
 				break;
 		}
@@ -237,8 +238,8 @@ public class Client implements Runnable {
 */
 
 		// Fin du client
-		inputStream.close();
 		outputStream.close();
+		inputStream.close();
 //	socket.close(); // Le socket du client est déjà clos
 		Thread.currentThread().stop();
 	}

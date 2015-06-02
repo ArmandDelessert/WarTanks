@@ -11,6 +11,8 @@ package clientserver;
 
 import client.Client;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import protocol.InfoClient;
 import serveur.Server;
 
@@ -33,7 +35,7 @@ public class ClientServer {
 	 * @param args the command line arguments
 	 * @throws java.lang.InterruptedException
 	 */
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args) {
 
 		// Création du serveur et d'un client pour les tests
 		System.out.println("Test 1 : Création du serveur et d'un client pour une communication.");
@@ -47,7 +49,9 @@ public class ClientServer {
 			client1.join();
 			server1.join();
 
-		} catch (IOException e) { System.out.println(e); }
+		} catch (IOException e) { System.out.println(e); } catch (InterruptedException ex) {
+			Logger.getLogger(ClientServer.class.getName()).log(Level.SEVERE, null, ex);
+		}
 
 /*
 		// Création de 2 clients et d'un serveur
