@@ -16,15 +16,16 @@ message.
 
 
 ## Message basic format
-+----+-----------------------------------+
-| ID |            Description            |
-+----+-----------------------------------+
-|  0 | keep-alive                        |
-|  1 | Changement of direction           |
-|  2 | Shoot                             |
-|  3 | Give bonus                        |
-|  4 | Map state and other player states |
-+----+-----------------------------------+
+
+The communication between the client and the server is made with differrent messages.
+
++---------+------------------+----------------------------+
+|  Name   |       Size       |        Description         |
++---------+------------------+----------------------------+
+| length  | int32            | Size of the message        |
+| ID      | byte             | Identifiant of the message |
+| payload | byte[length - 1] | Content of the message     |
++---------+------------------+----------------------------+
 
 
 ## Message IDs
@@ -43,5 +44,5 @@ message.
 Keep-alive:	<length=1><ID=0><no payload>
 Direction	<length=2><ID=1><direction ID (byte)>
 Shoot:		<length=1><ID=2><no payload>
-Bonus:		<length=2><ID=3><bonus ID <byte>
+Bonus:		<length=2><ID=3><bonus ID (byte)>
 Map:		<length=1+X><ID=4><map & player data (byte[X])>
