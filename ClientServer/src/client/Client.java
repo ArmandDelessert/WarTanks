@@ -48,7 +48,7 @@ public class Client implements Runnable {
 
 		// Création du socket de connexion au serveur
 		try {
-			socket = new Socket(infoClient.ip, infoClient.numeroPort);
+			socket = new Socket(infoClient.ipAddress, infoClient.portNumber);
 			outputStream = socket.getOutputStream();
 			outputSer = new ObjectOutputStream(outputStream);
 			inputStream = socket.getInputStream();
@@ -196,6 +196,8 @@ public class Client implements Runnable {
 	 */
 	private void client() throws IOException, ClassNotFoundException {
 
+		boolean connectedToTheServer = true;
+
 		// Le client s'annonce au serveur
 		sendInfoClient(this.infoClient);
 
@@ -207,7 +209,7 @@ public class Client implements Runnable {
 			case "OK":
 				System.out.println("[" + this.getClass() + "]: " + "Connecté au serveur");
 				this.infoPlayer = receiveInfoPlayer();
-				System.out.println("[" + this.getClass() + "]: " + "infoPlayer reçu : " + "infoPlayer.id = " + infoPlayer.id + " ; " + "infoPlayer.name = " + infoPlayer.name);
+				System.out.println("[" + this.getClass() + "]: " + "infoPlayer : " + infoPlayer);
 				break;
 			case "Refused":
 				System.out.println("ERREUR : Connexion au serveur refusée.");
@@ -218,8 +220,15 @@ public class Client implements Runnable {
 				break;
 		}
 
-		// Paramétrage de la partie
-		
+		// Boucle principale pour la communication avec le serveur
+		while (connectedToTheServer) {
+
+			// Paramétrage de la partie
+			
+
+			// Fin de la boucle principale pour la communication avec le serveur
+			connectedToTheServer = false;
+		}
 
 /*
 //	String message;
