@@ -93,21 +93,24 @@ public class Player extends Observable {
                 } else {
                     this.x = futurX;
                     this.y = futurY;
+                    
+                    switch (this.direction) {
+                        case UP:
+                            this.y -= speed * delta;
+                            break;
+                        case LEFT:
+                            this.x -= speed * delta;
+                            break;
+                        case DOWN:
+                            this.y += speed * delta;
+                            break;
+                        case RIGHT:
+                            this.x += speed * delta;
+                            break;
+                    }
+                    
                 }
-                switch (this.direction) {
-                    case UP:
-                        this.y -= speed * delta;
-                        break;
-                    case LEFT:
-                        this.x -= speed * delta;
-                        break;
-                    case DOWN:
-                        this.y += speed * delta;
-                        break;
-                    case RIGHT:
-                        this.x += speed * delta;
-                        break;
-                }
+                
             }
             for (int i = 0; i < listBullet.size(); i++) {
                 ((Bullet) listBullet.get(i)).update(delta);

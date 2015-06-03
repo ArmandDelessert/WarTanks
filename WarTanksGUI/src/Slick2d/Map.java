@@ -49,22 +49,40 @@ public class Map {
         int tileH = this.tiledMap.getTileHeight();
         int logicLayer = this.tiledMap.getLayerIndex("logic");
         Image tile = null;
-        boolean collision;
-
-        // Coin haut - gauche
-        if(this.tiledMap.getTileImage((int) (x) / tileW, (int) (y) / tileH, logicLayer) != null && (direction == Player.UP || direction == Player.LEFT)) {
-            tile = this.tiledMap.getTileImage((int) (x) / tileW, (int) (y) / tileH, logicLayer);
-            
-            // Coin haut - droite
-        } else if (this.tiledMap.getTileImage((int) (x+width-2) / tileW, (int) (y) / tileH, logicLayer) != null && (direction == Player.UP || direction == Player.RIGHT)) {
-            tile = this.tiledMap.getTileImage((int) (x+width-2) / tileW, (int) (y) / tileH, logicLayer);
-            
-            // Coin bas - gauche
-        } else if (this.tiledMap.getTileImage((int) (x) / tileW, (int) (y+height-2) / tileH, logicLayer) != null && (direction == Player.DOWN || direction == Player.LEFT)) {
-            tile = this.tiledMap.getTileImage((int) (x) / tileW, (int) (y+height-2) / tileH, logicLayer);
-            // Coin bas - droite
-        } else if (this.tiledMap.getTileImage((int) (x+width-2) / tileW, (int) (y+height-2) / tileH, logicLayer) != null && (direction == Player.DOWN || direction == Player.RIGHT)) {
-            tile = this.tiledMap.getTileImage((int) (x+width-2) / tileW, (int) (y+height-2) / tileH, logicLayer);
+        boolean collision = false;
+        
+        switch (direction) {
+            case Player.UP:
+                
+                if(this.tiledMap.getTileImage((int) (x) / tileW, (int) (y) / tileH, logicLayer) != null)
+                    tile = this.tiledMap.getTileImage((int) (x) / tileW, (int) (y) / tileH, logicLayer);
+                else if (this.tiledMap.getTileImage((int) (x+width) / tileW, (int) (y) / tileH, logicLayer) != null)
+                    tile = this.tiledMap.getTileImage((int) (x+width) / tileW, (int) (y) / tileH, logicLayer);
+                break;
+                
+            case Player.LEFT:
+                
+                if(this.tiledMap.getTileImage((int) (x) / tileW, (int) (y) / tileH, logicLayer) != null) {// haut gauche
+                    tile = this.tiledMap.getTileImage((int) (x) / tileW, (int) (y) / tileH, logicLayer);
+                    System.out.println("haut gauche");
+                } else if (this.tiledMap.getTileImage((int) (x) / tileW, (int) (y+height) / tileH, logicLayer) != null) {// bas gauche
+                    tile = this.tiledMap.getTileImage((int) (x) / tileW, (int) (y+height) / tileH, logicLayer);
+                    System.out.println("bas gauche");
+                }
+                break;
+                
+            case Player.DOWN:
+                if(this.tiledMap.getTileImage((int) (x) / tileW, (int) (y+height) / tileH, logicLayer) != null)
+                    tile = this.tiledMap.getTileImage((int) (x) / tileW, (int) (y+height) / tileH, logicLayer);
+                else if (this.tiledMap.getTileImage((int) (x+width) / tileW, (int) (y+height) / tileH, logicLayer) != null)
+                    tile = this.tiledMap.getTileImage((int) (x+width) / tileW, (int) (y+height) / tileH, logicLayer);
+                break;
+            case Player.RIGHT:
+                if(this.tiledMap.getTileImage((int) (x+width) / tileW, (int) (y) / tileH, logicLayer) != null)
+                    tile = this.tiledMap.getTileImage((int) (x+width) / tileW, (int) (y) / tileH, logicLayer);
+                else if (this.tiledMap.getTileImage((int) (x+width) / tileW, (int) (y+height) / tileH, logicLayer) != null)
+                    tile = this.tiledMap.getTileImage((int) (x+width) / tileW, (int) (y+height) / tileH, logicLayer);
+                break;
         }
 
         collision = tile != null;
@@ -79,6 +97,10 @@ public class Map {
                 || (x + width - 2 > this.tiledMap.getWidth() * tileW && direction == 3) || (x - 2 < 0 && direction == 1);
 
         return collision;
+    }
+    
+    private boolean isbetween(double val, double b1, double b2) {
+        return val >= b1 && val < b2;
     }
 
     public boolean isSlowed(float x, float y) {
