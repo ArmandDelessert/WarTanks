@@ -43,7 +43,7 @@ Here the basic format of these messages:
 
 ## Messages details
 ###Keep-alive
-Format "<length=1><ID=0><no payload>"
+Format \<length=1><ID=0><no payload>
 This message contain no payload.
 
 
