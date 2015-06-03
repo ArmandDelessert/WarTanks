@@ -2,12 +2,17 @@
 
 
 ## Handshake
-+-------------+--------+---------------------------+
-|    Name     |  Size  |        Description        |
-+-------------+--------+---------------------------+
-| strlen      | byte   | Size of client_name       |
-| client_name | byte[] | String name of the client |
-+-------------+--------+---------------------------+
+
+Handshake must be the first message send to the server, the server must reply the same
+message.
+
++-------------+----------+------------------------------------------+
+|    Name     |   Size   |               Description                |
++-------------+----------+------------------------------------------+
+| strlen      | byte     | Size of client_name                      |
+| client_name | byte[]   | String name of the client                |
+| client_id   | byte[20] | Random identifier generate by the client |
++-------------+----------+------------------------------------------+
 
 
 ## Message basic format
@@ -20,6 +25,7 @@
 |  3 | Give bonus                        |
 |  4 | Map state and other player states |
 +----+-----------------------------------+
+
 
 ## Message IDs
 +----+-------------------------+
