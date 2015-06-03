@@ -18,11 +18,11 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import protocol.InfoClient;
+import protocol.InfoPlayer;
 
 /**
  * Classe Server
@@ -32,8 +32,10 @@ import protocol.InfoClient;
 public class Server implements Runnable, Disposable {
 
 	public boolean running = true;
-	private int nbClientHandler;
-//private List<ClientHandler> clientHandlerList;
+	private int nbActualClientHandler;
+	private int nbTotalClientHandler;
+	private int nbMaxClientHandler;
+	private Vector clientHandlerList;
 
 	private ServerSocket socket;
 
@@ -42,9 +44,12 @@ public class Server implements Runnable, Disposable {
 	 * @param numeroPort
 	 * @throws IOException 
 	 */
-	public Server(int numeroPort) throws IOException {
+	public Server(int nbMaxClient, int numeroPort) throws IOException {
 
-//	clientHandlerList = new LinkedList<>();
+		nbActualClientHandler = 0;
+		nbTotalClientHandler = 0;
+		nbMaxClientHandler = nbMaxClient;
+		clientHandlerList = new Vector();
 
 		// Création du socket d'écoute des clients
 		try {
@@ -65,8 +70,7 @@ public class Server implements Runnable, Disposable {
 
 		try {
 			clientWaiting();
-		}
-		catch (IOException ex) {
+		} catch (IOException ex) {
 			System.out.println(ex);
 			Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
 		}
@@ -82,25 +86,33 @@ public class Server implements Runnable, Disposable {
 		Socket newSocket;
 
 		while (running) {
-			try {
-				newSocket = socket.accept();
+			if (nbTotalClientHandler < nbMaxClientHandler) { // On accepte qu'un seul client
+				try {
+					newSocket = socket.accept();
 
-				// Création d'un serveur spécifique au client
-				newClientHandler = new ClientHandler(newSocket);
-//			clientHandlerList.add(newServerHandler);
-				nbClientHandler++;
-				System.out.println("nbClientHandler : " + nbClientHandler);
-				newClientHandler.run();
-			} catch (IOException ex) {
-				throw new IOException("Problème interne à Server.clientWaiting() lors de la création du ServerHandler.");
+					// Création d'un serveur spécifique au client
+					newClientHandler = new ClientHandler(newSocket);
+					clientHandlerList.add(newClientHandler);
+					nbActualClientHandler ++;
+					nbTotalClientHandler ++;
+					System.out.println("[" + this.getClass() + "]: " + "nbActualClientHandler : " + nbActualClientHandler + " ; " + "nbTotalClientHandler : " + nbTotalClientHandler);
+					newClientHandler.start();
+				} catch (IOException ex) {
+					throw new IOException("Problème interne à Server.clientWaiting() lors de la création du ServerHandler.");
+				}
 			}
 		}
 
 		// Arrêt du serveur
-//	while (clientHandlerList.size() > 0); // Attente de la fin des clientHandler
-		System.out.println("Server : J'a fini !");
+
+//		// Arrêt des ClientHandler s'il en reste en activité
+//		for (int i = 0; i < clientHandlerList.size(); i ++) {
+//			((ClientHandler)clientHandlerList.elementAt(i)).stop();
+//		}
+
 		socket.close();
-		Thread.currentThread().stop();
+
+		System.out.println("[" + this.getClass() + "]: " + "I have finished my work.");
 	}
 
 	/**
@@ -122,11 +134,13 @@ public class Server implements Runnable, Disposable {
 	/**
 	 * Classe interne ClientHandler
 	 */
-	private class ClientHandler implements Runnable {
+	private class ClientHandler extends Thread {
 
 		private Socket socket;
-		private InputStream inputStream;
 		private OutputStream outputStream;
+		private ObjectOutputStream outputSer;
+		private InputStream inputStream;
+		private ObjectInputStream inputSer;
 
 		InfoClient infoClient;
 
@@ -140,8 +154,10 @@ public class Server implements Runnable, Disposable {
 			socket = s;
 
 			try {
-				inputStream = socket.getInputStream();
 				outputStream = socket.getOutputStream();
+				outputSer = new ObjectOutputStream(outputStream);
+				inputStream = socket.getInputStream();
+				inputSer = new ObjectInputStream(inputStream);
 			} catch (IOException ex) {
 				throw new IOException("Problème interne à Server.ClientHandler.ClientHandler() lors de la création du socket.getInputStream() ou du socket.getOutputStream().");
 			}
@@ -158,10 +174,7 @@ public class Server implements Runnable, Disposable {
 
 			try {
 				clientHandler();
-			} catch (IOException ex) {
-				System.out.println(ex);
-				Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-			} catch (ClassNotFoundException ex) {
+			} catch (IOException | ClassNotFoundException ex) {
 				System.out.println(ex);
 				Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
 			}
@@ -173,6 +186,8 @@ public class Server implements Runnable, Disposable {
 		 * @throws IOException 
 		 */
 		public void sendStringMessage(String message) throws IOException {
+
+			message = message.concat("\0"); // Ajout du caractère EOF
 
 			// Envoi d'un message au client
 			try {
@@ -199,7 +214,9 @@ public class Server implements Runnable, Disposable {
 				throw new IOException("Problème interne à ClientHandler.receiveStringMessage() lors de la réception du message.");
 			}
 
-			return new String(message);
+			// Suppression des caractères '\0' en trop
+			String s = new String(message);
+			return s.substring(0, s.indexOf('\0'));
 		}
 
 		/**
@@ -212,10 +229,25 @@ public class Server implements Runnable, Disposable {
 			// Envoi d'un message au client
 			try {
 				// Sérialisation et envoi du message
-				ObjectOutputStream outputSer = new ObjectOutputStream(outputStream);
 				outputSer.writeObject(message);
 			} catch (IOException ex) {
 				throw new IOException("Problème interne à ClientHandler.sendMessage() lors de l'envoie d'un message au client.");
+			}
+		}
+
+		/**
+		 * 
+		 * @param message 
+		 * @throws java.io.IOException 
+		 */
+		public void sendInfoPlayer(InfoPlayer infoPlayer) throws IOException {
+
+			// Envoi d'un message au client
+			try {
+				// Sérialisation et envoi du message
+				outputSer.writeObject(infoPlayer);
+			} catch (IOException ex) {
+				throw new IOException("Problème interne à ClientHandler.sendInfoPlayer().");
 			}
 		}
 
@@ -232,7 +264,6 @@ public class Server implements Runnable, Disposable {
 			// Réception d'un message du client
 			try {
 				// Réception et désérialisation du message
-				ObjectInputStream inputSer = new ObjectInputStream(inputStream);
 				message = (Message)inputSer.readObject();
 			} catch (IOException ex) {
 				throw new IOException("Problème interne à ClientHandler.receiveMessage() lors de la réception du message.");
@@ -249,18 +280,17 @@ public class Server implements Runnable, Disposable {
 		 */
 		public InfoClient receiveInfoClient() throws IOException, ClassNotFoundException {
 
-			InfoClient infoClient;
+			InfoClient receivedInfoClient;
 
 			// Réception d'un message du client
 			try {
 				// Réception et désérialisation du message
-				ObjectInputStream inputSer = new ObjectInputStream(inputStream);
-				infoClient = (InfoClient)inputSer.readObject();
+				receivedInfoClient = (InfoClient)inputSer.readObject();
 			} catch (IOException ex) {
 				throw new IOException("Problème interne à ClientHandler.receiveInfoClient().");
 			}
 
-			return infoClient;
+			return receivedInfoClient;
 		}
 
 		/**
@@ -271,7 +301,11 @@ public class Server implements Runnable, Disposable {
 
 			// Réception des infos du client
 			infoClient = receiveInfoClient();
-			System.out.println("infoClient : " + infoClient.numero + " " + infoClient.nomJoueur);
+			System.out.println("[" + this.getClass() + "]: " + "infoClient reçu : " + "infoClient.id = " + infoClient.id);
+
+			// Envoie d'une confirmation et des infos du joueur
+			sendStringMessage("OK");
+			sendInfoPlayer(new InfoPlayer(1, "Joueur1", "Blue"));
 
 /*
 //		String message;
@@ -294,17 +328,17 @@ public class Server implements Runnable, Disposable {
 */
 
 			// Fin du clientHandler
-			inputStream.close();
 			outputStream.close();
-//		socket.close(); // Fermer le socket du clientHandler et non celui du serveur
+			inputStream.close();
+//		socket.close(); // Le socket du ClientHandler est déjà clos
 
-			nbClientHandler--;
-			System.out.println("nbClientHandler restants : " + nbClientHandler);
-			if (nbClientHandler == 0) {
+			nbActualClientHandler --;
+			System.out.println("[" + this.getClass() + "]: " + "nbClientHandler restants : " + nbActualClientHandler);
+			if (nbActualClientHandler == 0) {
 				running = false; // Fin du serveur lorsqu'il n'y a plus de client à servir
 			}
 
-			Thread.currentThread().stop();
+			System.out.println("[" + this.getClass() + "]: " + "I have finished my work.");
 		}
 	}
 }

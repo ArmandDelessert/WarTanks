@@ -18,24 +18,21 @@ import java.io.Serializable;
 public class InfoClient implements Serializable {
 
 	// Info du joueur
-	public int numero;
-	public String nomJoueur;
+	public int id;
 
-	// Info réseau
+	// Infos de connexion
 	public String ip;
 	public int numeroPort;
 
 	/**
 	 * 
-	 * @param numero
-	 * @param nomJoueur
+	 * @param id
 	 * @param ip
 	 * @param numeroPort 
 	 */
-	public InfoClient(int numero, String nomJoueur, String ip, int numeroPort) {
+	public InfoClient(int id, String ip, int numeroPort) {
 
-		this.numero = numero;
-		this.nomJoueur = nomJoueur;
+		this.id = id;
 
 		this.ip = ip;
 		this.numeroPort = numeroPort;

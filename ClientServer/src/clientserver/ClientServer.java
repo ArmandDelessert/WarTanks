@@ -10,11 +10,11 @@
 package clientserver;
 
 import client.Client;
-import client.ClientTestSerialization;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import protocol.InfoClient;
 import serveur.Server;
-import serveur.ServerTestSerialization;
 
 /**
  *
@@ -35,56 +35,49 @@ public class ClientServer {
 	 * @param args the command line arguments
 	 * @throws java.lang.InterruptedException
 	 */
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args) {
 
 		// Création du serveur et d'un client pour les tests
 		System.out.println("Test 1 : Création du serveur et d'un client pour une communication.");
 		try {
-			server1 = new Thread(new Server(port1));
+			server1 = new Thread(new Server(1, port1));
 			server1.start();
 
-//		client1 = new Thread(new Client(ip, port1));
-			client1 = new Thread(new Client(new InfoClient(1, "Joueur1", ip, port1)));
+			client1 = new Thread(new Client(new InfoClient(1, ip, port1)));
 			client1.start();
 
 			client1.join();
 			server1.join();
 
-		} catch (IOException e) { System.out.println(e); }
+		} catch (IOException e) {
+			System.out.println(e);
+		} catch (InterruptedException ex) {
+			Logger.getLogger(ClientServer.class.getName()).log(Level.SEVERE, null, ex);
+		}
 
 /*
 		// Création de 2 clients et d'un serveur
 		// Test de 2 connexions en parallèle
 		System.out.println("Test 2 : Création du serveur et de 2 clients pour une communication.");
 		try {
-			server1 = new Thread(new Server(port1));
+			server1 = new Thread(new Server(2, port1));
 			server1.start();
 
-			client1 = new Thread(new Client(ip, port1));
+			client1 = new Thread(new Client(new InfoClient(1, ip, port1)));
 			client1.start();
 
-			client2 = new Thread(new Client(ip, port1));
+			client2 = new Thread(new Client (new InfoClient(1, ip, port1)));
 			client2.start();
 
 			client1.join();
 			client2.join();
 			server1.join();
 
-		} catch (IOException e) { System.out.println(e); }
-*/
-/*
-		// Création du serveur et d'un client pour les tests
-		try {
-			server1 = new Thread(new ServerTestSerialization(port1));
-			server1.start();
-
-			client1 = new Thread(new ClientTestSerialization(ip, port1));
-			client1.start();
-
-			client1.join();
-			server1.join();
-
-		} catch (IOException e) { System.out.println(e); }
+		} catch (IOException e) {
+			System.out.println(e);
+		} catch (InterruptedException ex) {
+			Logger.getLogger(ClientServer.class.getName()).log(Level.SEVERE, null, ex);
+		}
 */
 	}
 }

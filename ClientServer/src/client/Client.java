@@ -19,6 +19,7 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import protocol.InfoClient;
+import protocol.InfoPlayer;
 
 /**
  * Classe Client
@@ -28,10 +29,13 @@ import protocol.InfoClient;
 public class Client implements Runnable {
 
 	private Socket socket;
-	private InputStream inputStream;
 	private OutputStream outputStream;
+	private ObjectOutputStream outputSer;
+	private InputStream inputStream;
+	private ObjectInputStream inputSer;
 
 	InfoClient infoClient;
+	InfoPlayer infoPlayer;
 
 	/**
 	 *
@@ -45,8 +49,10 @@ public class Client implements Runnable {
 		// Création du socket de connexion au serveur
 		try {
 			socket = new Socket(infoClient.ip, infoClient.numeroPort);
-			inputStream = socket.getInputStream();
 			outputStream = socket.getOutputStream();
+			outputSer = new ObjectOutputStream(outputStream);
+			inputStream = socket.getInputStream();
+			inputSer = new ObjectInputStream(inputStream);
 		} catch (IOException ex) {
 			throw new IOException("Problème interne à Client.Client() lors de la création du socket ou lors de la création du socket.getInputStream() ou du socket.getOutputStream().");
 		}
@@ -67,7 +73,7 @@ public class Client implements Runnable {
 			System.out.println(ex);
 			Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
 		} catch (ClassNotFoundException ex) {
-			Logger.getLogger(ClientTestSerialization.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
 
@@ -77,6 +83,8 @@ public class Client implements Runnable {
 	 * @throws IOException 
 	 */
 	public void sendStringMessage(String message) throws IOException {
+
+		message = message.concat("\0"); // Ajout du caractère EOF
 
 		// Envoi d'un message au client
 		try {
@@ -103,7 +111,9 @@ public class Client implements Runnable {
 			throw new IOException("Problème interne à ClientHandler.receiveStringMessage() lors de la réception du message.");
 		}
 
-		return new String(message);
+		// Suppression des caractères '\0' en trop
+		String s = new String(message);
+		return s.substring(0, s.indexOf('\0'));
 	}
 
 	/**
@@ -116,7 +126,6 @@ public class Client implements Runnable {
 		// Envoi d'un message au serveur
 		try {
 			// Sérialisation et envoi du message
-			ObjectOutputStream outputSer = new ObjectOutputStream(outputStream);
 			outputSer.writeObject(message);
 		} catch (IOException ex) {
 			throw new IOException("Problème interne à ClientHandler.sendMessage() lors de l'envoie d'un message au client.");
@@ -133,7 +142,6 @@ public class Client implements Runnable {
 		// Envoi d'un message au client
 		try {
 			// Sérialisation et envoi du message
-			ObjectOutputStream outputSer = new ObjectOutputStream(outputStream);
 			outputSer.writeObject(infoClient);
 		} catch (IOException ex) {
 			throw new IOException("Problème interne à ClientHandler.sendInfoClient().");
@@ -153,7 +161,6 @@ public class Client implements Runnable {
 		// Réception d'un message du client
 		try {
 			// Réception et désérialisation du message
-			ObjectInputStream inputSer = new ObjectInputStream(inputStream);
 			message = (Message)inputSer.readObject();
 		} catch (IOException ex) {
 			throw new IOException("Problème interne à ClientHandler.receiveMessage() lors de la réception du message.");
@@ -164,12 +171,55 @@ public class Client implements Runnable {
 
 	/**
 	 * 
+	 * @return 
+	 * @throws java.io.IOException 
+	 * @throws java.lang.ClassNotFoundException 
+	 */
+	public InfoPlayer receiveInfoPlayer() throws IOException, ClassNotFoundException {
+
+		InfoPlayer receivedInfoPlayer;
+
+		// Réception d'un message du client
+		try {
+			// Réception et désérialisation du message
+			receivedInfoPlayer = (InfoPlayer)inputSer.readObject();
+		} catch (IOException ex) {
+			throw new IOException("Problème interne à ClientHandler.receiveInfoPlayer().");
+		}
+
+		return receivedInfoPlayer;
+	}
+
+	/**
+	 * 
 	 * @throws IOException 
 	 */
 	private void client() throws IOException, ClassNotFoundException {
 
 		// Le client s'annonce au serveur
 		sendInfoClient(this.infoClient);
+
+		// Le client attend la confirmation du serveur
+		String confirmation = receiveStringMessage();
+		switch (confirmation) {
+			case "OKsr":
+				System.out.println("[" + this.getClass() + "]: " + "Réponse du serveur : OKsr");
+			case "OK":
+				System.out.println("[" + this.getClass() + "]: " + "Connecté au serveur");
+				this.infoPlayer = receiveInfoPlayer();
+				System.out.println("[" + this.getClass() + "]: " + "infoPlayer reçu : " + "infoPlayer.id = " + infoPlayer.id + " ; " + "infoPlayer.name = " + infoPlayer.name);
+				break;
+			case "Refused":
+				System.out.println("ERREUR : Connexion au serveur refusée.");
+				break;
+			default:
+				System.out.println("[" + this.getClass() + "]: " + "Le serveur a répondu : " + confirmation);
+				System.out.println("ERREUR : La réponse du serveur est invalide.");
+				break;
+		}
+
+		// Paramétrage de la partie
+		
 
 /*
 //	String message;
@@ -192,9 +242,10 @@ public class Client implements Runnable {
 */
 
 		// Fin du client
-		inputStream.close();
 		outputStream.close();
-//	socket.close();
-		Thread.currentThread().stop();
+		inputStream.close();
+//	socket.close(); // Le socket du client est déjà clos
+
+		System.out.println("[" + this.getClass() + "]: " + "I have finished my work.");
 	}
 }
