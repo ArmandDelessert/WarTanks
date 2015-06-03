@@ -19,7 +19,7 @@ public class Bullet {
 
     //nombre de fois que le spell est disponible
     protected int avaliable = 0;
-    protected float x = 0, y = 0;
+    protected float x, y ;
     protected float speed;
     protected int direction = 0;
     protected boolean moving = true;

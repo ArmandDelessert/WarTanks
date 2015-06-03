@@ -8,9 +8,6 @@ package Slick2d.bullet;
 import Slick2d.Explosion;
 import Slick2d.Map;
 
-import java.util.TimerTask;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;

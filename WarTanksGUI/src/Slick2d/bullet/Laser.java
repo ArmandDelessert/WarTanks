@@ -106,6 +106,8 @@ public class Laser extends Bullet {
     @Override
     public void update(final int delta) throws SlickException {
         collision = this.map.isCollision(launcher.getX(), launcher.getY(), this.width, this.height, this.direction);
+        this.x = launcher.getX();
+        this.y = launcher.getY();
     }
 
 }

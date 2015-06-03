@@ -19,8 +19,6 @@ import org.newdawn.slick.SpriteSheet;
  * @author Simon
  */
 public class Explosion {
-
-    int playerID = 1; //sera attribuer par le serveur
     private float x = 300, y = 300;
     Sound shot;
     private LinkedList listBullet = new LinkedList();
