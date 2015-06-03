@@ -1,0 +1,41 @@
+# Wartanks Protocol Secifications
+
+
+## Handshake
++-------------+--------+---------------------------+
+|    Name     |  Size  |        Description        |
++-------------+--------+---------------------------+
+| strlen      | byte   | Size of client_name       |
+| client_name | byte[] | String name of the client |
++-------------+--------+---------------------------+
+
+
+## Message basic format
++----+-----------------------------------+
+| ID |            Description            |
++----+-----------------------------------+
+|  0 | keep-alive                        |
+|  1 | Changement of direction           |
+|  2 | Shoot                             |
+|  3 | Give bonus                        |
+|  4 | Map state and other player states |
++----+-----------------------------------+
+
+## Message IDs
++----+-------------------------+
+| ID |       Description       |
++----+-------------------------+
+|  0 | keep-alive              |
+|  1 | Changement of direction |
+|  2 | Shoot                   |
+|  3 | Give bonus              |
+|  4 | Map                     |
++----+-------------------------+
+
+
+## Messages
+Keep-alive:	<length=1><ID=0><no payload>
+Direction	<length=2><ID=1><direction ID (byte)>
+Shoot:		<length=1><ID=2><no payload>
+Bonus:		<length=2><ID=3><bonus ID <byte>
+Map:		<length=1+X><ID=4><map & player data (byte[X])>

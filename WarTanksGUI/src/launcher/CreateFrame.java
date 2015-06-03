@@ -17,7 +17,7 @@ public class CreateFrame extends JFrame{
     public CreateFrame(){
         this.setTitle("Create");
         JPanel panel = new JPanel();
-        this.setSize(400, 200);
+        this.setSize(800, 600);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
         //On prévient notre JFrame que notre JPanel sera son content pane
