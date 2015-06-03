@@ -23,6 +23,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import protocol.InfoClient;
 import protocol.InfoPlayer;
+import protocol.InfoPlayer.ColorPlayer;
 
 /**
  * Classe Server
@@ -30,6 +31,8 @@ import protocol.InfoPlayer;
  * @author Armand
  */
 public class Server implements Runnable, Disposable {
+
+	public static int nbClient = 0;
 
 	public boolean running = true;
 	private int nbActualClientHandler;
@@ -41,6 +44,7 @@ public class Server implements Runnable, Disposable {
 
 	/**
 	 * 
+	 * @param nbMaxClient
 	 * @param numeroPort
 	 * @throws IOException 
 	 */
@@ -86,7 +90,8 @@ public class Server implements Runnable, Disposable {
 		Socket newSocket;
 
 		while (running) {
-			if (nbTotalClientHandler < nbMaxClientHandler) { // On accepte qu'un seul client
+			// On limite le nombre de clients pouvant se connecter au serveur
+			if (nbTotalClientHandler < nbMaxClientHandler) {
 				try {
 					newSocket = socket.accept();
 
@@ -102,13 +107,6 @@ public class Server implements Runnable, Disposable {
 				}
 			}
 		}
-
-		// Arrêt du serveur
-
-//		// Arrêt des ClientHandler s'il en reste en activité
-//		for (int i = 0; i < clientHandlerList.size(); i ++) {
-//			((ClientHandler)clientHandlerList.elementAt(i)).stop();
-//		}
 
 		socket.close();
 
@@ -299,13 +297,26 @@ public class Server implements Runnable, Disposable {
 		 */
 		private void clientHandler() throws IOException, ClassNotFoundException {
 
+			boolean clientConnected = true;
+
 			// Réception des infos du client
-			infoClient = receiveInfoClient();
-			System.out.println("[" + this.getClass() + "]: " + "infoClient reçu : " + "infoClient.id = " + infoClient.id);
+			this.infoClient = receiveInfoClient();
+			System.out.println("[" + this.getClass() + "]: " + "infoClient reçu");
 
 			// Envoie d'une confirmation et des infos du joueur
 			sendStringMessage("OK");
-			sendInfoPlayer(new InfoPlayer(1, "Joueur1", "Blue"));
+			Server.nbClient ++;
+			sendInfoPlayer(new InfoPlayer(Server.nbClient, "Joueur" + Server.nbClient, ColorPlayer.getColor(Server.nbClient)));
+
+			// Boucle principale pour la communication avec le client
+			while (clientConnected) {
+
+				// Paramétrage de la partie
+				
+
+				// Fin de la boucle principale pour la communication avec le client
+				clientConnected = false;
+			}
 
 /*
 //		String message;

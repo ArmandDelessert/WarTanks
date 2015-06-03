@@ -17,24 +17,18 @@ import java.io.Serializable;
  */
 public class InfoClient implements Serializable {
 
-	// Info du joueur
-	public int id;
-
 	// Infos de connexion
-	public String ip;
-	public int numeroPort;
+	public String ipAddress;
+	public int portNumber;
 
 	/**
 	 * 
-	 * @param id
-	 * @param ip
-	 * @param numeroPort 
+	 * @param ipAddress
+	 * @param portNumber 
 	 */
-	public InfoClient(int id, String ip, int numeroPort) {
+	public InfoClient(String ipAddress, int portNumber) {
 
-		this.id = id;
-
-		this.ip = ip;
-		this.numeroPort = numeroPort;
+		this.ipAddress = ipAddress;
+		this.portNumber = portNumber;
 	}
 }
