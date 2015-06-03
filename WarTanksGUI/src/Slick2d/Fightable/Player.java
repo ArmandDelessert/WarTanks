@@ -127,6 +127,7 @@ public class Player extends Observable implements IFightable{
                             break;
                     }
                 }
+                
             }
             for (int i = 0; i < listBullet.size(); i++) {
                 ((Bullet) listBullet.get(i)).update(delta);
@@ -138,6 +139,7 @@ public class Player extends Observable implements IFightable{
             //mort
 
         }
+
     }
 
     @Override
