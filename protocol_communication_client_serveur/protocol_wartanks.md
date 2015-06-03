@@ -6,13 +6,11 @@
 Handshake must be the first message send to the server, the server must reply the same
 message.
 
-+-------------+----------+------------------------------------------+
 |    Name     |   Size   |               Description                |
-+-------------+----------+------------------------------------------+
+|-------------|----------|------------------------------------------|
 | strlen      | byte     | Size of client_name                      |
 | client_name | byte[]   | String name of the client                |
 | client_id   | byte[20] | Random identifier generate by the client |
-+-------------+----------+------------------------------------------+
 
 
 ## Message basic format
@@ -20,19 +18,17 @@ message.
 The communication between the client and the server is made with differrent messages.
 Here the basic format of these messages:
 
-+---------+------------------+----------------------------+
 |  Name   |       Size       |        Description         |
-+---------+------------------+----------------------------+
+|---------|------------------|----------------------------|
 | length  | int32            | Size of the message        |
 | ID      | byte             | Identifiant of the message |
 | payload | byte[length - 1] | Content of the message     |
-+---------+------------------+----------------------------+
+
 
 
 ## Message IDs
-+----+-------------------------+
 | ID |       Description       |
-+----+-------------------------+
+|----|-------------------------|
 |  0 | keep-alive              |
 |  1 | Changement of direction |
 |  2 | Shoot                   |
@@ -42,7 +38,7 @@ Here the basic format of these messages:
 |  6 | Bullet state            |
 |  7 | Score                   |
 |  8 | Game over               |
-+----+-------------------------+
+
 
 
 ## Messages details
