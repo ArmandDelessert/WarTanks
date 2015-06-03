@@ -24,7 +24,7 @@ import org.newdawn.slick.SlickException;
  */
 public class Bonus {
     
-    int avaliable = -1; //-1 si le bonus est au sol
+    private int avaliable = -1; //-1 si le bonus est au sol
     public String name = "bonus";
     private float x = 200, y = 200;
     private Image bonus;

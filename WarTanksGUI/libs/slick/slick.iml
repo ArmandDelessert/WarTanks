@@ -13,5 +13,6 @@
     <orderEntry type="library" name="lib" level="project" />
     <orderEntry type="library" name="jar" level="project" />
     <orderEntry type="library" name="lwjgl" level="project" />
+    <orderEntry type="library" name="windows" level="application" />
   </component>
 </module>
