@@ -18,6 +18,7 @@ message.
 ## Message basic format
 
 The communication between the client and the server is made with differrent messages.
+Here the basic format of these messages:
 
 +---------+------------------+----------------------------+
 |  Name   |       Size       |        Description         |
