@@ -49,18 +49,22 @@ This message contain no payload.
 
 ### Direction
 Format \<length=2>\<ID=1>\<direction ID (byte)>
+
 The client send this message when he change of direction
 
 ### Shoot
 Format \<length=1>\<ID=2>\<no payload>
+
 This message is send by the client when he shoot.
 
 ### Bonus
 Format \<length=2>\<ID=3>\<bonus ID (byte)>
+
 This message is send by the server when a client reach a bonus.
 
 ### Map
 Format \<length=1+X>\<ID=4>\<map (byte[X])>
+
 This message is send by the server each Y seconds to update client map state.
 (for example: bonus emplacement)
 
@@ -70,12 +74,15 @@ This message is send by the server to update ennemies state on client map.
 
 ### Bullet
 Format \<length=6>\<ID=6>\<pos_x (int16)>\<pos_y (int16)>\<direction ID (byte)>
+
 This message is send by the server to update ennemie's bullets on client map.
 
 ### Score
 Format \<length=1+X>\<ID=7>\<score_data (byte[X])>
+
 This message is send by the server to update client scoreboard.
 
 ### Game Over
 Format \<length=1+X>\<ID=8>\<is_winner (byte)>
+
 This message is send by the server at the end of the game.
