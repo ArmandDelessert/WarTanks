@@ -23,6 +23,6 @@ public class WarTanks {
         LauncherFrame laucher = new LauncherFrame();
         AppGameContainer app = new AppGameContainer(new Game(), 800, 600, false);
         app.setShowFPS(false);
-        //app.start();
+        app.start();
     }
 }
