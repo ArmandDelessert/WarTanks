@@ -4,10 +4,10 @@
  * Date   : 21.03.2015
  */
 
-package projectile;
+package server.projectile;
 
-import map.Direction;
-import map.Map;
+import server.map.Direction;
+import server.map.Map;
 
 
 /**

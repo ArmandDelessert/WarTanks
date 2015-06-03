@@ -4,11 +4,11 @@
  * Date   : 21.03.2015
  */
 
-package map;
+package server.map;
 
 import java.io.File;
-import vehicle.Tank;
-import vehicle.Vehicle;
+import server.vehicle.Tank;
+import server.vehicle.Vehicle;
 
 
 /**

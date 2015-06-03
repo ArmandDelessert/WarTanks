@@ -1,0 +1,22 @@
+		Protocole de la communication client-serveur
+
+	Connexion du client
+Client envoie InfoClient
+Serveur envoie Confirmation
+
+	Paramétrage de la partie
+Serveur envoie InfoGame
+Client envoie "Ready"
+Serveur envoie "Start" (simultanément à tous les joueurs)
+
+	En cours de partie
+Client envoie Commande
+Serveur envoie StateMap
+
+	Evenement de la partie
+Serveur envoie Player(numéro, état)
+
+	Fin de la partie
+Serveur envoie "Victory" au joueur gagnant
+Serveur envoie "Defeat" au joueur perdant
+Serveur envoie Scoreboard (à tous les joueurs)

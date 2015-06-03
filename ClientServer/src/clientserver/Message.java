@@ -31,6 +31,6 @@ public class Message implements Serializable {
 
 	public void afficher() {
 		System.out.println(">> " + text);
-		System.out.println("Auteur : " + author);
+		System.out.println("Author: " + author);
 	}
 }

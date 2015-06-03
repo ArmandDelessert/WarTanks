@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BonusPack>
+	<Bonus id="1">
+		<Name>SpeedUp</Name>
+		<Description>Augement la vitesse du tank</Description>
+		<Duree sec="5"></Duration>
+		<Number nbr="3"></Number>
+	<Bonus id="2">
+		<Name>Mine </Name>
+		<Description>dépose une mine sur la map</Description>
+		<Number nbr="3"></Number>
+	<Bonus id="3">
+		<Name>Heal</Name>
+		<Description>soigne le tank a hauteur de X pv</Description>
+		<Duree sec="5"></Duration>
+		<Number nbr="3"></Number>
+	<Bonus id="4">
+		<Name>Laser</Name>
+		<Description>Tire une laser vers l'avant du tank</Description>
+		<Duree sec="5"></Duration>
+		<Number nbr="1"></Number>
+	<Bonus id="5">
+		<Name>RapideFire</Name>
+		<Description>permet de tier 3 bullet par seconde</Description>
+		<Duree sec="5"></Duration>
+		<Number nbr="2"></Number>
+</BonusPack>

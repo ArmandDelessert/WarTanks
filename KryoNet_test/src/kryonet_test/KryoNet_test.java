@@ -34,7 +34,7 @@ public class KryoNet_test {
 		int numPortUDP = 54777;
 
 		/**
-		 * Crlation d'un serveur
+		 * Création d'un serveur
 		 */
 
 		Server server = new Server();
@@ -59,7 +59,7 @@ public class KryoNet_test {
 				if (object instanceof SomeRequest) {
 					// Affichage de la requête reçue
 					SomeRequest request = (SomeRequest)object;
-					System.out.println("[" + "Server" + "]: " + "I receive this message from the client:");
+					System.out.println("[" + "Server" + "]: " + "I receive this request from the client:");
 					System.out.println(request.text);
 
 					// Envoie d'une réponse au client

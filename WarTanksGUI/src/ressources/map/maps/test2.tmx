@@ -39,7 +39,11 @@
  </layer>
  <layer name="logic" width="32" height="32">
   <data encoding="base64" compression="gzip">
+<<<<<<< HEAD
    H4sIAAAAAAAAA+3NywkAIAzA0G7lxQ960P03MluUQh7knAhJkiRVsGnQSfpParSS/pc6vaS/JFX3ARLumlEAEAAA
+=======
+   H4sIAAAAAAAAA+3NsQkAAAzDsHzV/z/rmrVjQQLPTgAA+GAqfwCuFsd4jnAAEAAA
+>>>>>>> d214a2c4f6c85d7ac70cb10a35e11ca224ab78ee
   </data>
  </layer>
 </map>

@@ -5,14 +5,10 @@
  */
 package Slick2d;
 
-import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.Sound;
-import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.gui.MouseOverArea;
 import org.newdawn.slick.tiled.TiledMap;
 
@@ -52,7 +48,7 @@ public class Map {
         boolean collision = false;
         
         switch (direction) {
-            case Player.UP:
+            case 0:
                 
                 if(this.tiledMap.getTileImage((int) (x) / tileW, (int) (y) / tileH, logicLayer) != null)
                     tile = this.tiledMap.getTileImage((int) (x) / tileW, (int) (y) / tileH, logicLayer);
@@ -60,7 +56,7 @@ public class Map {
                     tile = this.tiledMap.getTileImage((int) (x+width) / tileW, (int) (y) / tileH, logicLayer);
                 break;
                 
-            case Player.LEFT:
+            case 1:
                 
                 if(this.tiledMap.getTileImage((int) (x) / tileW, (int) (y) / tileH, logicLayer) != null) {// haut gauche
                     tile = this.tiledMap.getTileImage((int) (x) / tileW, (int) (y) / tileH, logicLayer);
@@ -71,20 +67,19 @@ public class Map {
                 }
                 break;
                 
-            case Player.DOWN:
+            case 2:
                 if(this.tiledMap.getTileImage((int) (x) / tileW, (int) (y+height) / tileH, logicLayer) != null)
                     tile = this.tiledMap.getTileImage((int) (x) / tileW, (int) (y+height) / tileH, logicLayer);
                 else if (this.tiledMap.getTileImage((int) (x+width) / tileW, (int) (y+height) / tileH, logicLayer) != null)
                     tile = this.tiledMap.getTileImage((int) (x+width) / tileW, (int) (y+height) / tileH, logicLayer);
                 break;
-            case Player.RIGHT:
+            case 3:
                 if(this.tiledMap.getTileImage((int) (x+width) / tileW, (int) (y) / tileH, logicLayer) != null)
                     tile = this.tiledMap.getTileImage((int) (x+width) / tileW, (int) (y) / tileH, logicLayer);
                 else if (this.tiledMap.getTileImage((int) (x+width) / tileW, (int) (y+height) / tileH, logicLayer) != null)
                     tile = this.tiledMap.getTileImage((int) (x+width) / tileW, (int) (y+height) / tileH, logicLayer);
                 break;
         }
-
         collision = tile != null;
 
         if (collision) {
@@ -93,8 +88,8 @@ public class Map {
         }
 
         // Map border collisions management
-        collision = collision || (y + height - 2 > this.tiledMap.getHeight() * tileH && direction == 2)|| (y - 2 < 0 && direction == 0)
-                || (x + width - 2 > this.tiledMap.getWidth() * tileW && direction == 3) || (x - 2 < 0 && direction == 1);
+        collision = collision || (y + height > this.tiledMap.getHeight() * tileH && direction == 2)|| (y < 0 && direction == 0)
+                || (x + width > this.tiledMap.getWidth() * tileW && direction == 3) || (x < 0 && direction == 1);
 
         return collision;
     }

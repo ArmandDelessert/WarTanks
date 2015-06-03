@@ -4,11 +4,11 @@
  * Date   : 21.03.2015
  */
 
-package vehicle;
+package server.vehicle;
 
-import map.Direction;
-import map.Map;
-import map.Movable;
+import server.map.Direction;
+import server.map.Map;
+import server.map.Movable;
 
 
 /**
