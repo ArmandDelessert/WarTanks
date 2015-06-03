@@ -65,7 +65,7 @@ This message is send by the server when a client reach a bonus.
 
 ### Map
 Format <length=1+X><ID=4><map (byte[X])>
-This message is send by the server each X seconds to update client map state.
+This message is send by the server each Y seconds to update client map state.
 (for example: bonus emplacement)
 
 ### Player
