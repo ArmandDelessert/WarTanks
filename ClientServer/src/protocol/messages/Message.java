@@ -7,7 +7,7 @@
  * Classe Message pour les tests de communication.
  */
 
-package clientserver;
+package protocol.messages;
 
 import java.io.Serializable;
 

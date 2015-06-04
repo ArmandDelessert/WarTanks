@@ -13,7 +13,7 @@ import client.Client;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import protocol.InfoClient;
+import protocol.messages.InfoClient;
 import serveur.Server;
 
 /**
@@ -32,6 +32,7 @@ public class ClientServer {
 	private static final int port2 = 1992;
 
 	/**
+	 * 
 	 * @param args the command line arguments
 	 */
 	public static void main(String[] args) {
@@ -52,9 +53,8 @@ public class ClientServer {
 			client2.join();
 			server1.join();
 
-		} catch (IOException e) {
-			System.out.println(e);
-		} catch (InterruptedException ex) {
+		} catch (IOException | InterruptedException ex) {
+			System.out.println(ex);
 			Logger.getLogger(ClientServer.class.getName()).log(Level.SEVERE, null, ex);
 		}
 

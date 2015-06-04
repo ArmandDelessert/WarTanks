@@ -1,0 +1,33 @@
+run:
+Test de communication entre le serveur et un ou deux client(s).
+[class serveur.Server]: Hello from <class serveur.Server>!
+[class client.Client]: Hello from <class client.Client>!
+[class serveur.Server$ClientHandler]: Hello from <class serveur.Server$ClientHandler>!
+[class serveur.Server]: nbActualClientHandler : 1 ; nbTotalClientHandler : 1
+[class client.Client]: Hello from <class client.Client>!
+[class serveur.Server$ClientHandler]: Hello from <class serveur.Server$ClientHandler>!
+[class serveur.Server]: nbActualClientHandler : 2 ; nbTotalClientHandler : 2
+[class serveur.Server$ClientHandler]: infoClient reçu
+[class client.Client]: Connecté au serveur
+[class serveur.Server$ClientHandler]: infoClient reçu
+[class client.Client]: Connecté au serveur
+[class client.Client]: infoPlayer : 1 Joueur1 [BLUE]
+[class client.Client]: infoPlayer : 2 Joueur2 [RED]
+[class client.Client]: Le serveur a envoyé : Start
+[class client.Client]: Le serveur a envoyé : Start
+[class client.Client]: I have finished my work.
+[class client.Client]: I have finished my work.
+[class serveur.Server$ClientHandler]: Commande reçue : protocol.messages.PlayerCommand@1598e703
+[class serveur.Server$ClientHandler]: Commande reçue : protocol.messages.PlayerCommand@1598e703
+[class serveur.Server$ClientHandler]: Commande reçue : protocol.messages.PlayerCommand@1598e703
+[class serveur.Server$ClientHandler]: Commande reçue : protocol.messages.PlayerCommand@1598e703
+[class serveur.Server$ClientHandler]: nbClientHandler restants : 1
+[class serveur.Server$ClientHandler]: I have finished my work.
+[class serveur.Server$ClientHandler]: Commande reçue : protocol.messages.PlayerCommand@453689fc
+[class serveur.Server$ClientHandler]: Commande reçue : protocol.messages.PlayerCommand@453689fc
+[class serveur.Server$ClientHandler]: Commande reçue : protocol.messages.PlayerCommand@453689fc
+[class serveur.Server$ClientHandler]: Commande reçue : protocol.messages.PlayerCommand@453689fc
+[class serveur.Server$ClientHandler]: nbClientHandler restants : 0
+[class serveur.Server$ClientHandler]: I have finished my work.
+[class serveur.Server]: I have finished my work.
+BUILD SUCCESSFUL (total time: 1 second)
