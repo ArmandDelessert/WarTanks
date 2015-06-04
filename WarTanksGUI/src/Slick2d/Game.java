@@ -177,7 +177,10 @@ public class Game extends BasicGame {
                     System.out.println("boooom");
                     
                     if ((player.getlistBullet().get(y) instanceof AlphaStrick) && !(player.getlistBullet().get(y) instanceof Laser)) {
-                        player.getlistBullet().remove(y);
+                        ((AlphaStrick) player.getlistBullet().get(y)).setStrick(true);
+                        if (((AlphaStrick) player.getlistBullet().get(y)).getExplosion().isFinished()) {
+                            player.getlistBullet().remove(y);
+                        }
                     } 
                     else if(player.getlistBullet().get(y) instanceof Laser){
                         if (((Laser) player.getlistBullet().get(y)).getFinished()) 
@@ -187,10 +190,7 @@ public class Game extends BasicGame {
                         }
                     }
                     else {
-                        ((AlphaStrick) player.getlistBullet().get(y)).setStrick(true);
-                        if (((AlphaStrick) player.getlistBullet().get(y)).getExplosion().isFinished()) {
-                            player.getlistBullet().remove(y);
-                        }
+                        player.getlistBullet().remove(y);
                     }
                     break;
                 }
