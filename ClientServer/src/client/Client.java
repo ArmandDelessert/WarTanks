@@ -18,6 +18,7 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import protocol.Command;
 import protocol.InfoClient;
 import protocol.InfoPlayer;
 
@@ -225,6 +226,13 @@ public class Client implements Runnable {
 
 			// Paramétrage de la partie
 			
+
+//			Command command;
+//			// Envoie des commandes au serveur
+//			while (true) {
+//				command.newCommand("...");
+//				sendCommand(command);
+//			}
 
 			// Fin de la boucle principale pour la communication avec le serveur
 			connectedToTheServer = false;

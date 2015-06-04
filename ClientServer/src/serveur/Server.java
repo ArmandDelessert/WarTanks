@@ -314,6 +314,9 @@ public class Server implements Runnable, Disposable {
 				// Paramétrage de la partie
 				
 
+				// Démarrage de la partie
+				sendStringMessage("Start");
+
 				// Fin de la boucle principale pour la communication avec le client
 				clientConnected = false;
 			}
