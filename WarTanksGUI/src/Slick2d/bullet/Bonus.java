@@ -30,14 +30,12 @@ public class Bonus {
     private Image bonus;
     private int type = 1;
 
-    private Map map;
-    
+
     private final int height = 32;
     private final int width = 32;
-    
 
-    public Bonus(Map map,int type,int x, int y) {
-        this.map = map;
+
+    public Bonus(int type,int x, int y) {
         this.x = x;
         this.y = y;
         this.type = type;

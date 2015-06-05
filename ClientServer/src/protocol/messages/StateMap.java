@@ -17,9 +17,11 @@ import java.io.Serializable;
  */
 public class StateMap implements Serializable {
 
-//public Map map;
 	public InfoPlayer player1;
 	public InfoPlayer player2;
+
+	// Liste des bonus sur la carte
+	// Liste des obus sur la carte
 
 	public StateMap() {}
 

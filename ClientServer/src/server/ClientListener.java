@@ -7,15 +7,12 @@
  * Serveur de test de la communication client-serveur.
  */
 
-package serveur;
+package server;
 
 import com.sun.media.jfxmediaimpl.MediaDisposer.Disposable;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,11 +24,11 @@ import protocol.messages.PlayerCommand;
 import protocol.messages.StateMap;
 
 /**
- * Classe Server
+ * Classe ClientListener
  * 
  * @author Armand Delessert
  */
-public class Server implements Runnable, Disposable {
+public class ClientListener implements Runnable, Disposable {
 
 	public static int cptIdClientHandler = 0;
 
@@ -50,7 +47,7 @@ public class Server implements Runnable, Disposable {
 	 * @param numeroPort
 	 * @throws IOException 
 	 */
-	public Server(int nbMaxClient, int numeroPort) throws IOException {
+	public ClientListener(int nbMaxClient, int numeroPort) throws IOException {
 
 		nbActualClientHandler = 0;
 		nbTotalClientHandler = 0;
@@ -61,7 +58,7 @@ public class Server implements Runnable, Disposable {
 			socket = new ServerSocket(numeroPort);
 		}
 		catch (IOException ex) {
-			Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(ClientListener.class.getName()).log(Level.SEVERE, null, ex);
 			throw new IOException("Problème interne à Server.Server() lors de la création du socket.");
 		}
 
@@ -79,7 +76,7 @@ public class Server implements Runnable, Disposable {
 			clientWaiting();
 		} catch (IOException ex) {
 			System.out.println(ex);
-			Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(ClientListener.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
 
@@ -88,44 +85,39 @@ public class Server implements Runnable, Disposable {
 	 * @throws IOException 
 	 */
 	private void clientWaiting() throws IOException {
-                
+
 		Socket newSocket;
-		ClientHandler newClientHandler;
 		Vector clientHandlerList = new Vector();
 
-		while (running) {
-			// On limite le nombre de clients pouvant se connecter au serveur
-			if (nbTotalClientHandler < nbMaxClientHandler) {
-				try {
-					newSocket = socket.accept();
+		// Création des ClientHandler
+		for (nbTotalClientHandler = 0; nbTotalClientHandler < nbMaxClientHandler; nbTotalClientHandler ++) {
+			try {
+				newSocket = socket.accept();
 
-					// Création d'un serveur spécifique au client
-					newClientHandler = new ClientHandler(newSocket);
-					clientHandlerList.add(new Thread(newClientHandler));
-					
-					nbActualClientHandler ++;
-					nbTotalClientHandler ++;
-					System.out.println("[" + this.getClass() + "]: " + "nbActualClientHandler : " + nbActualClientHandler + " ; " + "nbTotalClientHandler : " + nbTotalClientHandler);
-				}
-				catch (IOException ex) {
-					Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-					throw new IOException("Problème interne à Server.clientWaiting() lors de la création du ClientHandler.");
-				}
-			} else if (nbTotalClientHandler ==  nbMaxClientHandler) {
-                            for (Object ch : clientHandlerList) {
-				((Thread)ch).start();
-                            }
-                        }
+				// Création d'un serveur spécifique au client
+				clientHandlerList.add(new Thread(new ClientHandler(newSocket)));
+				nbActualClientHandler ++;
+				System.out.println("[" + this.getClass() + "]: " + "nbActualClientHandler : " + nbActualClientHandler + " ; " + "nbTotalClientHandler : " + nbTotalClientHandler);
+			}
+			catch (IOException ex) {
+				Logger.getLogger(ClientListener.class.getName()).log(Level.SEVERE, null, ex);
+				throw new IOException("Problème interne à Server.clientWaiting() lors de la création du ClientHandler.");
+			}
+		}
+
+		// Lancement des ClientHandler
+		for (Object i : clientHandlerList) {
+			((Thread)i).start();
 		}
 
 		// Join sur les threads ClientHandler
 		try {
-			for (Object clientHandlerList1 : clientHandlerList) {
-				((Thread) clientHandlerList1).join();
+			for (Object i : clientHandlerList) {
+				((Thread)i).join();
 			}
 		} catch (InterruptedException ex) {
 			System.out.println(ex);
-			Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(ClientListener.class.getName()).log(Level.SEVERE, null, ex);
 		}
 
 		socket.close();
@@ -145,7 +137,7 @@ public class Server implements Runnable, Disposable {
 				socket.close();
 			} catch (IOException ex) {
 				System.out.println(ex);
-				Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+				Logger.getLogger(ClientListener.class.getName()).log(Level.SEVERE, null, ex);
 			}
 		}
 	}
@@ -168,13 +160,13 @@ public class Server implements Runnable, Disposable {
 		 */
 		public ClientHandler(Socket s) throws IOException {
 
-			this.id = Server.cptIdClientHandler ++;
+			this.id = ClientListener.cptIdClientHandler ++;
 
 			try {
 				this.communicationProtocol = new CommunicationProtocol(s);
 			}
 			catch (IOException ex) {
-				Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+				Logger.getLogger(ClientListener.class.getName()).log(Level.SEVERE, null, ex);
 				throw new IOException("Problème interne à Server.ClientHandler[" + this.id + "].ClientHandler() lors de la création de CommunicationProtocol.");
 			}
 
@@ -192,7 +184,7 @@ public class Server implements Runnable, Disposable {
 				clientHandler();
 			} catch (IOException ex) {
 				System.out.println(ex);
-				Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+				Logger.getLogger(ClientListener.class.getName()).log(Level.SEVERE, null, ex);
 			}
 		}
 
@@ -210,8 +202,8 @@ public class Server implements Runnable, Disposable {
 
 			// Envoie d'une confirmation et des infos du joueur
 			this.communicationProtocol.sendStringMessage("OK");
-			Server.nbClient ++;
-			this.communicationProtocol.sendInfoPlayer(new InfoPlayer(Server.nbClient, "Joueur" + Server.nbClient, ColorPlayer.getColor(Server.nbClient)));
+			ClientListener.nbClient ++;
+			this.communicationProtocol.sendInfoPlayer(new InfoPlayer(ClientListener.nbClient, "Joueur" + ClientListener.nbClient, ColorPlayer.getColor(ClientListener.nbClient)));
 
 			// Boucle principale pour la communication avec le client
 			while (clientConnected) {

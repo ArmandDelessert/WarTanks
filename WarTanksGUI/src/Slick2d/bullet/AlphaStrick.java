@@ -32,7 +32,7 @@ public class AlphaStrick extends Bullet {
         this.width = 64;
         this.height = 64;
         this.y = y;
-        e = new Explosion(map, (int) this.x, (int) y);
+        e = new Explosion((int) this.x, (int) y);
         e.init();
         this.init();
     }

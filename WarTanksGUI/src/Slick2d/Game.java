@@ -14,6 +14,7 @@ import Slick2d.bullet.Bonus;
 import Slick2d.bullet.Bullet;
 import Slick2d.Fightable.Player;
 import Slick2d.Fightable.Ennemy;
+import Slick2d.Fightable.IFightable;
 import Slick2d.PEnd.Victory;
 import Slick2d.PEnd.Defeat;
 import Slick2d.HUD.Hud;
@@ -33,9 +34,9 @@ import org.newdawn.slick.Sound;
 
 public class Game extends BasicGame {
 
-    private int nbrPlayer = 10;
-    private int nbrBonus = 10;
-    private int gameTimeSec = 30;
+    private int nbrPlayer;
+    private int nbrBonus;
+    private int gameTimeSec;
     private Sound shot;
     private Music background;
     private GameContainer container;
@@ -50,16 +51,19 @@ public class Game extends BasicGame {
     private float xCamera;
     private float yCamera;
 
-    public Game() throws SlickException {
+    public Game(int nbrPlayer, int nbrBonus, int gameTimeSec) throws SlickException {
         super("Wartanks");
         shot = new Sound("src/ressources/sound/2.ogg");
+        this.nbrPlayer = nbrPlayer;
+        this.nbrBonus = nbrBonus;
+        this.gameTimeSec = gameTimeSec;
     }
 
     Bonus bonusFactory() {
         int type = (int) (Math.random() * (9 + 1 - 1)) + 1;
         int randx = (int) (Math.random() * (32 * (this.map.getWidth() - 1)));
         int randy = (int) (Math.random() * (32 * (this.map.getHeight() - 1)));
-        return new Bonus(map, 4, randx, randy);
+        return new Bonus(8, randx, randy);
     }
 
     Ennemy ennemyFactory(int ID) {
@@ -74,6 +78,34 @@ public class Game extends BasicGame {
         int randy = (int) (Math.random() * (32 * (this.map.getHeight() - 1)));
         int randDirection = (int) (Math.random() * (3 + 1 - 1)) + 1;
         return new Player(map, randx, randy, gameTimeSec, randDirection, hud);
+    }
+
+    ScorePlayer scorePlayerFactory(Ennemy player) {
+        return new ScorePlayer(player);
+    }
+
+    public void setNbPlayer(int n) {
+        this.nbrPlayer = n;
+    }
+
+    public int getNbrPlayer() {
+        return nbrPlayer;
+    }
+
+    public int getNbrBonus() {
+        return nbrBonus;
+    }
+
+    public int getGameTimeSec() {
+        return gameTimeSec;
+    }
+
+    public void setNbBonus(int n) {
+        this.nbrBonus = n;
+    }
+
+    public void setGameTimeSec(int n) {
+        this.gameTimeSec = n;
     }
 
     @Override
@@ -98,12 +130,14 @@ public class Game extends BasicGame {
             listEnnemy.add(e);
             listScore.add(new ScorePlayer(e));
         }
+        listScore.add(new ScorePlayer(player));
+
         for (Object listBonu : listBonus) {
             ((Bonus) listBonu).init();
         }
 
         for (Object listEnnemy1 : listEnnemy) {
-            ((Ennemy) listEnnemy1).init();
+            ((Ennemy)listEnnemy1).init();
         }
         player.setEnnemyList(listEnnemy);
         background = new Music("src/ressources/sound/1.ogg");
@@ -147,7 +181,7 @@ public class Game extends BasicGame {
         if (dead == listEnnemy.size()) {
             Victory victory = new Victory();
             victory.init();
-            victory.render(g); 
+            victory.render(g);
         }
 
     }
@@ -163,6 +197,7 @@ public class Game extends BasicGame {
     public void update(GameContainer container, int delta) throws SlickException {
         this.player.update(delta);
         updateCamera(container);
+        Ennemy tmp;
         for (int i = 0; i < listEnnemy.size(); i++) {
             ((Ennemy) listEnnemy.get(i)).update(delta);
             isColisionWithEnnemy((Ennemy) listEnnemy.get(i), delta);
@@ -170,26 +205,25 @@ public class Game extends BasicGame {
                 if (isCollisionBulletEnnemy((Ennemy) listEnnemy.get(i), (Bullet) player.getlistBullet().get(y), delta)) {
                     if ((player.getlistBullet().get(y) instanceof AlphaStrick) && !((AlphaStrick) player.getlistBullet().get(y)).getStrick()) {
                         ((Ennemy) listEnnemy.get(i)).setHp();
+                        tmp = (Ennemy) listEnnemy.get(i);
                     } else if (!(player.getlistBullet().get(y) instanceof AlphaStrick)) {
                         ((Ennemy) listEnnemy.get(i)).setHp();
                     }
+
                     hud.setLisEnnemyList(listEnnemy);
                     System.out.println("boooom");
-                    
+
                     if ((player.getlistBullet().get(y) instanceof AlphaStrick) && !(player.getlistBullet().get(y) instanceof Laser)) {
                         ((AlphaStrick) player.getlistBullet().get(y)).setStrick(true);
                         if (((AlphaStrick) player.getlistBullet().get(y)).getExplosion().isFinished()) {
                             player.getlistBullet().remove(y);
                         }
-                    } 
-                    else if(player.getlistBullet().get(y) instanceof Laser){
-                        if (((Laser) player.getlistBullet().get(y)).getFinished()) 
-                        {
+                    } else if (player.getlistBullet().get(y) instanceof Laser) {
+                        if (((Laser) player.getlistBullet().get(y)).getFinished()) {
                             System.out.println("laser");
                             player.getlistBullet().remove(y);
                         }
-                    }
-                    else {
+                    } else {
                         player.getlistBullet().remove(y);
                     }
                     break;
@@ -204,9 +238,27 @@ public class Game extends BasicGame {
             }
         }
         isCollisionWithBonus(delta);
+        Input input = container.getInput();
+        if (input.isKeyDown(Input.KEY_UP)) {
+            this.player.setDirection(0);
+            this.player.setMoving(true);
+        }
+        if (input.isKeyDown(Input.KEY_RIGHT)) {
+            this.player.setDirection(3);
+            this.player.setMoving(true);
+        }
+        if (input.isKeyDown(Input.KEY_LEFT)) {
+            this.player.setDirection(1);
+            this.player.setMoving(true);
+        }
+        if (input.isKeyDown(Input.KEY_DOWN)) {
+            this.player.setDirection(2);
+            this.player.setMoving(true);
+        }
+
     }
 
-    boolean isCollisionBulletEnnemy(Ennemy e, Bullet b, int delta) {
+    boolean isCollisionBulletEnnemy(IFightable e, Bullet b, int delta) {
         return (e.getX() > b.getX() || e.getX() + 28 > b.getX())
                 && (e.getX() < b.getX() + b.getWidth())
                 && (e.getY() > b.getY() || e.getY() + 28 > b.getY())
@@ -361,31 +413,16 @@ public class Game extends BasicGame {
     public void keyPressed(int key, char c) {
         if (player.getHP() > 0) {
             switch (key) {
-                case Input.KEY_UP:
-                    this.player.setDirection(0);
-                    this.player.setMoving(true);
-                    break;
-                case Input.KEY_LEFT:
-                    this.player.setDirection(1);
-                    this.player.setMoving(true);
-                    break;
-                case Input.KEY_DOWN:
-                    this.player.setDirection(2);
-                    this.player.setMoving(true);
-                    break;
-                case Input.KEY_RIGHT:
-                    this.player.setDirection(3);
-                    this.player.setMoving(true);
-                    break;
                 case Input.KEY_SPACE: {
                     try {
                         player.shoot();
                     } catch (SlickException ex) {
                         Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
                     }
+                    shot.play();
+                    break;
                 }
-                shot.play();
-                break;
+
                 case Input.KEY_Q:
                     System.out.println("");
                     if (player.getListBonus().size() > 0 && player.getBonus(0).getAvaliable() > 0) {
@@ -461,6 +498,16 @@ public class Game extends BasicGame {
                         System.out.println("empty");
                     }
                     break;
+                case Input.KEY_H:
+                    player.setHp();
+                     {
+                        try {
+                            ((Ennemy) listEnnemy.get(0)).shoot();
+                        } catch (SlickException ex) {
+                            Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+
             }
         }
     }

@@ -28,7 +28,6 @@ public class Explosion {
 
     private Animation[] animations = new Animation[4];
 
-    private Map map;
 
     private final int height = 64;
     private final int width = 64;
@@ -38,8 +37,7 @@ public class Explosion {
     public static final int DOWN = 2;
     public static final int RIGHT = 3;
 
-    public Explosion(Map map, int x, int y) throws SlickException {
-        this.map = map;
+    public Explosion(int x, int y) throws SlickException {
         this.x = x;
         this.y = y;
         shot = new Sound("src/ressources/sound/DeathFlash.ogg");
