@@ -87,34 +87,33 @@ public class ClientListener implements Runnable, Disposable {
 	private void clientWaiting() throws IOException {
 
 		Socket newSocket;
-		ClientHandler newClientHandler;
 		Vector clientHandlerList = new Vector();
 
-		while (running) {
-			// On limite le nombre de clients pouvant se connecter au serveur
-			if (nbTotalClientHandler < nbMaxClientHandler) {
-				try {
-					newSocket = socket.accept();
+		// Création des ClientHandler
+		for (nbTotalClientHandler = 0; nbTotalClientHandler < nbMaxClientHandler; nbTotalClientHandler ++) {
+			try {
+				newSocket = socket.accept();
 
-					// Création d'un serveur spécifique au client
-					newClientHandler = new ClientHandler(newSocket);
-					clientHandlerList.add(new Thread(newClientHandler));
-					((Thread)clientHandlerList.get(nbTotalClientHandler)).start();
-					nbActualClientHandler ++;
-					nbTotalClientHandler ++;
-					System.out.println("[" + this.getClass() + "]: " + "nbActualClientHandler : " + nbActualClientHandler + " ; " + "nbTotalClientHandler : " + nbTotalClientHandler);
-				}
-				catch (IOException ex) {
-					Logger.getLogger(ClientListener.class.getName()).log(Level.SEVERE, null, ex);
-					throw new IOException("Problème interne à Server.clientWaiting() lors de la création du ClientHandler.");
-				}
+				// Création d'un serveur spécifique au client
+				clientHandlerList.add(new Thread(new ClientHandler(newSocket)));
+				nbActualClientHandler ++;
+				System.out.println("[" + this.getClass() + "]: " + "nbActualClientHandler : " + nbActualClientHandler + " ; " + "nbTotalClientHandler : " + nbTotalClientHandler);
 			}
+			catch (IOException ex) {
+				Logger.getLogger(ClientListener.class.getName()).log(Level.SEVERE, null, ex);
+				throw new IOException("Problème interne à Server.clientWaiting() lors de la création du ClientHandler.");
+			}
+		}
+
+		// Lancement des ClientHandler
+		for (Object i : clientHandlerList) {
+			((Thread)i).start();
 		}
 
 		// Join sur les threads ClientHandler
 		try {
-			for (Object clientHandlerList1 : clientHandlerList) {
-				((Thread) clientHandlerList1).join();
+			for (Object i : clientHandlerList) {
+				((Thread)i).join();
 			}
 		} catch (InterruptedException ex) {
 			System.out.println(ex);
