@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import protocol.messages.InfoClient;
-import server.Server;
+import server.ClientListener;
 
 /**
  *
@@ -40,7 +40,7 @@ public class ClientServer {
 		// Création du serveur et d'un ou deux client(s) pour les tests
 		System.out.println("Test de communication entre le serveur et un ou deux client(s).");
 		try {
-			server1 = new Thread(new Server(2, port1));
+			server1 = new Thread(new ClientListener(2, port1));
 			server1.start();
 
 			client1 = new Thread(new Client(new InfoClient(ip, port1)));
