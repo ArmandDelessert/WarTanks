@@ -4,7 +4,7 @@
  * Date   : 06.04.2015
  */
 
-package server.map;
+package gamemanager.map;
 
 /**
  * 

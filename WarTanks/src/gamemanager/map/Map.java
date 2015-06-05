@@ -4,11 +4,11 @@
  * Date   : 21.03.2015
  */
 
-package server.map;
+package gamemanager.map;
 
 import java.io.File;
-import server.vehicle.Tank;
-import server.vehicle.Vehicle;
+import gamemanager.vehicle.Tank;
+import gamemanager.vehicle.Vehicle;
 
 
 /**

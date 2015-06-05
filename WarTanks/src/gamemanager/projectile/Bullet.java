@@ -4,10 +4,10 @@
  * Date   : 21.03.2015
  */
 
-package server.projectile;
+package gamemanager.projectile;
 
-import server.map.Direction;
-import server.map.Map;
+import gamemanager.map.Direction;
+import gamemanager.map.Map;
 
 
 /**

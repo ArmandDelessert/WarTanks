@@ -9,11 +9,9 @@
 
 package wartanks;
 
-import client_test.network.Client_test;
-import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import server.gamemanager.GameManager;
+import gamemanager.GameManager;
 
 /**
  *
