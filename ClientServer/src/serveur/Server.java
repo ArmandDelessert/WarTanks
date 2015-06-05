@@ -21,6 +21,7 @@ import protocol.messages.InfoClient;
 import protocol.messages.InfoPlayer;
 import protocol.messages.InfoPlayer.ColorPlayer;
 import protocol.messages.PlayerCommand;
+import protocol.messages.StateMap;
 
 /**
  * Classe Server
@@ -29,13 +30,14 @@ import protocol.messages.PlayerCommand;
  */
 public class Server implements Runnable, Disposable {
 
+	public static int cptIdClientHandler = 0;
+
 	public static int nbClient = 0;
 
 	public boolean running = true;
 	private int nbActualClientHandler;
 	private int nbTotalClientHandler;
 	private int nbMaxClientHandler;
-	private Vector clientHandlerList;
 
 	private ServerSocket socket;
 
@@ -50,7 +52,6 @@ public class Server implements Runnable, Disposable {
 		nbActualClientHandler = 0;
 		nbTotalClientHandler = 0;
 		nbMaxClientHandler = nbMaxClient;
-		clientHandlerList = new Vector();
 
 		// Création du socket d'écoute des clients
 		try {
@@ -85,8 +86,9 @@ public class Server implements Runnable, Disposable {
 	 */
 	private void clientWaiting() throws IOException {
 
-		ClientHandler newClientHandler;
 		Socket newSocket;
+		ClientHandler newClientHandler;
+		Vector clientHandlerList = new Vector();
 
 		while (running) {
 			// On limite le nombre de clients pouvant se connecter au serveur
@@ -96,11 +98,11 @@ public class Server implements Runnable, Disposable {
 
 					// Création d'un serveur spécifique au client
 					newClientHandler = new ClientHandler(newSocket);
-					clientHandlerList.add(newClientHandler);
+					clientHandlerList.add(new Thread(newClientHandler));
+					((Thread)clientHandlerList.get(nbTotalClientHandler)).start();
 					nbActualClientHandler ++;
 					nbTotalClientHandler ++;
 					System.out.println("[" + this.getClass() + "]: " + "nbActualClientHandler : " + nbActualClientHandler + " ; " + "nbTotalClientHandler : " + nbTotalClientHandler);
-					new Thread(newClientHandler).start();
 				}
 				catch (IOException ex) {
 					Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
@@ -109,9 +111,19 @@ public class Server implements Runnable, Disposable {
 			}
 		}
 
+		// Join sur les threads ClientHandler
+		try {
+			for (Object clientHandlerList1 : clientHandlerList) {
+				((Thread) clientHandlerList1).join();
+			}
+		} catch (InterruptedException ex) {
+			System.out.println(ex);
+			Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+		}
+
 		socket.close();
 
-		System.out.println("[" + this.getClass() + "]: " + "I have finished my work.");
+		System.out.println("[" + this.getClass() + "]: " + "I have finished my work. Goodbye!");
 	}
 
 	/**
@@ -136,6 +148,8 @@ public class Server implements Runnable, Disposable {
 	 */
 	private class ClientHandler implements Runnable {
 
+		public final int id;
+
 		private CommunicationProtocol communicationProtocol;
 
 		InfoClient infoClient;
@@ -147,16 +161,18 @@ public class Server implements Runnable, Disposable {
 		 */
 		public ClientHandler(Socket s) throws IOException {
 
+			this.id = Server.cptIdClientHandler ++;
+
 			try {
 				this.communicationProtocol = new CommunicationProtocol(s);
 			}
 			catch (IOException ex) {
 				Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-				throw new IOException("Problème interne à Server.ClientHandler.ClientHandler() lors de la création de CommunicationProtocol.");
+				throw new IOException("Problème interne à Server.ClientHandler[" + this.id + "].ClientHandler() lors de la création de CommunicationProtocol.");
 			}
 
 			// Hello from clientHandler
-			System.out.println("[" + this.getClass() + "]: " + "Hello from <" + this.getClass() + ">!");
+			System.out.println("[" + this.getClass() + " " + this.id + "]: " + "Hello from <" + this.getClass() + ">!");
 		}
 
 		/**
@@ -183,7 +199,7 @@ public class Server implements Runnable, Disposable {
 
 			// Réception des infos du client
 			this.infoClient = this.communicationProtocol.receiveInfoClient();
-			System.out.println("[" + this.getClass() + "]: " + "infoClient reçu");
+			System.out.println("[" + this.getClass() + " " + this.id + "]: " + "infoClient reçu");
 
 			// Envoie d'une confirmation et des infos du joueur
 			this.communicationProtocol.sendStringMessage("OK");
@@ -199,48 +215,32 @@ public class Server implements Runnable, Disposable {
 				// Démarrage de la partie
 				this.communicationProtocol.sendStringMessage("Start");
 
-				// Réception des commandes des clients
+				// Boucle principale pour la communication pendant la partie
 				PlayerCommand command;
+				StateMap stateMap = new StateMap();
 				for (int i = 0; i < 4; i ++) {
+					// Réception des commandes des clients
 					command = this.communicationProtocol.receivePlayerCommand();
-					System.out.println("[" + this.getClass() + "]: " + "Commande reçue : " + command);
+					System.out.println("[" + this.getClass() + " " + this.id + "]: " + "Commande reçue : " + command);
+
+					// Envoie de la mise à jour de la map
+					this.communicationProtocol.sendStateMap(stateMap);
 				}
 
 				// Fin de la boucle principale pour la communication avec le client
 				clientConnected = false;
 			}
 
-/*
-			// Tests de transfert de messages
-//		String message;
-			Message receivedMessage = new Message("Armand Delessert", "Ça marche pas !");
-			Message sendedMessage = new Message("Armand Delessert", "Hello World from <" + this.getClass() + ">!");
-
-			// Écoute du client
-//		message = receiveStringMessage();
-			receivedMessage = receiveMessage();
-
-			// Affichage du message reçu
-			System.out.println("[" + this.getClass() + "]: " + "I receive this message from the client:");
-//		System.out.println(message);
-			receivedMessage.afficher();
-
-			// Envoie d'une réponse au client
-			System.out.println("[" + this.getClass() + "]: " + "I send \"Hello World!\" to the client.");
-//		sendStringMessage("Hello World from <" + this.getClass() + ">!");
-			sendMessage(sendedMessage);
-*/
-
 			// Fin du clientHandler
 			this.communicationProtocol.close(); // Fermeture des connexions
 
 			nbActualClientHandler --;
-			System.out.println("[" + this.getClass() + "]: " + "nbClientHandler restants : " + nbActualClientHandler);
+			System.out.println("[" + this.getClass() + " " + this.id + "]: " + "nbClientHandler restants : " + nbActualClientHandler);
 			if (nbActualClientHandler == 0) {
 				running = false; // Fin du serveur lorsqu'il n'y a plus de client à servir
 			}
 
-			System.out.println("[" + this.getClass() + "]: " + "I have finished my work.");
+			System.out.println("[" + this.getClass() + " " + this.id + "]: " + "I have finished my work. Goodbye!");
 		}
 	}
 }

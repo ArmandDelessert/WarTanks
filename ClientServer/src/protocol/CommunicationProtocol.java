@@ -21,6 +21,7 @@ import protocol.messages.InfoClient;
 import protocol.messages.InfoPlayer;
 import protocol.messages.Message;
 import protocol.messages.PlayerCommand;
+import protocol.messages.StateMap;
 
 /**
  *
@@ -239,6 +240,38 @@ public class CommunicationProtocol {
 
 		try {
 			return (PlayerCommand)inputSer.readObject();
+		}
+		catch (IOException | ClassNotFoundException ex) {
+			Logger.getLogger(CommunicationProtocol.class.getName()).log(Level.SEVERE, null, ex);
+			throw new IOException("Problème interne à CommunicationProtocol.receivePlayerCommand().");
+		}
+	}
+
+	/**
+	 * 
+	 * @param stateMap
+	 * @throws IOException 
+	 */
+	public void sendStateMap(StateMap stateMap) throws IOException {
+
+		try {
+			outputSer.writeObject(stateMap);
+		}
+		catch (IOException ex) {
+			Logger.getLogger(CommunicationProtocol.class.getName()).log(Level.SEVERE, null, ex);
+			throw new IOException("Problème interne à CommunicationProtocol.sendPlayerCommand().");
+		}
+	}
+
+	/**
+	 * 
+	 * @return
+	 * @throws IOException 
+	 */
+	public StateMap receiveStateMap() throws IOException {
+
+		try {
+			return (StateMap)inputSer.readObject();
 		}
 		catch (IOException | ClassNotFoundException ex) {
 			Logger.getLogger(CommunicationProtocol.class.getName()).log(Level.SEVERE, null, ex);

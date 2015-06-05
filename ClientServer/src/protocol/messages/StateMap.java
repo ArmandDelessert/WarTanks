@@ -21,6 +21,8 @@ public class StateMap implements Serializable {
 	public InfoPlayer player1;
 	public InfoPlayer player2;
 
+	public StateMap() {}
+
 	public StateMap(InfoPlayer player1, InfoPlayer player2) {
 
 		this.player1 = player1;
