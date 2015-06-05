@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import protocol.messages.InfoClient;
-import serveur.Server;
+import server.Server;
 
 /**
  *

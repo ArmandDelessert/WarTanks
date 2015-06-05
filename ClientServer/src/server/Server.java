@@ -7,7 +7,7 @@
  * Serveur de test de la communication client-serveur.
  */
 
-package serveur;
+package server;
 
 import com.sun.media.jfxmediaimpl.MediaDisposer.Disposable;
 import java.io.IOException;
