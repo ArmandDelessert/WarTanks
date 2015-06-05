@@ -38,7 +38,7 @@ public class Bullet {
 
     public Bullet(Map map, int x, int y, int direction) throws SlickException {
         this.map = map;
-        speed = .1f;
+        speed = .2f;
         this.x = x;
         this.y = y;
         this.direction = direction;

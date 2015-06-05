@@ -21,7 +21,7 @@ public class WarTanks {
      */
     public static void main(String[] args) throws IOException, SlickException{
         LauncherFrame laucher = new LauncherFrame();
-        int nbPlayer = 10;
+        int nbPlayer = 1;
         int nbBponus = 10;
         int temps = 30;
         AppGameContainer app = new AppGameContainer(new Game(nbPlayer,nbBponus,temps), 800, 600, false);
