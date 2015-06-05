@@ -7,6 +7,7 @@ package Slick2d.PEnd;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.state.BasicGameState;
 
 /**
  *
