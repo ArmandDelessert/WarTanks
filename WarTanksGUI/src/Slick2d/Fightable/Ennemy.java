@@ -7,6 +7,8 @@ package Slick2d.Fightable;
 
 import Slick2d.Explosion;
 import Slick2d.Map;
+import Slick2d.bullet.Bullet;
+import java.util.LinkedList;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
@@ -17,7 +19,7 @@ import org.newdawn.slick.SpriteSheet;
  *
  * @author Simon
  */
-public class Ennemy implements IFightable{
+public class Ennemy implements IFightable {
 
     int playerID = 1; //sera attribuer par le serveur
     String name;
@@ -30,6 +32,8 @@ public class Ennemy implements IFightable{
     private boolean moving = false;
     private Animation[] animations = new Animation[8];
     private Animation[] diedAnimation = new Animation[32];
+
+    private LinkedList listBullet = new LinkedList();
 
     private Map map;
 
@@ -63,7 +67,7 @@ public class Ennemy implements IFightable{
         this.animations[5] = loadAnimation(spriteSheet, 1, 8, 1);
         this.animations[6] = loadAnimation(spriteSheet, 1, 8, 2);
         this.animations[7] = loadAnimation(spriteSheet, 1, 8, 3);
-        e = new Explosion((int) x-16, (int) y-16);
+        e = new Explosion((int) x - 16, (int) y - 16);
         e.init();
     }
 
@@ -76,6 +80,9 @@ public class Ennemy implements IFightable{
     }
 
     public void render(Graphics g) throws SlickException {
+        for (Object listBullet1 : listBullet) {
+            ((Bullet) listBullet1).render(g);
+        }
         g.setColor(new Color(0, 0, 0, .5f));
         g.drawAnimation(animations[direction + (moving ? 4 : 0)], x, y);
         if (HP == 0) {
@@ -88,6 +95,7 @@ public class Ennemy implements IFightable{
     @Override
     public void update(int delta) throws SlickException {
         if (HP > 0) {
+
             if (this.moving) {
                 float futurX = getFuturX(delta);
                 float futurY = getFuturY(delta);
@@ -119,6 +127,13 @@ public class Ennemy implements IFightable{
                         this.x += speed * delta;
                         break;
                 }
+
+            }
+            for (int i = 0; i < listBullet.size(); i++) {
+                ((Bullet) listBullet.get(i)).update(delta);
+                if (((Bullet) listBullet.get(i)).getCollison()) {
+                    listBullet.remove(i);
+                }
             }
         } else {
             SpriteSheet spriteSheet = new SpriteSheet("src/ressources/tanks/MulticolorTanksBlack.png", this.width, this.height);
@@ -130,6 +145,8 @@ public class Ennemy implements IFightable{
             this.animations[5] = loadAnimation(spriteSheet, 1, 8, 1);
             this.animations[6] = loadAnimation(spriteSheet, 1, 8, 2);
             this.animations[7] = loadAnimation(spriteSheet, 1, 8, 3);
+            e.setX(x);
+            e.setY(y);
 
         }
     }
@@ -202,10 +219,9 @@ public class Ennemy implements IFightable{
     }
 
     public void setHp() {
-        if(HP == 0)
-        {
+        if (HP == 0) {
             HP = 0;
-        }else{
+        } else {
             HP--;
         }
     }
@@ -216,5 +232,12 @@ public class Ennemy implements IFightable{
 
     public int getHP() {
         return HP;
+    }
+
+    public void shoot() throws SlickException {
+        listBullet.add(new Bullet(map, (int) x + 32, (int) y, direction));
+    }
+     public LinkedList getlistBullet() {
+        return listBullet;
     }
 }

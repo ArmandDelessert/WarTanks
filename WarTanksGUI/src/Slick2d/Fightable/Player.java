@@ -5,6 +5,7 @@
  */
 package Slick2d.Fightable;
 
+import Slick2d.Explosion;
 import Slick2d.bullet.AlphaStrick;
 import Slick2d.bullet.Bonus;
 import Slick2d.bullet.Bullet;
@@ -30,7 +31,7 @@ import org.newdawn.slick.SpriteSheet;
  */
 public class Player extends Observable implements IFightable{
 
-    int playerID = 1; //sera attribuer par le serveur
+    int playerID = 0; //sera attribuer par le serveur
     String name;
     private float x = 300, y = 300;
     private int HP;
@@ -38,6 +39,7 @@ public class Player extends Observable implements IFightable{
     private float speed;
     private int direction;
     private boolean moving = false;
+    private Explosion e;
     private LinkedList listBonus = new LinkedList();
     private LinkedList listBullet = new LinkedList();
     private LinkedList listEnnemy = new LinkedList();
@@ -76,6 +78,8 @@ public class Player extends Observable implements IFightable{
         this.animations[5] = loadAnimation(spriteSheet, 1, 8, 1);
         this.animations[6] = loadAnimation(spriteSheet, 1, 8, 2);
         this.animations[7] = loadAnimation(spriteSheet, 1, 8, 3);
+        e = new Explosion((int) x-16, (int) y-16);
+        e.init();
     }
 
     private Animation loadAnimation(SpriteSheet spriteSheet, int startX, int endX, int y) {
@@ -98,6 +102,11 @@ public class Player extends Observable implements IFightable{
         }
         g.setColor(new Color(0, 0, 0, .5f));
         g.drawAnimation(animations[direction + (moving ? 4 : 0)], x, y);
+        
+        if (HP == 0) {
+            //recu les coord du joueur
+            e.render(g);
+        }
     }
 
     @Override
@@ -136,6 +145,18 @@ public class Player extends Observable implements IFightable{
             }
         } else {
             //mort
+            SpriteSheet spriteSheet = new SpriteSheet("src/ressources/tanks/MulticolorTanksBlack.png", this.width, this.height);
+            this.animations[0] = loadAnimation(spriteSheet, 0, 1, 0);
+            this.animations[1] = loadAnimation(spriteSheet, 0, 1, 1);
+            this.animations[2] = loadAnimation(spriteSheet, 0, 1, 2);
+            this.animations[3] = loadAnimation(spriteSheet, 0, 1, 3);
+            this.animations[4] = loadAnimation(spriteSheet, 1, 8, 0);
+            this.animations[5] = loadAnimation(spriteSheet, 1, 8, 1);
+            this.animations[6] = loadAnimation(spriteSheet, 1, 8, 2);
+            this.animations[7] = loadAnimation(spriteSheet, 1, 8, 3);
+            e.setX(x-16);
+            e.setY(y-16);
+
 
         }
     }

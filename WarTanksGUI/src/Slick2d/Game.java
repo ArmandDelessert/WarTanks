@@ -14,6 +14,7 @@ import Slick2d.bullet.Bonus;
 import Slick2d.bullet.Bullet;
 import Slick2d.Fightable.Player;
 import Slick2d.Fightable.Ennemy;
+import Slick2d.Fightable.IFightable;
 import Slick2d.PEnd.Victory;
 import Slick2d.PEnd.Defeat;
 import Slick2d.HUD.Hud;
@@ -79,6 +80,10 @@ public class Game extends BasicGame {
         return new Player(map, randx, randy, gameTimeSec, randDirection, hud);
     }
 
+    ScorePlayer scorePlayerFactory(Ennemy player) {
+        return new ScorePlayer(player);
+    }
+
     public void setNbPlayer(int n) {
         this.nbrPlayer = n;
     }
@@ -125,12 +130,14 @@ public class Game extends BasicGame {
             listEnnemy.add(e);
             listScore.add(new ScorePlayer(e));
         }
+        listScore.add(new ScorePlayer(player));
+
         for (Object listBonu : listBonus) {
             ((Bonus) listBonu).init();
         }
 
         for (Object listEnnemy1 : listEnnemy) {
-            ((Ennemy) listEnnemy1).init();
+            ((Ennemy)listEnnemy1).init();
         }
         player.setEnnemyList(listEnnemy);
         background = new Music("src/ressources/sound/1.ogg");
@@ -190,6 +197,7 @@ public class Game extends BasicGame {
     public void update(GameContainer container, int delta) throws SlickException {
         this.player.update(delta);
         updateCamera(container);
+        Ennemy tmp;
         for (int i = 0; i < listEnnemy.size(); i++) {
             ((Ennemy) listEnnemy.get(i)).update(delta);
             isColisionWithEnnemy((Ennemy) listEnnemy.get(i), delta);
@@ -197,9 +205,11 @@ public class Game extends BasicGame {
                 if (isCollisionBulletEnnemy((Ennemy) listEnnemy.get(i), (Bullet) player.getlistBullet().get(y), delta)) {
                     if ((player.getlistBullet().get(y) instanceof AlphaStrick) && !((AlphaStrick) player.getlistBullet().get(y)).getStrick()) {
                         ((Ennemy) listEnnemy.get(i)).setHp();
+                        tmp = (Ennemy) listEnnemy.get(i);
                     } else if (!(player.getlistBullet().get(y) instanceof AlphaStrick)) {
                         ((Ennemy) listEnnemy.get(i)).setHp();
                     }
+
                     hud.setLisEnnemyList(listEnnemy);
                     System.out.println("boooom");
 
@@ -248,7 +258,7 @@ public class Game extends BasicGame {
 
     }
 
-    boolean isCollisionBulletEnnemy(Ennemy e, Bullet b, int delta) {
+    boolean isCollisionBulletEnnemy(IFightable e, Bullet b, int delta) {
         return (e.getX() > b.getX() || e.getX() + 28 > b.getX())
                 && (e.getX() < b.getX() + b.getWidth())
                 && (e.getY() > b.getY() || e.getY() + 28 > b.getY())
@@ -488,6 +498,16 @@ public class Game extends BasicGame {
                         System.out.println("empty");
                     }
                     break;
+                case Input.KEY_H:
+                    player.setHp();
+                     {
+                        try {
+                            ((Ennemy) listEnnemy.get(0)).shoot();
+                        } catch (SlickException ex) {
+                            Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+
             }
         }
     }
