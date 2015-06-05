@@ -7,7 +7,7 @@
  * Liste des fonctions nécessaires à la communication client-serveur.
  */
 
-package client;
+package protocol;
 
 import java.io.IOException;
 import java.io.InputStream;
