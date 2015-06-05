@@ -17,11 +17,15 @@
 /WarTanksGUI/build/
 /WarTanksGUI/dist/
 /WarTanksGUI/nbproject/private/
+# Protection contre la modification de la configuration du projet
+/WarTanksGUI/nbproject/
 
 # ClientServer #
 /ClientServer/build/
 /ClientServer/dist/
 /ClientServer/nbproject/private/
+# Protection contre la modification de la configuration du projet
+/ClientServer/nbproject/
 
 # KryoNet_test #
 /KryoNet_test/build/
