@@ -13,6 +13,9 @@ import com.sun.media.jfxmediaimpl.MediaDisposer.Disposable;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -85,7 +88,7 @@ public class Server implements Runnable, Disposable {
 	 * @throws IOException 
 	 */
 	private void clientWaiting() throws IOException {
-
+                
 		Socket newSocket;
 		ClientHandler newClientHandler;
 		Vector clientHandlerList = new Vector();
@@ -99,7 +102,7 @@ public class Server implements Runnable, Disposable {
 					// Création d'un serveur spécifique au client
 					newClientHandler = new ClientHandler(newSocket);
 					clientHandlerList.add(new Thread(newClientHandler));
-					((Thread)clientHandlerList.get(nbTotalClientHandler)).start();
+					
 					nbActualClientHandler ++;
 					nbTotalClientHandler ++;
 					System.out.println("[" + this.getClass() + "]: " + "nbActualClientHandler : " + nbActualClientHandler + " ; " + "nbTotalClientHandler : " + nbTotalClientHandler);
@@ -108,7 +111,11 @@ public class Server implements Runnable, Disposable {
 					Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
 					throw new IOException("Problème interne à Server.clientWaiting() lors de la création du ClientHandler.");
 				}
-			}
+			} else if (nbTotalClientHandler ==  nbMaxClientHandler) {
+                            for (Object ch : clientHandlerList) {
+				((Thread)ch).start();
+                            }
+                        }
 		}
 
 		// Join sur les threads ClientHandler
