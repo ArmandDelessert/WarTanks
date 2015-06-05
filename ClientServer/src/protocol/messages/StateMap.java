@@ -7,7 +7,7 @@
  * Classe pour le stockage des informations concernant la carte et l'état de la partie.
  */
 
-package protocol;
+package protocol.messages;
 
 import java.io.Serializable;
 
@@ -20,6 +20,8 @@ public class StateMap implements Serializable {
 //public Map map;
 	public InfoPlayer player1;
 	public InfoPlayer player2;
+
+	public StateMap() {}
 
 	public StateMap(InfoPlayer player1, InfoPlayer player2) {
 

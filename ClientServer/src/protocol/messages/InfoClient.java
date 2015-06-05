@@ -7,7 +7,7 @@
  * Classe pour le stockage des informations concernant un client.
  */
 
-package protocol;
+package protocol.messages;
 
 import java.io.Serializable;
 

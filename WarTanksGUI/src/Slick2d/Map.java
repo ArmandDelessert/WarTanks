@@ -5,10 +5,14 @@
  */
 package Slick2d;
 
+import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Sound;
+import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.gui.MouseOverArea;
 import org.newdawn.slick.tiled.TiledMap;
 
@@ -45,41 +49,8 @@ public class Map {
         int tileH = this.tiledMap.getTileHeight();
         int logicLayer = this.tiledMap.getLayerIndex("logic");
         Image tile = null;
-        boolean collision = false;
-        
-        switch (direction) {
-            case 0:
-                
-                if(this.tiledMap.getTileImage((int) (x) / tileW, (int) (y) / tileH, logicLayer) != null)
-                    tile = this.tiledMap.getTileImage((int) (x) / tileW, (int) (y) / tileH, logicLayer);
-                else if (this.tiledMap.getTileImage((int) (x+width) / tileW, (int) (y) / tileH, logicLayer) != null)
-                    tile = this.tiledMap.getTileImage((int) (x+width) / tileW, (int) (y) / tileH, logicLayer);
-                break;
-                
-            case 1:
-                
-                if(this.tiledMap.getTileImage((int) (x) / tileW, (int) (y) / tileH, logicLayer) != null) {// haut gauche
-                    tile = this.tiledMap.getTileImage((int) (x) / tileW, (int) (y) / tileH, logicLayer);
-                    System.out.println("haut gauche");
-                } else if (this.tiledMap.getTileImage((int) (x) / tileW, (int) (y+height) / tileH, logicLayer) != null) {// bas gauche
-                    tile = this.tiledMap.getTileImage((int) (x) / tileW, (int) (y+height) / tileH, logicLayer);
-                    System.out.println("bas gauche");
-                }
-                break;
-                
-            case 2:
-                if(this.tiledMap.getTileImage((int) (x) / tileW, (int) (y+height) / tileH, logicLayer) != null)
-                    tile = this.tiledMap.getTileImage((int) (x) / tileW, (int) (y+height) / tileH, logicLayer);
-                else if (this.tiledMap.getTileImage((int) (x+width) / tileW, (int) (y+height) / tileH, logicLayer) != null)
-                    tile = this.tiledMap.getTileImage((int) (x+width) / tileW, (int) (y+height) / tileH, logicLayer);
-                break;
-            case 3:
-                if(this.tiledMap.getTileImage((int) (x+width) / tileW, (int) (y) / tileH, logicLayer) != null)
-                    tile = this.tiledMap.getTileImage((int) (x+width) / tileW, (int) (y) / tileH, logicLayer);
-                else if (this.tiledMap.getTileImage((int) (x+width) / tileW, (int) (y+height) / tileH, logicLayer) != null)
-                    tile = this.tiledMap.getTileImage((int) (x+width) / tileW, (int) (y+height) / tileH, logicLayer);
-                break;
-        }
+        boolean collision;
+
         collision = tile != null;
 
         if (collision) {
@@ -92,10 +63,6 @@ public class Map {
                 || (x + width > this.tiledMap.getWidth() * tileW && direction == 3) || (x < 0 && direction == 1);
 
         return collision;
-    }
-    
-    private boolean isbetween(double val, double b1, double b2) {
-        return val >= b1 && val < b2;
     }
 
     public boolean isSlowed(float x, float y) {
