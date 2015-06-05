@@ -5,6 +5,7 @@
  */
 package client;
 
+import protocol.CommunicationProtocol;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
