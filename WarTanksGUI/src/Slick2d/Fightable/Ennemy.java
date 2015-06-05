@@ -24,7 +24,7 @@ public class Ennemy implements IFightable{
     private float x = 350, y = 350;
     private Explosion e;
     private int HP;
-    private boolean kaboomed = false;
+    private boolean kaboomed;
     private float speed;
     private int direction = 0;
     private boolean moving = false;
@@ -43,6 +43,7 @@ public class Ennemy implements IFightable{
 
     public Ennemy(Map map, int x, int y, int randDirection, int id) {
         this.x = x;
+        kaboomed = false;
         this.name = "Ennemy " + id;
         this.y = y;
         this.direction = randDirection;
@@ -62,7 +63,7 @@ public class Ennemy implements IFightable{
         this.animations[5] = loadAnimation(spriteSheet, 1, 8, 1);
         this.animations[6] = loadAnimation(spriteSheet, 1, 8, 2);
         this.animations[7] = loadAnimation(spriteSheet, 1, 8, 3);
-        e = new Explosion(map, (int) x-16, (int) y-16);
+        e = new Explosion((int) x-16, (int) y-16);
         e.init();
     }
 

@@ -33,9 +33,9 @@ import org.newdawn.slick.Sound;
 
 public class Game extends BasicGame {
 
-    private int nbrPlayer = 10;
-    private int nbrBonus = 10;
-    private int gameTimeSec = 30;
+    private int nbrPlayer ;
+    private int nbrBonus ;
+    private int gameTimeSec ;
     private Sound shot;
     private Music background;
     private GameContainer container;
@@ -50,16 +50,19 @@ public class Game extends BasicGame {
     private float xCamera;
     private float yCamera;
 
-    public Game() throws SlickException {
+    public Game(int nbrPlayer, int nbrBonus , int gameTimeSec) throws SlickException {
         super("Wartanks");
         shot = new Sound("src/ressources/sound/2.ogg");
+        this.nbrPlayer = nbrPlayer;
+        this.nbrBonus = nbrBonus;
+        this.gameTimeSec = gameTimeSec;
     }
 
     Bonus bonusFactory() {
         int type = (int) (Math.random() * (9 + 1 - 1)) + 1;
         int randx = (int) (Math.random() * (32 * (this.map.getWidth() - 1)));
         int randy = (int) (Math.random() * (32 * (this.map.getHeight() - 1)));
-        return new Bonus(map, 4, randx, randy);
+        return new Bonus(8, randx, randy);
     }
 
     Ennemy ennemyFactory(int ID) {
@@ -75,7 +78,30 @@ public class Game extends BasicGame {
         int randDirection = (int) (Math.random() * (3 + 1 - 1)) + 1;
         return new Player(map, randx, randy, gameTimeSec, randDirection, hud);
     }
-
+    public void setNbPlayer(int n)
+    {
+        this.nbrPlayer = n;
+    }
+    public int getNbrPlayer()
+    {
+        return nbrPlayer;
+    }
+    public  int getNbrBonus()
+    {
+        return nbrBonus;
+    }
+    public int getGameTimeSec()
+    {
+        return gameTimeSec;
+    }
+    public void setNbBonus(int n)
+    {
+        this.nbrBonus = n;
+    }
+    public void setGameTimeSec(int n)
+    {
+        this.gameTimeSec = n;
+    }
     @Override
     public void init(GameContainer container) throws SlickException {
         this.container = container;
