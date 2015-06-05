@@ -23,7 +23,7 @@ public class Map {
     TiledMap tiledMap;
 
     public void init() throws SlickException {
-        this.tiledMap = new TiledMap("src/ressources/map/maps/test2.tmx");
+        this.tiledMap = new TiledMap("src/ressources/map/maps/test1.tmx");
 
     }
 
@@ -32,8 +32,8 @@ public class Map {
         this.tiledMap.render(0, 0, 0);
         this.tiledMap.render(0, 0, 1);
         this.tiledMap.render(0, 0, 2);
-        this.tiledMap.render(0, 0, 3);
-        this.tiledMap.render(0, 0, 4);
+        //this.tiledMap.render(0, 0, 3);
+        //this.tiledMap.render(0, 0, 4);
     }
 
     public void renderForeground() {
