@@ -13,11 +13,11 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import protocol.CommunicationProtocol;
-import protocol.messages.PlayerCommand;
-import protocol.messages.InfoClient;
-import protocol.messages.InfoPlayer;
-import protocol.messages.StateMap;
+import network.protocol.CommunicationProtocol;
+import network.protocol.messages.PlayerCommand;
+import network.protocol.messages.InfoClient;
+import network.protocol.messages.InfoPlayer;
+import network.protocol.messages.StateMap;
 
 /**
  * Classe Client
