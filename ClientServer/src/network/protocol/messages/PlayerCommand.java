@@ -7,7 +7,7 @@
  * Classe pour la communication des commandes du client au serveur.
  */
 
-package protocol.messages;
+package network.protocol.messages;
 
 import java.io.Serializable;
 

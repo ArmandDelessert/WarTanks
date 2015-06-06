@@ -7,7 +7,7 @@
  * Classe pour le stockage des informations concernant la carte et l'état de la partie.
  */
 
-package protocol.messages;
+package network.protocol.messages;
 
 import java.io.Serializable;
 

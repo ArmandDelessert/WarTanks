@@ -9,12 +9,12 @@
 
 package clientserver;
 
-import client.Client;
+import network.client.Client;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import protocol.messages.InfoClient;
-import server.ClientListener;
+import network.protocol.messages.InfoClient;
+import network.server.ClientListener;
 
 /**
  *

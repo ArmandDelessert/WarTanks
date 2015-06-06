@@ -7,7 +7,7 @@
  * Liste des fonctions nécessaires à la communication client-serveur.
  */
 
-package protocol;
+package network.protocol;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,11 +17,11 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import protocol.messages.InfoClient;
-import protocol.messages.InfoPlayer;
-import protocol.messages.Message;
-import protocol.messages.PlayerCommand;
-import protocol.messages.StateMap;
+import network.protocol.messages.InfoClient;
+import network.protocol.messages.InfoPlayer;
+import network.protocol.messages.Message;
+import network.protocol.messages.PlayerCommand;
+import network.protocol.messages.StateMap;
 
 /**
  *

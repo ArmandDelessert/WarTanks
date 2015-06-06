@@ -7,7 +7,7 @@
  * Classe pour le stockage des informations concernant un joueur.
  */
 
-package protocol.messages;
+package network.protocol.messages;
 
 import java.io.Serializable;
 
