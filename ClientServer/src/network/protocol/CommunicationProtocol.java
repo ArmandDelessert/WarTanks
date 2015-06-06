@@ -20,14 +20,21 @@ import java.util.logging.Logger;
 import network.protocol.messages.InfoClient;
 import network.protocol.messages.InfoPlayer;
 import network.protocol.messages.Message;
-import network.protocol.messages.PlayerCommand;
+import network.protocol.messages.Command;
+import network.protocol.messages.Movement;
+import network.protocol.messages.Shoot;
 import network.protocol.messages.StateMap;
+import network.protocol.messages.TiledMapMessage;
+import network.protocol.messages.UseBonus;
 
 /**
  *
  * @author Armand Delessert
  */
 public class CommunicationProtocol {
+
+	// Exceptions
+	public static class UnknownCommand extends Exception {}
 
 	private Socket socket;
 	private OutputStream outputStream;
@@ -71,7 +78,20 @@ public class CommunicationProtocol {
 			throw new IOException("Problème interne à CommunicationProtocol.close().");
 		}
 	}
-	
+
+	/**
+	 * 
+	 * @return
+	 * @throws IOException 
+	 */
+	public boolean isAvailable() throws IOException {
+		return (inputSer.available() > 0);
+	}
+
+	/******************************************
+	 * Class String
+	 *****************************************/
+
 	/**
 	 * 
 	 * @param message
@@ -115,6 +135,10 @@ public class CommunicationProtocol {
 		return s.substring(0, s.indexOf('\0'));
 	}
 
+	/******************************************
+	 * Class Message
+	 *****************************************/
+
 	/**
 	 * 
 	 * @param message 
@@ -151,6 +175,10 @@ public class CommunicationProtocol {
 		}
 	}
 
+	/******************************************
+	 * Class InfoClient
+	 *****************************************/
+
 	/**
 	 * 
 	 * @param infoClient
@@ -182,6 +210,10 @@ public class CommunicationProtocol {
 			throw new IOException("Problème interne à CommunicationProtocol.receiveInfoClient().");
 		}
 	}
+
+	/******************************************
+	 * Class InfoPlayer
+	 *****************************************/
 
 	/**
 	 * 
@@ -215,19 +247,22 @@ public class CommunicationProtocol {
 		}
 	}
 
+	/******************************************
+	 * Class TiledMapMessage
+	 *****************************************/
+
 	/**
 	 * 
-	 * @param playerCommand
+	 * @param tiledMapMessage
 	 * @throws IOException 
 	 */
-	public void sendPlayerCommand(PlayerCommand playerCommand) throws IOException {
-
+	public void sendTiledMapMessage(TiledMapMessage tiledMapMessage) throws IOException {
 		try {
-			outputSer.writeObject(playerCommand);
+			outputSer.writeObject(tiledMapMessage);
 		}
 		catch (IOException ex) {
 			Logger.getLogger(CommunicationProtocol.class.getName()).log(Level.SEVERE, null, ex);
-			throw new IOException("Problème interne à CommunicationProtocol.sendPlayerCommand().");
+			throw new IOException("Problème interne à CommunicationProtocol.sendTiledMapMessage().");
 		}
 	}
 
@@ -236,16 +271,19 @@ public class CommunicationProtocol {
 	 * @return
 	 * @throws IOException 
 	 */
-	public PlayerCommand receivePlayerCommand() throws IOException {
-
+	public TiledMapMessage receiveTiledMapMessage() throws IOException {
 		try {
-			return (PlayerCommand)inputSer.readObject();
+			return (TiledMapMessage)inputSer.readObject();
 		}
 		catch (IOException | ClassNotFoundException ex) {
 			Logger.getLogger(CommunicationProtocol.class.getName()).log(Level.SEVERE, null, ex);
-			throw new IOException("Problème interne à CommunicationProtocol.receivePlayerCommand().");
+			throw new IOException("Problème interne à CommunicationProtocol.receiveTiledMapMessage().");
 		}
 	}
+
+	/******************************************
+	 * Class StateMap
+	 *****************************************/
 
 	/**
 	 * 
@@ -276,6 +314,90 @@ public class CommunicationProtocol {
 		catch (IOException | ClassNotFoundException ex) {
 			Logger.getLogger(CommunicationProtocol.class.getName()).log(Level.SEVERE, null, ex);
 			throw new IOException("Problème interne à CommunicationProtocol.receivePlayerCommand().");
+		}
+	}
+
+	/******************************************
+	 * Class Command
+	 *****************************************/
+
+//	/**
+//	 * 
+//	 * @param playerCommand
+//	 * @throws IOException 
+//	 */
+//	public void sendPlayerCommand(Command playerCommand) throws IOException {
+//
+//		try {
+//			outputSer.writeObject(playerCommand);
+//		}
+//		catch (IOException ex) {
+//			Logger.getLogger(CommunicationProtocol.class.getName()).log(Level.SEVERE, null, ex);
+//			throw new IOException("Problème interne à CommunicationProtocol.sendPlayerCommand().");
+//		}
+//	}
+//
+//	/**
+//	 * 
+//	 * @return
+//	 * @throws IOException 
+//	 */
+//	public Command receivePlayerCommand() throws IOException {
+//
+//		try {
+//			return (Command)inputSer.readObject();
+//		}
+//		catch (IOException | ClassNotFoundException ex) {
+//			Logger.getLogger(CommunicationProtocol.class.getName()).log(Level.SEVERE, null, ex);
+//			throw new IOException("Problème interne à CommunicationProtocol.receivePlayerCommand().");
+//		}
+//	}
+
+	/**
+	 * 
+	 * @param cmd
+	 * @throws IOException 
+	 */
+	public void sendCommand(Command cmd) throws IOException {
+		try {
+			outputSer.writeObject(cmd);
+		}
+		catch (IOException ex) {
+			Logger.getLogger(CommunicationProtocol.class.getName()).log(Level.SEVERE, null, ex);
+			throw new IOException("Problème interne à CommunicationProtocol.sendCommand().");
+		}
+	}
+
+	/**
+	 * 
+	 * @return
+	 * @throws IOException
+	 * @throws UnknownCommand 
+	 */
+	public Command receiveCommand() throws IOException, UnknownCommand {
+
+		Command input = null;
+
+		try {
+			input =  (Command)inputSer.readObject();
+		}
+		catch (IOException | ClassNotFoundException ex) {
+			Logger.getLogger(CommunicationProtocol.class.getName()).log(Level.SEVERE, null, ex);
+			throw new IOException("Problème interne à CommunicationProtocol.receiveCommand().");
+		}
+		finally {
+			if (input.getClass().equals(UseBonus.class)) {
+				return (UseBonus)input;
+			}
+			else if (input.getClass().equals(Shoot.class)) {
+				return (Shoot)input;
+			}
+			else if (input.getClass().equals(Movement.class)) {
+				return (Movement)input;
+			}
+			else {
+				throw new CommunicationProtocol.UnknownCommand();
+			}
 		}
 	}
 }

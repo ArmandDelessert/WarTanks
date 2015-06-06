@@ -20,7 +20,7 @@ import network.protocol.CommunicationProtocol;
 import network.protocol.messages.InfoClient;
 import network.protocol.messages.InfoPlayer;
 import network.protocol.messages.InfoPlayer.ColorPlayer;
-import network.protocol.messages.PlayerCommand;
+import network.protocol.messages.Command;
 import network.protocol.messages.StateMap;
 
 /**
@@ -215,7 +215,7 @@ public class ClientListener implements Runnable, Disposable {
 				this.communicationProtocol.sendStringMessage("Start");
 
 				// Boucle principale pour la communication pendant la partie
-				PlayerCommand command;
+				Command command;
 				StateMap stateMap = new StateMap();
 				for (int i = 0; i < 4; i ++) {
 					// Réception des commandes des clients

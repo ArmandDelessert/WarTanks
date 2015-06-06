@@ -15,27 +15,27 @@ import java.io.Serializable;
  *
  * @author Armand Delessert
  */
-public class PlayerCommand implements Serializable {
-
+public class Command implements Serializable {
+/*
 	public CommandType typeCmd;
 	public Command_Movement cmdMovement;
 	public Command_Fire cmdFire;
 
-	public PlayerCommand() {
+	public Command() {
 
 		this.typeCmd = null;
 		this.cmdMovement = null;
 		this.cmdFire = null;
 	}
 
-	public PlayerCommand(CommandType typeCmd, Command_Movement cmd) {
+	public Command(CommandType typeCmd, Command_Movement cmd) {
 
 		this.typeCmd = typeCmd;
 		this.cmdMovement = cmd;
 		this.cmdFire = null;
 	}
 
-	public PlayerCommand(CommandType typeCmd, Command_Fire cmd) {
+	public Command(CommandType typeCmd, Command_Fire cmd) {
 
 		this.typeCmd = typeCmd;
 		this.cmdMovement = null;
@@ -74,4 +74,5 @@ public class PlayerCommand implements Serializable {
 
 		FIRE;
 	}
+*/
 }
