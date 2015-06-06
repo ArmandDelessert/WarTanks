@@ -33,13 +33,14 @@ import protocol.messages.UseBonus;
  */
 public class CommunicationProtocol {
 
+	// Exceptions
+	public static class UnknownCommand extends Exception {}
+
 	private Socket socket;
 	private OutputStream outputStream;
 	private ObjectOutputStream outputSer;
 	private InputStream inputStream;
 	private ObjectInputStream inputSer;
-        
-        public static class UnknownCommand extends Exception {}
 
 	/**
 	 * 
@@ -77,7 +78,16 @@ public class CommunicationProtocol {
 			throw new IOException("Problème interne à CommunicationProtocol.close().");
 		}
 	}
-	
+
+	/**
+	 * 
+	 * @return
+	 * @throws IOException 
+	 */
+	public boolean isAvailable() throws IOException {
+		return (inputSer.available() > 0);
+	}
+
 	/**
 	 * 
 	 * @param message
@@ -221,8 +231,6 @@ public class CommunicationProtocol {
 		}
 	}
 
-	
-
 	/**
 	 * 
 	 * @param stateMap
@@ -254,9 +262,28 @@ public class CommunicationProtocol {
 			throw new IOException("Problème interne à CommunicationProtocol.receivePlayerCommand().");
 		}
 	}
-        
-        public TiledMapMessage receiveTiledMapMessage() throws IOException {
 
+	/**
+	 * 
+	 * @param tiledMapMessage
+	 * @throws IOException 
+	 */
+	public void sendTiledMapMessage(TiledMapMessage tiledMapMessage) throws IOException {
+		try {
+			outputSer.writeObject(tiledMapMessage);
+		}
+		catch (IOException ex) {
+			Logger.getLogger(CommunicationProtocol.class.getName()).log(Level.SEVERE, null, ex);
+			throw new IOException("Problème interne à CommunicationProtocol.sendTiledMapMessage().");
+		}
+	}
+
+	/**
+	 * 
+	 * @return
+	 * @throws IOException 
+	 */
+	public TiledMapMessage receiveTiledMapMessage() throws IOException {
 		try {
 			return (TiledMapMessage)inputSer.readObject();
 		}
@@ -265,71 +292,52 @@ public class CommunicationProtocol {
 			throw new IOException("Problème interne à CommunicationProtocol.receiveTiledMapMessage().");
 		}
 	}
-        
-        public void sendTiledMapMessage(TiledMapMessage tiledMapMessage) throws IOException {
-            try {
-                outputSer.writeObject(tiledMapMessage);
-            }
-            catch (IOException ex) {
-                Logger.getLogger(CommunicationProtocol.class.getName()).log(Level.SEVERE, null, ex);
-                throw new IOException("Problème interne à CommunicationProtocol.sendTiledMapMessage().");
-            }
-        }
-        
-        /**
-         * 
-         * @return 
-         */
-	public boolean isAvailable() throws IOException {
-            return (inputSer.available() > 0);
-	}
-        
-        /**
-         * 
-         * @param cmd
-         * @throws IOException 
-         */
-        public void sendCmd(Command cmd) throws IOException {
-            try {
-                    outputSer.writeObject(cmd);
-            }
-            catch (IOException ex) {
-                    Logger.getLogger(CommunicationProtocol.class.getName()).log(Level.SEVERE, null, ex);
-                    throw new IOException("Problème interne à CommunicationProtocol.sendCmd() (IOException)");
-            }
-        }
 
-        /**
-         * 
-         * @return
-         * @throws IOException
-         * @throws client.CommunicationProtocol.UnknownCommand 
-         */
+	/**
+	 * 
+	 * @param cmd
+	 * @throws IOException 
+	 */
+	public void sendCmd(Command cmd) throws IOException {
+		try {
+			outputSer.writeObject(cmd);
+		}
+		catch (IOException ex) {
+			Logger.getLogger(CommunicationProtocol.class.getName()).log(Level.SEVERE, null, ex);
+			throw new IOException("Problème interne à CommunicationProtocol.sendCmd() (IOException)");
+		}
+	}
+
+	/**
+	 * 
+	 * @return
+	 * @throws IOException
+	 * @throws UnknownCommand 
+	 */
 	public Command receiveCmd() throws IOException, UnknownCommand {
-                Command input = null;
+
+		Command input = null;
+
 		try {
 			input =  (Command)inputSer.readObject();
 		}
 		catch (IOException | ClassNotFoundException ex) {
 			Logger.getLogger(CommunicationProtocol.class.getName()).log(Level.SEVERE, null, ex);
 			throw new IOException("Problème interne à CommunicationProtocol.receivePlayerCommand().");
-		} finally {
-                    if (input.getClass().equals(UseBonus.class)) {
-                        return (UseBonus)input;
-                    }
-                    
-                    else if (input.getClass().equals(Shoot.class)) {
-                        return (Shoot)input;
-                    }
-                    
-                    else if (input.getClass().equals(Movement.class)) {
-                        return (Movement)input;
-                    }
-                    
-                    else {
-                        throw new CommunicationProtocol.UnknownCommand();
-                    }
-                    
-                }
+		}
+		finally {
+			if (input.getClass().equals(UseBonus.class)) {
+				return (UseBonus)input;
+			}
+			else if (input.getClass().equals(Shoot.class)) {
+				return (Shoot)input;
+			}
+			else if (input.getClass().equals(Movement.class)) {
+				return (Movement)input;
+			}
+			else {
+				throw new CommunicationProtocol.UnknownCommand();
+			}
+		}
 	}
 }
