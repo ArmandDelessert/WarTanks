@@ -15,7 +15,7 @@ import java.io.Serializable;
  *
  * @author Armand Delessert
  */
-public class StateMap implements Serializable {
+public class StateGame implements Serializable {
 
 	public InfoPlayer player1;
 	public InfoPlayer player2;
@@ -23,9 +23,9 @@ public class StateMap implements Serializable {
 	// Liste des bonus sur la carte
 	// Liste des obus sur la carte
 
-	public StateMap() {}
+	public StateGame() {}
 
-	public StateMap(InfoPlayer player1, InfoPlayer player2) {
+	public StateGame(InfoPlayer player1, InfoPlayer player2) {
 
 		this.player1 = player1;
 		this.player2 = player2;

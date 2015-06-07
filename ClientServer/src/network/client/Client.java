@@ -18,7 +18,7 @@ import network.protocol.messages.Command;
 import network.protocol.messages.InfoClient;
 import network.protocol.messages.InfoPlayer;
 import network.protocol.messages.Movement;
-import network.protocol.messages.StateMap;
+import network.protocol.messages.StateGame;
 
 /**
  * Classe Client
@@ -113,7 +113,7 @@ public class Client implements Runnable {
 
 			// Boucle principale pour la communication pendant la partie
 			Movement command = new Movement(0);
-			StateMap stateMap;
+			StateGame stateMap;
 			for (int i = 0; i < 4; i ++) {
 				// Envoie des commandes au serveur
 				this.communicationProtocol.sendCommand(command);
