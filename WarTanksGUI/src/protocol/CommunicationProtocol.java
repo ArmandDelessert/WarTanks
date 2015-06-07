@@ -23,7 +23,7 @@ import protocol.messages.InfoPlayer;
 import protocol.messages.Message;
 import protocol.messages.Movement;
 import protocol.messages.Shoot;
-import protocol.messages.StateMap;
+import protocol.messages.StateGame;
 import protocol.messages.TiledMapMessage;
 import protocol.messages.UseBonus;
 
@@ -236,7 +236,7 @@ public class CommunicationProtocol {
 	 * @param stateMap
 	 * @throws IOException 
 	 */
-	public void sendStateMap(StateMap stateMap) throws IOException {
+	public void sendStateMap(StateGame stateMap) throws IOException {
 
 		try {
 			outputSer.writeObject(stateMap);
@@ -252,10 +252,10 @@ public class CommunicationProtocol {
 	 * @return
 	 * @throws IOException 
 	 */
-	public StateMap receiveStateMap() throws IOException {
+	public StateGame receiveStateMap() throws IOException {
 
 		try {
-			return (StateMap)inputSer.readObject();
+			return (StateGame)inputSer.readObject();
 		}
 		catch (IOException | ClassNotFoundException ex) {
 			Logger.getLogger(CommunicationProtocol.class.getName()).log(Level.SEVERE, null, ex);
@@ -298,7 +298,7 @@ public class CommunicationProtocol {
 	 * @param cmd
 	 * @throws IOException 
 	 */
-	public void sendCmd(Command cmd) throws IOException {
+	public void sendCommand(Command cmd) throws IOException {
 		try {
 			outputSer.writeObject(cmd);
 		}
@@ -314,7 +314,7 @@ public class CommunicationProtocol {
 	 * @throws IOException
 	 * @throws UnknownCommand 
 	 */
-	public Command receiveCmd() throws IOException, UnknownCommand {
+	public Command receiveCommand() throws IOException, UnknownCommand {
 
 		Command input = null;
 

@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 import org.newdawn.slick.tiled.TiledMap;
 import protocol.messages.Command;
 import protocol.messages.InfoPlayer;
-import protocol.messages.StateMap;
+import protocol.messages.StateGame;
 
 /**
  *
@@ -67,7 +67,7 @@ public class ConnectionHandler extends Thread {
                 TiledMap tiledMap = this.communicationProtocol.receiveTiledMapMessage().getTiledMap();
                 
                 // Recupère l'état de la map
-                StateMap stateMap = this.communicationProtocol.receiveStateMap();
+                StateGame stateMap = this.communicationProtocol.receiveStateMap();
                 
                 // Wait start from the server
                 while (!this.communicationProtocol.receiveStringMessage().equals("Start"));
@@ -76,7 +76,7 @@ public class ConnectionHandler extends Thread {
                     
                     // Send commands in queue
                     for (Command cmd : cmdQueue) {
-                        this.communicationProtocol.sendCmd(cmd);
+                        this.communicationProtocol.sendCommand(cmd);
                     }
                     cmdQueue.clear();
 
