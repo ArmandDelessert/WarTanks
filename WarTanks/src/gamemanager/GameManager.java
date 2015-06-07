@@ -12,6 +12,8 @@ package gamemanager;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import network.protocol.messages.StateGame;
+import network.server.ClientHandler;
 import network.server.ClientListener;
 
 /**
@@ -20,8 +22,10 @@ import network.server.ClientListener;
  */
 public class GameManager implements Runnable {
 
-	private int nbJoueurs = 2;
+	private int nbJoueurs = 1;
 	private boolean running = true;
+
+	private StateGame stateMap = new StateGame();
 
 	@Override
 	public void run() {
@@ -40,6 +44,7 @@ public class GameManager implements Runnable {
 	 */
 	public void gameManager() throws IOException, InterruptedException {
 
+		ClientListener clientListener;
 		Thread networkServer;
 
 		String ipAddress = "localhost";
@@ -48,7 +53,8 @@ public class GameManager implements Runnable {
 		/**
 		 * Création et démarrage du serveur pour la communication avec les clients
 		 */
-		networkServer = new Thread(new ClientListener(2, numeroPort));
+		clientListener = new ClientListener(nbJoueurs, numeroPort);
+		networkServer = new Thread(clientListener);
 		networkServer.start();
 
 		/**
@@ -56,7 +62,14 @@ public class GameManager implements Runnable {
 		 */
 		while (running) {
 
+			// Récupération des commandes des clients
 			
+
+			// Envoi de la mise à jour de l'état de la carte
+			for (Object i : clientListener.clientHandlerList) {
+				System.out.println("[" + this.getClass() + "]: " + "this.stateMap : " + this.stateMap);
+				((ClientHandler)i).setStateMap(this.stateMap);
+			}
 
 			/**
 			 * Fin de la partie
