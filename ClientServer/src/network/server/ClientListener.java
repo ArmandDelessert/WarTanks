@@ -13,6 +13,8 @@ import com.sun.media.jfxmediaimpl.MediaDisposer.Disposable;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,13 +43,16 @@ public class ClientListener implements Runnable, Disposable {
 
 	private ServerSocket socket;
 
+	private StateMap stateMap;
+
 	/**
 	 * 
 	 * @param nbMaxClient
 	 * @param numeroPort
+	 * @param stateMap
 	 * @throws IOException 
 	 */
-	public ClientListener(int nbMaxClient, int numeroPort) throws IOException {
+	public ClientListener(int nbMaxClient, int numeroPort, StateMap stateMap) throws IOException {
 
 		nbActualClientHandler = 0;
 		nbTotalClientHandler = 0;
@@ -61,6 +66,8 @@ public class ClientListener implements Runnable, Disposable {
 			Logger.getLogger(ClientListener.class.getName()).log(Level.SEVERE, null, ex);
 			throw new IOException("Problème interne à Server.Server() lors de la création du socket.");
 		}
+
+		this.stateMap = stateMap;
 
 		// Hello from server
 		System.out.println("[" + this.getClass() + "]: " + "Hello from <" + this.getClass() + ">!");
@@ -95,7 +102,7 @@ public class ClientListener implements Runnable, Disposable {
 				newSocket = socket.accept();
 
 				// Création d'un serveur spécifique au client
-				clientHandlerList.add(new Thread(new ClientHandler(newSocket)));
+				clientHandlerList.add(new Thread(new ClientHandler(newSocket, stateMap)));
 				nbActualClientHandler ++;
 				System.out.println("[" + this.getClass() + "]: " + "nbActualClientHandler : " + nbActualClientHandler + " ; " + "nbTotalClientHandler : " + nbTotalClientHandler);
 			}
@@ -151,14 +158,16 @@ public class ClientListener implements Runnable, Disposable {
 
 		private CommunicationProtocol communicationProtocol;
 
-		InfoClient infoClient;
+		private InfoClient infoClient;
+		private StateMap stateMap;
+		private List<Command> commandQueue;
 
 		/**
 		 * 
 		 * @param s
 		 * @throws IOException 
 		 */
-		public ClientHandler(Socket s) throws IOException {
+		public ClientHandler(Socket s, StateMap stateMap) throws IOException {
 
 			this.id = ClientListener.cptIdClientHandler ++;
 
@@ -169,6 +178,9 @@ public class ClientListener implements Runnable, Disposable {
 				Logger.getLogger(ClientListener.class.getName()).log(Level.SEVERE, null, ex);
 				throw new IOException("Problème interne à Server.ClientHandler[" + this.id + "].ClientHandler() lors de la création de CommunicationProtocol.");
 			}
+
+			this.stateMap = stateMap;
+			this.commandQueue = new LinkedList<Command>();
 
 			// Hello from clientHandler
 			System.out.println("[" + this.getClass() + " " + this.id + "]: " + "Hello from <" + this.getClass() + ">!");
@@ -215,20 +227,23 @@ public class ClientListener implements Runnable, Disposable {
 				this.communicationProtocol.sendStringMessage("Start");
 
 				// Boucle principale pour la communication pendant la partie
-				Command command;
-				StateMap stateMap = new StateMap();
+//			Command command;
 				for (int i = 0; i < 4; i ++) {
 					try {
 						// Réception des commandes des clients
-						command = this.communicationProtocol.receiveCommand();
-						System.out.println("[" + this.getClass() + " " + this.id + "]: " + "Commande reçue : " + command);
+//					command = this.communicationProtocol.receiveCommand();
+//					System.out.println("[" + this.getClass() + " " + this.id + "]: " + "Commande reçue : " + command);
+
+						commandQueue.add(this.communicationProtocol.receiveCommand());
+						System.out.println("[" + this.getClass() + " " + this.id + "]: " + "Commande reçue : " + this.commandQueue);
+
 					} catch (CommunicationProtocol.UnknownCommand ex) {
 						System.out.println(ex);
 						Logger.getLogger(ClientListener.class.getName()).log(Level.SEVERE, null, ex);
 					}
 
 					// Envoie de la mise à jour de la map
-					this.communicationProtocol.sendStateMap(stateMap);
+					this.communicationProtocol.sendStateMap(this.stateMap);
 				}
 
 				// Fin de la boucle principale pour la communication avec le client

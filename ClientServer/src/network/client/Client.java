@@ -109,8 +109,7 @@ public class Client implements Runnable {
 			
 
 			// Attente du début de la partie
-//		while (this.communicationProtocol.receiveStringMessage() != "Start"); // Ca marche pas !
-			System.out.println("[" + this.getClass() + " " + this.id + "]: " + "Le serveur a envoyé : " + this.communicationProtocol.receiveStringMessage());
+			while (!this.communicationProtocol.receiveStringMessage().equals("Start"));
 
 			// Boucle principale pour la communication pendant la partie
 			Movement command = new Movement(0);

@@ -9,7 +9,7 @@
 
 package network.protocol.messages;
 
-import org.newdawn.slick.tiled.TiledMap;
+//import org.newdawn.slick.tiled.TiledMap;
 
 /**
  *
@@ -26,4 +26,6 @@ public class TiledMapMessage {
 	public TiledMap getTiledMap() {
 		return tiledMap;
 	}
+
+	class TiledMap {}
 }
