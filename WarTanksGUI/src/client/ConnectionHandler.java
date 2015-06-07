@@ -70,7 +70,7 @@ public class ConnectionHandler extends Thread {
                 StateMap stateMap = this.communicationProtocol.receiveStateMap();
                 
                 // Wait start from the server
-                while (this.communicationProtocol.receiveStringMessage() != "Start");
+                while (!this.communicationProtocol.receiveStringMessage().equals("Start"));
                
                 while (running) {
                     
