@@ -218,9 +218,14 @@ public class ClientListener implements Runnable, Disposable {
 				Command command;
 				StateMap stateMap = new StateMap();
 				for (int i = 0; i < 4; i ++) {
-					// Réception des commandes des clients
-					command = this.communicationProtocol.receivePlayerCommand();
-					System.out.println("[" + this.getClass() + " " + this.id + "]: " + "Commande reçue : " + command);
+					try {
+						// Réception des commandes des clients
+						command = this.communicationProtocol.receiveCommand();
+						System.out.println("[" + this.getClass() + " " + this.id + "]: " + "Commande reçue : " + command);
+					} catch (CommunicationProtocol.UnknownCommand ex) {
+						System.out.println(ex);
+						Logger.getLogger(ClientListener.class.getName()).log(Level.SEVERE, null, ex);
+					}
 
 					// Envoie de la mise à jour de la map
 					this.communicationProtocol.sendStateMap(stateMap);

@@ -34,7 +34,9 @@ import network.protocol.messages.UseBonus;
 public class CommunicationProtocol {
 
 	// Exceptions
-	public static class UnknownCommand extends Exception {}
+	public static class UnknownCommand extends Exception {
+		String exception = "La commande reçue n'est pas reconnue.";
+	}
 
 	private Socket socket;
 	private OutputStream outputStream;
@@ -379,7 +381,7 @@ public class CommunicationProtocol {
 		Command input = null;
 
 		try {
-			input =  (Command)inputSer.readObject();
+			input = (Command)inputSer.readObject();
 		}
 		catch (IOException | ClassNotFoundException ex) {
 			Logger.getLogger(CommunicationProtocol.class.getName()).log(Level.SEVERE, null, ex);

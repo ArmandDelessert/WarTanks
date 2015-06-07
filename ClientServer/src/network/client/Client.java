@@ -17,6 +17,7 @@ import network.protocol.CommunicationProtocol;
 import network.protocol.messages.Command;
 import network.protocol.messages.InfoClient;
 import network.protocol.messages.InfoPlayer;
+import network.protocol.messages.Movement;
 import network.protocol.messages.StateMap;
 
 /**
@@ -112,12 +113,11 @@ public class Client implements Runnable {
 			System.out.println("[" + this.getClass() + " " + this.id + "]: " + "Le serveur a envoyé : " + this.communicationProtocol.receiveStringMessage());
 
 			// Boucle principale pour la communication pendant la partie
-			Command command = new Command();
+			Movement command = new Movement(0);
 			StateMap stateMap;
 			for (int i = 0; i < 4; i ++) {
 				// Envoie des commandes au serveur
-				command.newCommand(Command.CommandType.MOVEMENT, Command.Command_Movement.RIGHT);
-				this.communicationProtocol.sendPlayerCommand(command);
+				this.communicationProtocol.sendCommand(command);
 
 				// Réceptionde la mise à jour de la map
 				stateMap = this.communicationProtocol.receiveStateMap();
