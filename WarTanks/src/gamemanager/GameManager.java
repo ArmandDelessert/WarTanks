@@ -22,7 +22,7 @@ import network.server.ClientListener;
  */
 public class GameManager implements Runnable {
 
-	private int nbJoueurs = 1;
+	private final int nbJoueurs = 1;
 	private boolean running = true;
 
 	private StateGame stateMap = new StateGame();
@@ -60,6 +60,15 @@ public class GameManager implements Runnable {
 		/**
 		 * Démarrage de la partie
 		 */
+//	sleep(1000);
+		System.out.println("[" + this.getClass() + "]: " + "Avant le start.wait()");
+		synchronized(clientListener.start) {
+			clientListener.start.notifyAll();
+		}
+		System.out.println("[" + this.getClass() + "]: " + "Avant le start.wait()");
+		
+
+		// Boucle principale du déroulement de la partie
 		while (running) {
 
 			// Récupération des commandes des clients
