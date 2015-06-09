@@ -31,12 +31,14 @@ public class WarTanks {
 		String ipAddress = "localhost";
 		int portNumber = 1991;
 
+		System.out.println("Projet WarTanks - Test du serveur.");
+
 		// Lancement du serveur
 		gameManager = new Thread(new GameManager());
 		gameManager.start();
 
 		// Création d'un client pour les tests
-		System.out.println("Création d'un client pour tester la communication.");
+		System.out.println("[" + WarTanks.class + "]: " + "Création d'un client pour tester la communication.");
 		try {
 			client = new Thread(new Client(new InfoClient(ipAddress, portNumber)));
 			client.start();

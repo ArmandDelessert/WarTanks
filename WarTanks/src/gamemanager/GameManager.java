@@ -22,7 +22,7 @@ import network.server.ClientListener;
  */
 public class GameManager implements Runnable {
 
-	private final int nbJoueurs = 1;
+	private final int nbJoueurs = 2;
 	private boolean running = true;
 
 	private StateGame stateMap = new StateGame();
@@ -53,6 +53,7 @@ public class GameManager implements Runnable {
 		/**
 		 * Création et démarrage du serveur pour la communication avec les clients
 		 */
+		System.out.println("[" + this.getClass() + "]: " + "Démarrage du test avec " + nbJoueurs + " client(s).");
 		clientListener = new ClientListener(nbJoueurs, numeroPort);
 		networkServer = new Thread(clientListener);
 		networkServer.start();
@@ -60,12 +61,26 @@ public class GameManager implements Runnable {
 		/**
 		 * Démarrage de la partie
 		 */
-//	sleep(1000);
-		System.out.println("[" + this.getClass() + "]: " + "Avant le start.wait()");
+		// Attente du démarrage des ClientHandler
+		while (!clientListener.allClientHandlerStarted);
+
+		// Attente de l0initialisation des ClientHandler
+		boolean readyToStart = false;
+		while (!readyToStart) {
+			readyToStart = true;
+			for (Object i : clientListener.clientHandlerList) {
+				if (!((ClientHandler)i).readyToStart) {
+					readyToStart = false;
+					break;
+				}
+			}
+		}
+
+		System.out.println("[" + this.getClass() + "]: " + "Avant le start.notifyAll()");
 		synchronized(clientListener.start) {
 			clientListener.start.notifyAll();
 		}
-		System.out.println("[" + this.getClass() + "]: " + "Avant le start.wait()");
+		System.out.println("[" + this.getClass() + "]: " + "Après le start.notifyAll()");
 		
 
 		// Boucle principale du déroulement de la partie
