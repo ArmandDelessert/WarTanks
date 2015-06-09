@@ -31,8 +31,6 @@ public class ClientListener implements Runnable, Disposable {
 
 	public static int cptIdClientHandler = 0;
 
-	public static int nbClient = 0;
-
 	public boolean running = true;
 	public int nbActualClientHandler;
 	private int nbTotalClientHandler;
@@ -40,6 +38,7 @@ public class ClientListener implements Runnable, Disposable {
 
 	public final List<ClientHandler> clientHandlerList;
 	private final List<Thread> threadList;
+	public boolean allClientHandlerStarted;
 	public final Lock start;
 
 	/**
@@ -65,6 +64,7 @@ public class ClientListener implements Runnable, Disposable {
 
 		this.clientHandlerList = new LinkedList<ClientHandler>();
 		this.threadList = new LinkedList<Thread>();
+		this.allClientHandlerStarted = false;
 		this.start = new ReentrantLock();
 
 		// Hello from server
@@ -114,6 +114,8 @@ public class ClientListener implements Runnable, Disposable {
 		for (Object i : threadList) {
 			((Thread)i).start();
 		}
+
+		this.allClientHandlerStarted = true;
 
 		// Join sur les threads ClientHandler
 		try {

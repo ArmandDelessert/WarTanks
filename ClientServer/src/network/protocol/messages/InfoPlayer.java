@@ -17,6 +17,8 @@ import java.io.Serializable;
  */
 public class InfoPlayer implements Serializable {
 
+	public final static int maxPlayer = 2;
+
 	// Info du joueur
 	public int id;
 	public String name;
@@ -41,13 +43,14 @@ public class InfoPlayer implements Serializable {
 	@Override
 	public String toString() {
 
-		return String.valueOf(this.id) + " " + this.name + " [" + this.colorPlayer.toString() + "]";
+		return String.valueOf(this.id) + " " + this.name + " [" + this.colorPlayer + "]";
 	}
 
 	public enum ColorPlayer {
 
-		BLUE	(1,	"blue"),
-		RED		(2,	"red");
+		NO_COLOR	(0, "no color"),
+		BLUE			(1,	"blue"),
+		RED				(2,	"red");
 
 		private int id;
 		private String name;

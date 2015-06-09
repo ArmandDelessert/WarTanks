@@ -34,7 +34,7 @@ public class ClientHandler implements Runnable {
 	private StateGame stateMap;
 	private final List<Command> commandQueue;
 
-	public boolean pret;
+	public boolean readyToStart;
 	private Semaphore semaphore;
 
 	/**
@@ -47,7 +47,8 @@ public class ClientHandler implements Runnable {
 
 		this.id = ClientListener.cptIdClientHandler ++;
 
-		this.pret = false;
+		this.semaphore = new Semaphore(1);
+		this.readyToStart = false;
 		this.clientListener = clientListener;
 
 		try {
@@ -127,8 +128,8 @@ public class ClientHandler implements Runnable {
 
 		// Envoie d'une confirmation et des infos du joueur
 		this.communicationProtocol.sendStringMessage("OK");
-		ClientListener.nbClient ++;
-		this.communicationProtocol.sendInfoPlayer(new InfoPlayer(ClientListener.nbClient, "Joueur" + ClientListener.nbClient, InfoPlayer.ColorPlayer.getColor(ClientListener.nbClient)));
+		this.communicationProtocol.sendInfoPlayer(new InfoPlayer(this.id + 1, "Joueur" + (this.id + 1),
+						InfoPlayer.ColorPlayer.getColor(this.id + 1)));
 
 		// Boucle principale pour la communication avec le client
 		while (clientConnected) {
@@ -138,7 +139,8 @@ public class ClientHandler implements Runnable {
 				
 
 				// Prêt pour le début de la partie
-				
+				this.readyToStart = true;
+				System.out.println("[" + this.getClass() + " " + this.id + "]: " + "Prêt !");
 
 				// Attente du signal pour le démarrage de la partie
 				System.out.println("[" + this.getClass() + " " + this.id + "]: " + "Avant le start.wait()");
@@ -180,7 +182,8 @@ public class ClientHandler implements Runnable {
 		this.communicationProtocol.close(); // Fermeture des connexions
 
 		this.clientListener.nbActualClientHandler --;
-		System.out.println("[" + this.getClass() + " " + this.id + "]: " + "nbClientHandler restants : " + this.clientListener.nbActualClientHandler);
+		System.out.println("[" + this.getClass() + " " + this.id + "]: " + "nbClientHandler restants : "
+						+ this.clientListener.nbActualClientHandler);
 		if (this.clientListener.nbActualClientHandler == 0) {
 			this.clientListener.running = false; // Fin du serveur lorsqu'il n'y a plus de client à servir
 		}

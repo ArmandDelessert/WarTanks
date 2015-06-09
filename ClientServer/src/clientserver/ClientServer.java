@@ -43,6 +43,8 @@ public class ClientServer {
 
 		ClientListener clientListener;
 
+		System.out.println("Projet ClientServer - Test de la communication client-serveur.");
+
 		// Création du serveur et d'un ou deux client(s) pour les tests
 		System.out.println("Test de communication entre le serveur et un ou deux client(s).");
 		try {
@@ -60,7 +62,7 @@ public class ClientServer {
 				threadList.get(i).start();
 			}
 
-			sleep(10000);
+			sleep(3000);
 
 			// Synchronisation des clients pour le lancement de la partie
 			System.out.println("Envoi du signal de ynchronisation des clients pour le lancement de la partie.");
