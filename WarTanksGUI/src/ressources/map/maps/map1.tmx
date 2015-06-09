@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="32" tileheight="32" nextobjectid="1">
+ <tileset firstgid="1" name="brackish" tilewidth="32" tileheight="32">
+  <image source="../../../../../../../../WarTanksGUI/src/ressources/map/tuiles/LPC Base Assets/tiles/brackish.png" width="96" height="192"/>
+ </tileset>
+ <tileset firstgid="19" name="grass" tilewidth="32" tileheight="32">
+  <image source="../../../../../../../../WarTanksGUI/src/ressources/map/tuiles/LPC Base Assets/tiles/grass.png" width="96" height="192"/>
+ </tileset>
+ <layer name="Calque de Tile 1" width="32" height="32">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3DAQkAAAwEoevy/Tuux1Bw1VRVVdXXDzzcWmIAEAAA
+  </data>
+ </layer>
+</map>

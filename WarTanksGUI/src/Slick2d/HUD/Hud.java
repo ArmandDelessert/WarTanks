@@ -12,15 +12,12 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.newdawn.slick.BasicGame;
-import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.gui.ComponentListener;
-import org.newdawn.slick.gui.GUIContext;
 import org.newdawn.slick.gui.MouseOverArea;
 
 /**
@@ -34,7 +31,6 @@ public class Hud implements Observer {
     private Image playerbars;
     private Image actionbar;
     private Image lifebar;
-    private String message = "";
     private LinkedList listBonusImg = new LinkedList();
     private LinkedList shortCut = new LinkedList();
     private LinkedList AmountAmmo = new LinkedList();
@@ -121,14 +117,4 @@ public class Hud implements Observer {
     public void setLisEnnemyList(LinkedList l) {
         this.ListEnnemy = l;
     }
-
-    public void componentActivated(AbstractComponent source) {
-        System.out.println("ACTIVL : " + source);
-        for (int i = 0; i < 4; i++) {
-            if (source == areas[i]) {
-                message = "Option " + (i + 1) + " pressed!";
-            }
-        }
-    }
-
 }

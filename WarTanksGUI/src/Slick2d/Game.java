@@ -9,6 +9,7 @@ package Slick2d;
  *
  * @author Simon
  */
+import Factories.Factoy;
 import Slick2d.bullet.AlphaStrick;
 import Slick2d.bullet.Bonus;
 import Slick2d.bullet.Bullet;
@@ -43,9 +44,10 @@ public class Game extends BasicGame {
     private Map map = new Map();
     private int dead = 0;
     private LinkedList listBonus = new LinkedList();
-    private LinkedList listEnnemy = new LinkedList();
-    private LinkedList listScore = new LinkedList();
+    private LinkedList ennemies = new LinkedList();
+    private LinkedList scores = new LinkedList();
 
+    private Factoy factory;
     private Hud hud;
     private Player player;
     private float xCamera;
@@ -54,34 +56,10 @@ public class Game extends BasicGame {
     public Game(int nbrPlayer, int nbrBonus, int gameTimeSec) throws SlickException {
         super("Wartanks");
         shot = new Sound("src/ressources/sound/2.ogg");
+        factory = new Factoy();
         this.nbrPlayer = nbrPlayer;
         this.nbrBonus = nbrBonus;
         this.gameTimeSec = gameTimeSec;
-    }
-
-    Bonus bonusFactory() {
-        int type = (int) (Math.random() * (9 + 1 - 1)) + 1;
-        int randx = (int) (Math.random() * (32 * (this.map.getWidth() - 1)));
-        int randy = (int) (Math.random() * (32 * (this.map.getHeight() - 1)));
-        return new Bonus(8, randx, randy);
-    }
-
-    Ennemy ennemyFactory(int ID) {
-        int randx = (int) (Math.random() * (32 * (this.map.getWidth() - 1)));
-        int randy = (int) (Math.random() * (32 * (this.map.getHeight() - 1)));
-        int randDirection = (int) (Math.random() * (3 + 1 - 1)) + 1;
-        return new Ennemy(map, randx, randy, randDirection, ID);
-    }
-
-    Player playerFactory(int ID) {
-        int randx = (int) (Math.random() * (32 * (this.map.getWidth() - 1)));
-        int randy = (int) (Math.random() * (32 * (this.map.getHeight() - 1)));
-        int randDirection = (int) (Math.random() * (3 + 1 - 1)) + 1;
-        return new Player(map, randx, randy, gameTimeSec, randDirection, hud);
-    }
-
-    ScorePlayer scorePlayerFactory(Ennemy player) {
-        return new ScorePlayer(player);
     }
 
     public void setNbPlayer(int n) {
@@ -112,39 +90,39 @@ public class Game extends BasicGame {
     public void init(GameContainer container) throws SlickException {
         this.container = container;
         this.map.init();
+        this.factory.init(map);
 
         hud = new Hud(container);
-        player = playerFactory(dead);
+        player = factory.playerFactory(0,hud);
         xCamera = player.getX();
         yCamera = player.getY();
-        this.map.init();
         this.player.init();
         dead = 0;
 
         for (int i = 0; i < nbrBonus; i++) {
-            listBonus.add(bonusFactory());
+            listBonus.add(factory.bonusFactory());
         }
 
         for (int i = 0; i < nbrPlayer; i++) {
-            Ennemy e = ennemyFactory(i);
-            listEnnemy.add(e);
-            listScore.add(new ScorePlayer(e));
+            Ennemy e = factory.ennemyFactory(i);
+            ennemies.add(e);
+            scores.add(factory.scorePlayerFactory(e));
         }
-        listScore.add(new ScorePlayer(player));
+        scores.add(factory.scorePlayerFactory(player));
 
         for (Object listBonu : listBonus) {
             ((Bonus) listBonu).init();
         }
 
-        for (Object listEnnemy1 : listEnnemy) {
+        for (Object listEnnemy1 : ennemies) {
             ((Ennemy)listEnnemy1).init();
         }
-        player.setEnnemyList(listEnnemy);
+        player.setEnnemyList(ennemies);
         background = new Music("src/ressources/sound/1.ogg");
         background.setVolume(.05f);
         background.loop();
         this.hud.init();
-        hud.setLisEnnemyList(listEnnemy);
+        hud.setLisEnnemyList(ennemies);
     }
 
     @Override
@@ -156,7 +134,7 @@ public class Game extends BasicGame {
         for (Object listBonu : listBonus) {
             ((Bonus) listBonu).render(g);
         }
-        for (Object listEnnemy1 : listEnnemy) {
+        for (Object listEnnemy1 : ennemies) {
             ((Ennemy) listEnnemy1).render(g);
         }
         this.player.render(g);
@@ -164,7 +142,7 @@ public class Game extends BasicGame {
         this.hud.render(g);
 
         dead = 0;
-        for (Object listEnnemy1 : listEnnemy) {
+        for (Object listEnnemy1 : ennemies) {
             if (((Ennemy) listEnnemy1).getHP() > 0) {
                 break;
             } else {
@@ -178,7 +156,7 @@ public class Game extends BasicGame {
             defeat.init();
             defeat.render(g);
         }
-        if (dead == listEnnemy.size()) {
+        if (dead == ennemies.size()) {
             Victory victory = new Victory();
             victory.init();
             victory.render(g);
@@ -189,7 +167,7 @@ public class Game extends BasicGame {
     void restGame(GameContainer container) throws SlickException {
         player.getListBonus().clear();
         this.listBonus.clear();
-        listEnnemy.clear();
+        ennemies.clear();
         this.init(container);
     }
 
@@ -198,19 +176,19 @@ public class Game extends BasicGame {
         this.player.update(delta);
         updateCamera(container);
         Ennemy tmp;
-        for (int i = 0; i < listEnnemy.size(); i++) {
-            ((Ennemy) listEnnemy.get(i)).update(delta);
-            isColisionWithEnnemy((Ennemy) listEnnemy.get(i), delta);
+        for (int i = 0; i < ennemies.size(); i++) {
+            ((Ennemy) ennemies.get(i)).update(delta);
+            isColisionWithEnnemy((Ennemy) ennemies.get(i), delta);
             for (int y = 0; y < player.getlistBullet().size(); y++) {
-                if (isCollisionBulletEnnemy((Ennemy) listEnnemy.get(i), (Bullet) player.getlistBullet().get(y), delta)) {
+                if (isCollisionBulletEnnemy((Ennemy) ennemies.get(i), (Bullet) player.getlistBullet().get(y), delta)) {
                     if ((player.getlistBullet().get(y) instanceof AlphaStrick) && !((AlphaStrick) player.getlistBullet().get(y)).getStrick()) {
-                        ((Ennemy) listEnnemy.get(i)).setHp();
-                        tmp = (Ennemy) listEnnemy.get(i);
+                        ((Ennemy) ennemies.get(i)).setHp();
+                        tmp = (Ennemy) ennemies.get(i);
                     } else if (!(player.getlistBullet().get(y) instanceof AlphaStrick)) {
-                        ((Ennemy) listEnnemy.get(i)).setHp();
+                        ((Ennemy) ennemies.get(i)).setHp();
                     }
 
-                    hud.setLisEnnemyList(listEnnemy);
+                    hud.setLisEnnemyList(ennemies);
                     System.out.println("boooom");
 
                     if ((player.getlistBullet().get(y) instanceof AlphaStrick) && !(player.getlistBullet().get(y) instanceof Laser)) {
@@ -502,7 +480,7 @@ public class Game extends BasicGame {
                     player.setHp();
                      {
                         try {
-                            ((Ennemy) listEnnemy.get(0)).shoot();
+                            ((Ennemy) ennemies.get(0)).shoot();
                         } catch (SlickException ex) {
                             Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
                         }
