@@ -26,7 +26,6 @@ import network.protocol.messages.StateGame;
 public class ClientHandler implements Runnable {
 
 	public final int id;
-
 	private final ClientListener clientListener;
 
 	private CommunicationProtocol communicationProtocol;
@@ -35,17 +34,20 @@ public class ClientHandler implements Runnable {
 	private StateGame stateMap;
 	private final List<Command> commandQueue;
 
+	public boolean pret;
 	private Semaphore semaphore;
 
 	/**
 	 * 
 	 * @param s
+	 * @param clientListener
 	 * @throws IOException 
 	 */
 	public ClientHandler(Socket s, ClientListener clientListener) throws IOException {
 
 		this.id = ClientListener.cptIdClientHandler ++;
 
+		this.pret = false;
 		this.clientListener = clientListener;
 
 		try {
@@ -131,10 +133,23 @@ public class ClientHandler implements Runnable {
 		// Boucle principale pour la communication avec le client
 		while (clientConnected) {
 
-			// Paramétrage de la partie
+			try {
+				// Paramétrage de la partie
+				
 
+				// Prêt pour le début de la partie
+				
 
-			// Démarrage de la partie
+				// Attente du signal pour le démarrage de la partie
+				System.out.println("[" + this.getClass() + " " + this.id + "]: " + "Avant le start.wait()");
+				synchronized(this.clientListener.start) {
+					this.clientListener.start.wait();
+				}
+			} catch (InterruptedException ex) {
+				System.out.println(ex);
+				Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
+			}
+			System.out.println("[" + this.getClass() + " " + this.id + "]: " + "Après le start.wait()");
 			this.communicationProtocol.sendStringMessage("Start");
 
 			// Boucle principale pour la communication pendant la partie

@@ -15,15 +15,10 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.Semaphore;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import network.protocol.CommunicationProtocol;
-import network.protocol.messages.InfoClient;
-import network.protocol.messages.InfoPlayer;
-import network.protocol.messages.InfoPlayer.ColorPlayer;
-import network.protocol.messages.Command;
-import network.protocol.messages.StateGame;
 
 /**
  * Classe ClientListener
@@ -45,6 +40,7 @@ public class ClientListener implements Runnable, Disposable {
 
 	public final List<ClientHandler> clientHandlerList;
 	private final List<Thread> threadList;
+	public final Lock start;
 
 	/**
 	 * 
@@ -69,6 +65,7 @@ public class ClientListener implements Runnable, Disposable {
 
 		this.clientHandlerList = new LinkedList<ClientHandler>();
 		this.threadList = new LinkedList<Thread>();
+		this.start = new ReentrantLock();
 
 		// Hello from server
 		System.out.println("[" + this.getClass() + "]: " + "Hello from <" + this.getClass() + ">!");

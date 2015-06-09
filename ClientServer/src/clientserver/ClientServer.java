@@ -11,9 +11,13 @@ package clientserver;
 
 import network.client.Client;
 import java.io.IOException;
+import static java.lang.Thread.sleep;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import network.protocol.messages.InfoClient;
+import network.server.ClientHandler;
 import network.server.ClientListener;
 
 /**
@@ -22,14 +26,8 @@ import network.server.ClientListener;
  */
 public class ClientServer {
 
-	private static Thread client1 = null;
-	private static Thread client2 = null;
-	private static Thread server1 = null;
-	private static Thread server2 = null;
-
 	private static final String ip = "localhost";
-	private static final int port1 = 1991;
-	private static final int port2 = 1992;
+	private static final int port = 1991;
 
 	/**
 	 * 
@@ -37,26 +35,54 @@ public class ClientServer {
 	 */
 	public static void main(String[] args) {
 
+		final int nbJoueurs = 2;
+
+		Thread server;
+		final List<Client> clientHandlerList = new LinkedList<>();
+		final List<Thread> threadList = new LinkedList<>();
+
+		ClientListener clientListener;
+
 		// Création du serveur et d'un ou deux client(s) pour les tests
 		System.out.println("Test de communication entre le serveur et un ou deux client(s).");
 		try {
-			server1 = new Thread(new ClientListener(2, port1));
-			server1.start();
+			// Création et lancement du serveur
+			System.out.println("Création et lancement du serveur.");
+			clientListener = new ClientListener(nbJoueurs, port);
+			server = new Thread(clientListener);
+			server.start();
 
-			client1 = new Thread(new Client(new InfoClient(ip, port1)));
-			client1.start();
+			// Création des clients
+			System.out.println("Création des clients.");
+			for (int i = 0; i < nbJoueurs; i ++) {
+				clientHandlerList.add(new Client(new InfoClient(ip, port)));
+				threadList.add(new Thread(clientHandlerList.get(i)));
+				threadList.get(i).start();
+			}
 
-			client2 = new Thread(new Client (new InfoClient(ip, port1)));
-			client2.start();
+			sleep(10000);
 
-			client1.join();
-			client2.join();
-			server1.join();
+			// Synchronisation des clients pour le lancement de la partie
+			System.out.println("Envoi du signal de ynchronisation des clients pour le lancement de la partie.");
+			synchronized(clientListener.start) {
+				clientListener.start.notifyAll();
+			}
+
+			// Arrêt des clients
+			System.out.println("Attente de la fin des clients.");
+			for (int i = 0; i < nbJoueurs; i ++) {
+				threadList.get(i).join();
+			}
+
+			// Arrêt du serveur
+			System.out.println("Arrêt du serveur.");
+			server.join();
 
 		} catch (IOException | InterruptedException ex) {
 			System.out.println(ex);
 			Logger.getLogger(ClientServer.class.getName()).log(Level.SEVERE, null, ex);
 		}
 
+		System.out.println("Fin du test de la communication client-serveur.");
 	}
 }
