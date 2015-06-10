@@ -17,15 +17,28 @@ package network.protocol.messages;
  */
 public class TiledMapMessage {
 
-	private final TiledMap tiledMap;
+	private final Object tiledMap; // Caster en TiledMap
 
-	public TiledMapMessage(TiledMap tiledMap) {
+	public TiledMapMessage(Object tiledMap) {
 		this.tiledMap = tiledMap;
 	}
 
-	public TiledMap getTiledMap() {
-		return tiledMap;
+	public Object getTiledMap() {
+		return tiledMap; // Caster en TiledMap
 	}
-
-	class TiledMap {}
 }
+
+//public class TiledMapMessage {
+//
+//	private final TiledMap tiledMap;
+//
+//	public TiledMapMessage(TiledMap tiledMap) {
+//		this.tiledMap = tiledMap;
+//	}
+//
+//	public TiledMap getTiledMap() {
+//		return tiledMap;
+//	}
+//
+//	class TiledMap {}
+//}
