@@ -38,7 +38,7 @@ public class ClientListener implements Runnable, Disposable {
 
 	public final List<ClientHandler> clientHandlerList;
 	private final List<Thread> threadList;
-	public boolean allClientHandlerStarted;
+	public boolean allClientHandlerReady;
 	public final Lock start;
 
 	/**
@@ -64,7 +64,7 @@ public class ClientListener implements Runnable, Disposable {
 
 		this.clientHandlerList = new LinkedList<ClientHandler>();
 		this.threadList = new LinkedList<Thread>();
-		this.allClientHandlerStarted = false;
+		this.allClientHandlerReady = false;
 		this.start = new ReentrantLock();
 
 		// Hello from server
@@ -115,7 +115,22 @@ public class ClientListener implements Runnable, Disposable {
 			((Thread)i).start();
 		}
 
-		this.allClientHandlerStarted = true;
+		// Attente sur les ClientHandler
+		boolean readyToStart = false;
+		while (!readyToStart) {
+			readyToStart = true;
+			for (Object i : this.clientHandlerList) {
+				if (!((ClientHandler)i).readyToStart) {
+					readyToStart = false;
+					break;
+				}
+			}
+		}
+
+		// Tous les ClientHandler sont prêt
+		this.allClientHandlerReady = true;
+
+		System.out.println("[" + this.getClass() + "]: " + "Tous les ClientHandler sont prêt.");
 
 		// Join sur les threads ClientHandler
 		try {

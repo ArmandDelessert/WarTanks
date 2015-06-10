@@ -27,26 +27,38 @@ public class WarTanks {
 	 */
 	public static void main(String[] args) {
 
-		Thread client, gameManager;
+		GameManager gameManager;
+		Thread gameManagerThread, clientThread = null;
 		String ipAddress = "localhost";
 		int portNumber = 1991;
 
 		System.out.println("Projet WarTanks - Test du serveur.");
 
 		// Lancement du serveur
-		gameManager = new Thread(new GameManager());
-		gameManager.start();
+		gameManager = new GameManager();
+		gameManagerThread = new Thread(gameManager);
+		gameManagerThread.start();
 
-		// Création d'un client pour les tests
-		System.out.println("[" + WarTanks.class + "]: " + "Création d'un client pour tester la communication.");
-		try {
-			client = new Thread(new Client(new InfoClient(ipAddress, portNumber)));
-			client.start();
-			client.join();
+		// Création d'un ou plusieurs client(s) pour les tests
+		for (int i = 0; i < gameManager.nbJoueurs; i ++) {
+			System.out.println("[" + WarTanks.class + "]: " + "Création du client" + (i+1) + " pour tester la communication.");
+			try {
+				clientThread = new Thread(new Client(new InfoClient(ipAddress, portNumber)));
+				clientThread.start();
+			} catch (IOException ex) {
+				System.out.println(ex);
+				Logger.getLogger(WarTanks.class.getName()).log(Level.SEVERE, null, ex);
+			}
+		}
 
-		} catch (IOException | InterruptedException ex) {
-			System.out.println(ex);
-			Logger.getLogger(WarTanks.class.getName()).log(Level.SEVERE, null, ex);
+		// Démarrage du ou des client(s)
+		for (int i = 0; i < gameManager.nbJoueurs; i ++) {
+			try {
+				clientThread.join();
+			} catch (InterruptedException ex) {
+				System.out.println(ex);
+				Logger.getLogger(WarTanks.class.getName()).log(Level.SEVERE, null, ex);
+			}
 		}
 	}
 }

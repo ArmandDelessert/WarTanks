@@ -138,13 +138,12 @@ public class ClientHandler implements Runnable {
 				// Paramétrage de la partie
 				
 
-				// Prêt pour le début de la partie
-				this.readyToStart = true;
 				System.out.println("[" + this.getClass() + " " + this.id + "]: " + "Prêt !");
-
-				// Attente du signal pour le démarrage de la partie
 				System.out.println("[" + this.getClass() + " " + this.id + "]: " + "Avant le start.wait()");
+
+				// Prêt pour le début de la partie, attente du signal pour le démarrage de la partie
 				synchronized(this.clientListener.start) {
+					this.readyToStart = true;
 					this.clientListener.start.wait();
 				}
 			} catch (InterruptedException ex) {

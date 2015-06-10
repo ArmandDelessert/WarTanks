@@ -10,6 +10,7 @@
 package gamemanager;
 
 import java.io.IOException;
+import static java.lang.Thread.sleep;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import network.protocol.messages.StateGame;
@@ -22,7 +23,7 @@ import network.server.ClientListener;
  */
 public class GameManager implements Runnable {
 
-	private final int nbJoueurs = 2;
+	public final int nbJoueurs = 2;
 	private boolean running = true;
 
 	private StateGame stateMap = new StateGame();
@@ -62,9 +63,14 @@ public class GameManager implements Runnable {
 		 * Démarrage de la partie
 		 */
 		// Attente du démarrage des ClientHandler
-		while (!clientListener.allClientHandlerStarted);
+		System.out.println("[" + this.getClass() + "]: " + "Attente que tous les ClientHandler soient démarrés.");
+		while (!clientListener.allClientHandlerReady) {
+			System.out.println("[" + this.getClass() + "]: " + "Waiting...");
+			sleep(200); // Attente de 0.2 seconde
+		}
+		System.out.println("[" + this.getClass() + "]: " + "Tous les ClientHandler sont prêt.");
 
-		// Attente de l0initialisation des ClientHandler
+		// Attente de l'initialisation des ClientHandler
 		boolean readyToStart = false;
 		while (!readyToStart) {
 			readyToStart = true;
