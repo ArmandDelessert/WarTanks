@@ -5,7 +5,6 @@
  */
 package client;
 
-import protocol.CommunicationProtocol;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -13,10 +12,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import network.protocol.CommunicationProtocol;
+import network.protocol.messages.Command;
+import network.protocol.messages.InfoPlayer;
+import network.protocol.messages.StateGame;
 import org.newdawn.slick.tiled.TiledMap;
-import protocol.messages.Command;
-import protocol.messages.InfoPlayer;
-import protocol.messages.StateGame;
 
 /**
  *
@@ -64,10 +64,10 @@ public class ConnectionHandler extends Thread {
                 System.out.println("[" + this.getClass() + " " + this.infoPlayer.id + "]: " + "infoPlayer : " + infoPlayer);
                 
                 // Récupération de la TiledMap
-                TiledMap tiledMap = this.communicationProtocol.receiveTiledMapMessage().getTiledMap();
+                TiledMap tiledMap = (TiledMap)this.communicationProtocol.receiveTiledMapMessage().getTiledMap();
                 
                 // Recupère l'état de la map
-                StateGame stateMap = this.communicationProtocol.receiveStateMap();
+                StateGame stateGame = this.communicationProtocol.receiveStateMap();
                 
                 // Wait start from the server
                 while (!this.communicationProtocol.receiveStringMessage().equals("Start"));
@@ -82,7 +82,7 @@ public class ConnectionHandler extends Thread {
 
                     // Récupère l'état de la map si elle a été envoyé
                     if (this.communicationProtocol.isAvailable()) {
-                        stateMap = this.communicationProtocol.receiveStateMap();
+                        stateGame = this.communicationProtocol.receiveStateMap();
                     }
 
                     // sleep to not overload
