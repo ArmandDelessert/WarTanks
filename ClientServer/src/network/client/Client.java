@@ -14,7 +14,6 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import network.protocol.CommunicationProtocol;
-import network.protocol.messages.Command;
 import network.protocol.messages.InfoClient;
 import network.protocol.messages.InfoPlayer;
 import network.protocol.messages.Movement;
@@ -113,14 +112,14 @@ public class Client implements Runnable {
 
 			// Boucle principale pour la communication pendant la partie
 			Movement command = new Movement(0);
-			StateGame stateMap;
+			StateGame stateGame;
 			for (int i = 0; i < 4; i ++) {
 				// Envoie des commandes au serveur
 				this.communicationProtocol.sendCommand(command);
 
 				// Réceptionde la mise à jour de la map
-				stateMap = this.communicationProtocol.receiveStateMap();
-				System.out.println("[" + this.getClass() + " " + this.id + "]: " + "StateMap reçu : " + stateMap);
+				stateGame = this.communicationProtocol.receiveStateGame();
+				System.out.println("[" + this.getClass() + " " + this.id + "]: " + "StateGame reçu : " + stateGame);
 			}
 
 			// Fin de la boucle principale pour la communication avec le serveur

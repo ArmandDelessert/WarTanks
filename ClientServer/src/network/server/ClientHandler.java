@@ -17,6 +17,7 @@ import network.protocol.messages.Command;
 import network.protocol.messages.InfoClient;
 import network.protocol.messages.InfoPlayer;
 import network.protocol.messages.StateGame;
+import network.protocol.messages.TiledMapMessage;
 
 /**
  * Classe interne ClientHandler
@@ -31,7 +32,9 @@ public class ClientHandler implements Runnable {
 	private CommunicationProtocol communicationProtocol;
 
 	private InfoClient infoClient;
-	private StateGame stateMap;
+	private TiledMapMessage tiledMapMessage;
+	private StateGame stateGame;
+	private boolean newStateGameAvailable;
 	private final List<Command> commandQueue;
 
 	public boolean readyToStart;
@@ -81,12 +84,12 @@ public class ClientHandler implements Runnable {
 
 	/**
 	 * 
-	 * @param stateMap 
+	 * @param tiledMapMessage
 	 */
-	public void setStateMap(StateGame stateMap) {
+	public void setTiledMapMessage(TiledMapMessage tiledMapMessage) {
 		try {
 			this.semaphore.acquire();
-			this.stateMap = stateMap;
+			this.tiledMapMessage = tiledMapMessage;
 			this.semaphore.release();
 		} catch (InterruptedException ex) {
 			System.out.println(ex);
@@ -98,20 +101,53 @@ public class ClientHandler implements Runnable {
 	 * 
 	 * @return 
 	 */
-	public StateGame getStateMap() {
+	public TiledMapMessage getTiledMapMessage() {
 
-		return this.stateMap;
+		TiledMapMessage newTiledMapMessage = null;
 
-//		StateGame stateMap = null;
-//
-//		try {
-//			this.semaphore.acquire();
-//			stateMap = this.stateMap;
-//			this.semaphore.release();
-//		} catch (InterruptedException ex) {
-//			Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
-//		}
-//		return stateMap;
+		try {
+			this.semaphore.acquire();
+			newTiledMapMessage = this.tiledMapMessage;
+			this.semaphore.release();
+		} catch (InterruptedException ex) {
+			Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		return newTiledMapMessage;
+	}
+
+	/**
+	 * 
+	 * @param newStateGame
+	 */
+	public void setStateGame(StateGame newStateGame) {
+		try {
+			this.semaphore.acquire();
+			this.stateGame = newStateGame;
+			this.newStateGameAvailable = true;
+			this.semaphore.release();
+		} catch (InterruptedException ex) {
+			System.out.println(ex);
+			Logger.getLogger(ClientListener.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+
+	/**
+	 * 
+	 * @return 
+	 */
+	public StateGame getStateGame() {
+
+		StateGame newStateGame = null;
+
+		try {
+			this.semaphore.acquire();
+			newStateGame = this.stateGame;
+			this.newStateGameAvailable = false;
+			this.semaphore.release();
+		} catch (InterruptedException ex) {
+			Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		return newStateGame;
 	}
 
 	/**
@@ -134,14 +170,15 @@ public class ClientHandler implements Runnable {
 		// Boucle principale pour la communication avec le client
 		while (clientConnected) {
 
+			// Paramétrage de la partie
+//			this.getTiledMapMessage(); // Pas besoin, on le possède déjà dans la classe ClientHandler...
+//			this.getStateGame(); // Pas besoin, on le possède déjà dans la classe ClientHandler...
+
+			System.out.println("[" + this.getClass() + " " + this.id + "]: " + "Prêt !");
+			System.out.println("[" + this.getClass() + " " + this.id + "]: " + "Avant le start.wait()");
+
+			// Prêt pour le début de la partie, attente du signal pour le démarrage de la partie
 			try {
-				// Paramétrage de la partie
-				
-
-				System.out.println("[" + this.getClass() + " " + this.id + "]: " + "Prêt !");
-				System.out.println("[" + this.getClass() + " " + this.id + "]: " + "Avant le start.wait()");
-
-				// Prêt pour le début de la partie, attente du signal pour le démarrage de la partie
 				synchronized(this.clientListener.start) {
 					this.readyToStart = true;
 					this.clientListener.start.wait();
@@ -156,21 +193,33 @@ public class ClientHandler implements Runnable {
 			// Boucle principale pour la communication pendant la partie
 //			Command command;
 			for (int i = 0; i < 4; i ++) {
-				try {
-					// Réception des commandes des clients
-//					command = this.communicationProtocol.receiveCommand();
-//					System.out.println("[" + this.getClass() + " " + this.id + "]: " + "Commande reçue : " + command);
-
-					commandQueue.add(this.communicationProtocol.receiveCommand());
-					System.out.println("[" + this.getClass() + " " + this.id + "]: " + "Commande reçue : " + this.commandQueue);
-
-				} catch (CommunicationProtocol.UnknownCommand ex) {
-					System.out.println(ex);
-					Logger.getLogger(ClientListener.class.getName()).log(Level.SEVERE, null, ex);
+				// Réception des commandes des clients
+				if (this.communicationProtocol.isAvailable()) {
+					try {
+						commandQueue.add(this.communicationProtocol.receiveCommand());
+					} catch (CommunicationProtocol.UnknownCommand ex) {
+						System.out.println(ex);
+						Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
+					}
 				}
 
-				// Envoie de la mise à jour de la map
-				this.communicationProtocol.sendStateMap(this.getStateMap());
+//				try {
+////				command = this.communicationProtocol.receiveCommand();
+////				System.out.println("[" + this.getClass() + " " + this.id + "]: " + "Commande reçue : " + command);
+//
+//					commandQueue.add(this.communicationProtocol.receiveCommand());
+//					System.out.println("[" + this.getClass() + " " + this.id + "]: " + "Commande(s) reçue(s) : " + this.commandQueue);
+//
+//				} catch (CommunicationProtocol.UnknownCommand ex) {
+//					System.out.println(ex);
+//					Logger.getLogger(ClientListener.class.getName()).log(Level.SEVERE, null, ex);
+//				}
+
+				// Envoie de la mise à jour du jeu si disponible
+				if (this.newStateGameAvailable) {
+					System.out.println("[" + this.getClass() + " " + this.id + "]: " + "Envoie du StateGame au client.");
+					this.communicationProtocol.sendStateGame(this.getStateGame());
+				}
 			}
 
 			// Fin de la boucle principale pour la communication avec le client

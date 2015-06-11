@@ -109,7 +109,7 @@ public class CommunicationProtocol {
 		}
 		catch (IOException ex) {
 			Logger.getLogger(CommunicationProtocol.class.getName()).log(Level.SEVERE, null, ex);
-			throw new IOException("Problème interne à CommunicationProtocol.sendStringMessage() lors de l'envoie d'un message.");
+			throw new IOException("Problème interne à CommunicationProtocol.sendStringMessage().");
 		}
 	}
 
@@ -129,7 +129,7 @@ public class CommunicationProtocol {
 		}
 		catch (IOException ex) {
 			Logger.getLogger(CommunicationProtocol.class.getName()).log(Level.SEVERE, null, ex);
-			throw new IOException("Problème interne à CommunicationProtocol.receiveStringMessage() lors de la réception du message.");
+			throw new IOException("Problème interne à CommunicationProtocol.receiveStringMessage().");
 		}
 
 		// Suppression des caractères '\0' en trop
@@ -155,7 +155,7 @@ public class CommunicationProtocol {
 		}
 		catch (IOException ex) {
 			Logger.getLogger(CommunicationProtocol.class.getName()).log(Level.SEVERE, null, ex);
-			throw new IOException("Problème interne à CommunicationProtocol.sendMessage() lors de l'envoie d'un message.");
+			throw new IOException("Problème interne à CommunicationProtocol.sendMessage().");
 		}
 	}
 
@@ -173,7 +173,7 @@ public class CommunicationProtocol {
 		}
 		catch (IOException | ClassNotFoundException ex) {
 			Logger.getLogger(CommunicationProtocol.class.getName()).log(Level.SEVERE, null, ex);
-			throw new IOException("Problème interne à CommunicationProtocol.receiveMessage() lors de la réception du message.");
+			throw new IOException("Problème interne à CommunicationProtocol.receiveMessage().");
 		}
 	}
 
@@ -284,22 +284,22 @@ public class CommunicationProtocol {
 	}
 
 	/******************************************
-	 * Class StateMap
+	 * Class stateGame
 	 *****************************************/
 
 	/**
 	 * 
-	 * @param stateMap
+	 * @param stateGame
 	 * @throws IOException 
 	 */
-	public void sendStateMap(StateGame stateMap) throws IOException {
+	public void sendStateGame(StateGame stateGame) throws IOException {
 
 		try {
-			outputSer.writeObject(stateMap);
+			outputSer.writeObject(stateGame);
 		}
 		catch (IOException ex) {
 			Logger.getLogger(CommunicationProtocol.class.getName()).log(Level.SEVERE, null, ex);
-			throw new IOException("Problème interne à CommunicationProtocol.sendPlayerCommand().");
+			throw new IOException("Problème interne à CommunicationProtocol.sendStateGame().");
 		}
 	}
 
@@ -308,14 +308,14 @@ public class CommunicationProtocol {
 	 * @return
 	 * @throws IOException 
 	 */
-	public StateGame receiveStateMap() throws IOException {
+	public StateGame receiveStateGame() throws IOException {
 
 		try {
 			return (StateGame)inputSer.readObject();
 		}
 		catch (IOException | ClassNotFoundException ex) {
 			Logger.getLogger(CommunicationProtocol.class.getName()).log(Level.SEVERE, null, ex);
-			throw new IOException("Problème interne à CommunicationProtocol.receivePlayerCommand().");
+			throw new IOException("Problème interne à CommunicationProtocol.receiveStateGame().");
 		}
 	}
 
