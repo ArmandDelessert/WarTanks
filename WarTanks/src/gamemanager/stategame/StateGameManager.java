@@ -21,6 +21,7 @@ import network.protocol.messages.StateGame;
 public class StateGameManager {
 
 	public Date lastUpdate;
+	public boolean gameEnd = false;
 
 	public int[][] map;
 
@@ -51,10 +52,13 @@ public class StateGameManager {
 	}
 
 	public StateGame getStateGame() {
-		return new StateGame(
+
+		StateGame stateGame = new StateGame(
 			new InfoPlayer(this.player1.id, this.player1.name, this.player1.positionX, this.player1.positionY, this.player1.direction),
 			new InfoPlayer(this.player2.id, this.player2.name, this.player2.positionX, this.player2.positionY, this.player2.direction)
 		);
+		stateGame.gameEnd = this.gameEnd;
+		return stateGame;
 	}
 
 	/**

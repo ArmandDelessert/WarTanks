@@ -104,6 +104,7 @@ public class GameManager implements Runnable {
 		
 
 		// Boucle principale du déroulement de la partie
+		int countdown = 4;
 		while (running) {
 
 			/*
@@ -131,7 +132,11 @@ public class GameManager implements Runnable {
 			/**
 			 * Fin de la partie
 			 */
-			running = false;
+			if (--countdown == 0) {
+				System.out.println("[" + this.getClass() + "]: " + "Fin de la partie.");
+				this.stateGameManager.gameEnd = true;
+				running = false;
+			}
 		}
 
 		/**
