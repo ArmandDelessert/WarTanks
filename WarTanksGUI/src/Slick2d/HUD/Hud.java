@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -5,6 +6,7 @@
  */
 package Slick2d.HUD;
 
+import Slick2d.Fightable.Player;
 import Slick2d.bullet.Bonus;
 import Slick2d.Fightable.Ennemy;
 import java.util.LinkedList;
@@ -31,6 +33,7 @@ public class Hud implements Observer {
     private Image playerbars;
     private Image actionbar;
     private Image lifebar;
+    private Player p;
     private LinkedList listBonusImg = new LinkedList();
     private LinkedList shortCut = new LinkedList();
     private LinkedList AmountAmmo = new LinkedList();
@@ -95,15 +98,11 @@ public class Hud implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
+
         System.out.println("Notified");
+
         try {
             listBonusImg.add(new Image("src/ressources/UI/bonus/bonus" + ((Bonus) arg).getType() + ".png"));
-            MouseOverArea button1 = new MouseOverArea(container, playerbars, P_BAR_X, P_BAR_X, 200, 50, new ComponentListener() {
-                @Override
-                public void componentActivated(AbstractComponent source) {
-                    System.out.println("Yooolooo");
-                }
-            });
             AmountAmmo.add(((Bonus) arg).getAvaliable());
         } catch (SlickException ex) {
             Logger.getLogger(Hud.class.getName()).log(Level.SEVERE, null, ex);

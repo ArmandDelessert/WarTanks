@@ -5,12 +5,12 @@
  */
 package Slick2d.Fightable;
 
-import Slick2d.Explosion;
+import Slick2d.GameObject.Explosion;
 import Slick2d.bullet.AlphaStrick;
 import Slick2d.bullet.Bonus;
 import Slick2d.bullet.Bullet;
 import Slick2d.bullet.Laser;
-import Slick2d.Map;
+import Slick2d.GameObject.Map;
 import Slick2d.bullet.Mine;
 import java.util.LinkedList;
 import java.util.Observable;
@@ -31,15 +31,16 @@ import org.newdawn.slick.SpriteSheet;
  */
 public class Player extends Observable implements IFightable{
 
-    int playerID = 0; //sera attribuer par le serveur
+    int playerID = 1; //sera attribuer par le serveur
     String name;
     private float x = 300, y = 300;
     private int HP;
     private int score;
+    private Explosion e;
     private float speed;
     private int direction;
     private boolean moving = false;
-    private Explosion e;
+    boolean collision;
     private LinkedList listBonus = new LinkedList();
     private LinkedList listBullet = new LinkedList();
     private LinkedList listEnnemy = new LinkedList();
@@ -100,11 +101,14 @@ public class Player extends Observable implements IFightable{
         for (Object listBullet1 : listBullet) {
             ((Bullet) listBullet1).render(g);
         }
+        
         g.setColor(new Color(0, 0, 0, .5f));
         g.drawAnimation(animations[direction + (moving ? 4 : 0)], x, y);
         
         if (HP == 0) {
             //recu les coord du joueur
+            e.setX(x-16);
+            e.setY(y-16);
             e.render(g);
         }
     }
@@ -115,7 +119,7 @@ public class Player extends Observable implements IFightable{
             if (this.moving) {
                 float futurX = getFuturX(delta);
                 float futurY = getFuturY(delta);
-                boolean collision = this.map.isCollision(futurX, futurY, this.width, this.height, this.direction);
+                collision = this.map.isCollision(futurX, futurY, this.width, this.height, this.direction);
                 if (collision) {
                     this.moving = false;
                 } else {
@@ -143,9 +147,8 @@ public class Player extends Observable implements IFightable{
                     listBullet.remove(i);
                 }
             }
-        } else {
-            //mort
-            SpriteSheet spriteSheet = new SpriteSheet("src/ressources/tanks/MulticolorTanksBlack.png", this.width, this.height);
+        } else {//mort
+             SpriteSheet spriteSheet = new SpriteSheet("src/ressources/tanks/MulticolorTanksBlack.png", this.width, this.height);
             this.animations[0] = loadAnimation(spriteSheet, 0, 1, 0);
             this.animations[1] = loadAnimation(spriteSheet, 0, 1, 1);
             this.animations[2] = loadAnimation(spriteSheet, 0, 1, 2);
@@ -154,9 +157,6 @@ public class Player extends Observable implements IFightable{
             this.animations[5] = loadAnimation(spriteSheet, 1, 8, 1);
             this.animations[6] = loadAnimation(spriteSheet, 1, 8, 2);
             this.animations[7] = loadAnimation(spriteSheet, 1, 8, 3);
-            e.setX(x-16);
-            e.setY(y-16);
-
 
         }
     }
@@ -365,6 +365,14 @@ public class Player extends Observable implements IFightable{
     void AddScore()
     {
         score++;
+    }
+    public boolean getCol()
+    {
+        return collision;
+    }
+    public void setCollision(boolean b)
+    {
+        collision = b;
     }
 
 }

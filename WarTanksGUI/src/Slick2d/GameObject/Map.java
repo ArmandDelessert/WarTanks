@@ -1,18 +1,15 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Slick2d;
+package Slick2d.GameObject;
 
-import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.Sound;
-import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.gui.MouseOverArea;
 import org.newdawn.slick.tiled.TiledMap;
 
@@ -27,7 +24,7 @@ public class Map {
     TiledMap tiledMap;
 
     public void init() throws SlickException {
-        this.tiledMap = new TiledMap("src/ressources/map/maps/test1.tmx");
+        this.tiledMap = new TiledMap("src/ressources/map/maps/map1.tmx");
 
     }
 

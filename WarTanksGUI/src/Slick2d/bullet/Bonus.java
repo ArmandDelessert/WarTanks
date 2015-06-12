@@ -12,7 +12,7 @@
  */
 package Slick2d.bullet;
 
-import Slick2d.Map;
+import Slick2d.GameObject.Map;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -35,7 +35,7 @@ public class Bonus {
     private final int width = 32;
 
 
-    public Bonus(int type,int x, int y) {
+    public Bonus(Map map, int type, int x, int y) {
         this.x = x;
         this.y = y;
         this.type = type;
