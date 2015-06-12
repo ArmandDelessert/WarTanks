@@ -104,5 +104,12 @@ Thumbs.db
 ~*.tmp
 
 
+# pour armand
+build-impl.xml
+genfiles.properties
+project.properties
+project.xml
+
+
 # Auto add #
 ############
