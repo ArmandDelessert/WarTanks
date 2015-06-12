@@ -43,10 +43,10 @@
 /NavalBattle/nbproject/private/
 
 # Fichiers de config des projets NetBeans #
-#/*/nbproject/build-impl.xml
-#/*/nbproject/project.xml
-#/*/nbproject/genfiles.properties
-#/*/nbproject/project.properties
+#nbproject/build-impl.xml
+#nbproject/project.xml
+#nbproject/genfiles.properties
+#nbproject/project.properties
 
 
 # Compiled source #
