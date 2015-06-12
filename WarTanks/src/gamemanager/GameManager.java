@@ -12,8 +12,11 @@ package gamemanager;
 import java.io.IOException;
 import static java.lang.Thread.sleep;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import network.protocol.messages.Command;
 import network.protocol.messages.StateGame;
 import network.server.ClientHandler;
 import network.server.ClientListener;
@@ -48,6 +51,8 @@ public class GameManager implements Runnable {
 
 		ClientListener clientListener;
 		Thread clientListenerThread;
+
+		LinkedList<LinkedList<Command>> commandQueues = new LinkedList<LinkedList<Command>>();
 
 		String ipAddress = "localhost";
 		int portNumber = 1991;
@@ -101,15 +106,17 @@ public class GameManager implements Runnable {
 			*/
 
 			// Récupération des commandes des clients
-			
+			for (Object i : clientListener.clientHandlerList) {
+				commandQueues.add(((ClientHandler)i).getCommandQueue());
+			}
 
 			// Mise à jour de la carte
 			this.stateGame.lastUpdate = new Date(System.currentTimeMillis());
 //		this.stateGame.lastUpdate.setTime(System.currentTimeMillis());
 
 			// Envoi de la mise à jour de l'état de la carte à tous les ClientHandler
+			System.out.println("[" + this.getClass() + "]: " + "Envoi de this.stateGame aux clients : " + this.stateGame);
 			for (Object i : clientListener.clientHandlerList) {
-				System.out.println("[" + this.getClass() + "]: " + "this.stateGame : " + this.stateGame);
 				((ClientHandler)i).setStateGame(stateGame);
 			}
 
