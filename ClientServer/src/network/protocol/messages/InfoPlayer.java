@@ -37,9 +37,8 @@ public class InfoPlayer implements Serializable {
 	 * 
 	 * @param id
 	 * @param name
-	 * @param color
 	 */
-	public InfoPlayer(int id, String name, ColorPlayer color) {
+	public InfoPlayer(int id, String name) {
 
 		this.id = id;
 		this.name = name;

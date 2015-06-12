@@ -171,8 +171,7 @@ public class ClientHandler implements Runnable {
 
 		// Envoie d'une confirmation et des infos du joueur
 		this.communicationProtocol.sendStringMessage("OK");
-		this.communicationProtocol.sendInfoPlayer(new InfoPlayer(this.id + 1, "Joueur" + (this.id + 1),
-						InfoPlayer.ColorPlayer.getColor(this.id + 1)));
+		this.communicationProtocol.sendInfoPlayer(new InfoPlayer(this.id + 1, "Joueur" + (this.id + 1)));
 
 		// Boucle principale pour la communication avec le client
 		while (clientConnected) {
