@@ -12,14 +12,17 @@ package gamemanager.stategame;
 import gamemanager.player.Player;
 import java.util.Date;
 import network.protocol.messages.InfoPlayer;
+import network.protocol.messages.StateGame;
 
 /**
  *
  * @author Armand Delessert
  */
-public class StateGame {
+public class StateGameManager {
 
 	public Date lastUpdate;
+
+	public int[][] map;
 
 	public Player player1;
 	public Player player2;
@@ -27,12 +30,31 @@ public class StateGame {
 	// Liste des bonus sur la carte
 	// Liste des obus sur la carte
 
-	public StateGame() {}
+	/**
+	 * 
+	 */
+	public StateGameManager() {
+		this.map = new int[32][32];
+	}
 
-	public StateGame(Player player1, Player player2) {
+	/**
+	 * 
+	 * @param player1
+	 * @param player2 
+	 */
+	public StateGameManager(Player player1, Player player2) {
+
+		this.map = new int[32][32];
 
 		this.player1 = player1;
 		this.player2 = player2;
+	}
+
+	public StateGame getStateGame() {
+		return new StateGame(
+			new InfoPlayer(this.player1.id, this.player1.name, this.player1.positionX, this.player1.positionY, this.player1.direction),
+			new InfoPlayer(this.player2.id, this.player2.name, this.player2.positionX, this.player2.positionY, this.player2.direction)
+		);
 	}
 
 	/**

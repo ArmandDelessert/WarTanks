@@ -39,7 +39,7 @@ public class Player {
 	 * @param name
 	 * @param color
 	 */
-	public Player(int id, String name, ColorPlayer color) {
+	public Player(int id, String name) {
 
 		this.id = id;
 		this.name = name;

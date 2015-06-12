@@ -9,15 +9,15 @@
 
 package gamemanager;
 
+import gamemanager.player.Player;
+import gamemanager.stategame.StateGameManager;
 import java.io.IOException;
 import static java.lang.Thread.sleep;
 import java.util.Date;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import network.protocol.messages.Command;
-import network.protocol.messages.StateGame;
 import network.server.ClientHandler;
 import network.server.ClientListener;
 
@@ -30,7 +30,9 @@ public class GameManager implements Runnable {
 	public final int nbJoueurs = 2;
 	private boolean running = true;
 
-	private final StateGame stateGame = new StateGame();
+	private final Player player1 = new Player(1, "Player1");
+	private final Player player2 = new Player(2, "Player2");
+	private final StateGameManager stateGameManager = new StateGameManager(player1, player2);
 
 	@Override
 	public void run() {
@@ -64,6 +66,12 @@ public class GameManager implements Runnable {
 		clientListener = new ClientListener(nbJoueurs, portNumber);
 		clientListenerThread = new Thread(clientListener);
 		clientListenerThread.start();
+
+		/**
+		 * Paramétrage initial de la carte
+		 */
+		this.stateGameManager.player1.setPosition(1, 1, 0);
+		this.stateGameManager.player2.setPosition(30, 30, 0);
 
 		/**
 		 * Démarrage de la partie
@@ -111,13 +119,13 @@ public class GameManager implements Runnable {
 			}
 
 			// Mise à jour de la carte
-			this.stateGame.lastUpdate = new Date(System.currentTimeMillis());
+			this.stateGameManager.lastUpdate = new Date(System.currentTimeMillis());
 //		this.stateGame.lastUpdate.setTime(System.currentTimeMillis());
 
 			// Envoi de la mise à jour de l'état de la carte à tous les ClientHandler
-			System.out.println("[" + this.getClass() + "]: " + "Envoi de this.stateGame aux clients : " + this.stateGame);
+			System.out.println("[" + this.getClass() + "]: " + "Envoi de this.stateGame aux clients : " + this.stateGameManager);
 			for (Object i : clientListener.clientHandlerList) {
-				((ClientHandler)i).setStateGame(stateGame);
+				((ClientHandler)i).setStateGame(this.stateGameManager.getStateGame());
 			}
 
 			/**
