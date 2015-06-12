@@ -6,7 +6,7 @@
 package Slick2d.bullet;
 
 import Slick2d.Fightable.Player;
-import Slick2d.Map;
+import Slick2d.GameObject.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import org.newdawn.slick.Color;
@@ -22,6 +22,7 @@ public class Laser extends Bullet {
 
     private boolean strick = false;
     boolean finished = false;
+
     Player launcher;
 
     public Laser(Map map, int x, int y, int direction, Player p) throws SlickException {
@@ -44,7 +45,6 @@ public class Laser extends Bullet {
     public void render(final Graphics g) throws SlickException {
         if (finished == false) {
             g.setColor(new Color(0, 0, 0, .5f));
-            //g.drawRect(getX(), getY()-200, width, height);
             if (launcher.getDirection() == UP || launcher.getDirection() == DOWN) {
                 height = 200;
                 width = 32;
@@ -55,23 +55,23 @@ public class Laser extends Bullet {
             }
             if (launcher.getDirection() == UP) {
                 bullet = new Image("src/ressources/bullet/laser.png");
-                g.fillRect(launcher.getX(), launcher.getY() - 200, width, height);
-                g.fillRect(launcher.getX(), launcher.getY() - 200, width, height, bullet, 0, 0);
+                g.fillRect(x, y, width, height);
+                g.fillRect(x, y, width, height, bullet, 0, 0);
             }
             if (launcher.getDirection() == DOWN) {
                 bullet = new Image("src/ressources/bullet/laser.png");
-                g.fillRect(launcher.getX(), launcher.getY() + 32, width, height);
-                g.fillRect(launcher.getX(), launcher.getY() + 32, width, height, bullet, 0, 0);
+                g.fillRect(x, y, width, height);
+                g.fillRect(x, y, width, height, bullet, 0, 0);
             }
             if (launcher.getDirection() == RIGHT) {
                 bullet = new Image("src/ressources/bullet/laserRight.png");
-                g.fillRect(launcher.getX() + 32, launcher.getY(), width, height);
-                g.fillRect(launcher.getX() + 32, launcher.getY(), width, height, bullet, 0, 0);
+                g.fillRect(x, y, width, height);
+                g.fillRect(x, y, width, height, bullet, 0, 0);
             }
             if (launcher.getDirection() == LEFT) {
                 bullet = new Image("src/ressources/bullet/laserRight.png");
-                g.fillRect(launcher.getX() - 200, launcher.getY(), width, height);
-                g.fillRect(launcher.getX() - 200, launcher.getY(), width, height, bullet, 0, 0);
+                g.fillRect(x, y, width, height);
+                g.fillRect(x, y, width, height, bullet, 0, 0);
             }
         }
         TimerTask task;
@@ -105,9 +105,34 @@ public class Laser extends Bullet {
 
     @Override
     public void update(final int delta) throws SlickException {
+        if (direction == UP || direction == DOWN) {
+            height = 200;
+            width = 32;
+        }
+        if (direction == RIGHT || direction == LEFT) {
+            height = 32;
+            width = 200;
+        }
+
         collision = this.map.isCollision(launcher.getX(), launcher.getY(), this.width, this.height, this.direction);
         this.x = launcher.getX();
         this.y = launcher.getY();
-    }
 
+        if (launcher.getDirection() == RIGHT) {
+           this.x = launcher.getX() + 32;
+            this.y = launcher.getY();
+        }
+        if (launcher.getDirection() == LEFT) {
+            this.x = launcher.getX() - 200;
+            this.y = launcher.getY();
+        }
+        if(launcher.getDirection() == UP) {
+            this.x = launcher.getX() ;
+            this.y = launcher.getY() -200;
+        }
+        if(launcher.getDirection() == DOWN) {
+            this.x = launcher.getX() +32 ;
+            this.y = launcher.getY();
+        }
+    }
 }

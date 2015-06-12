@@ -6,7 +6,6 @@
 package Slick2d.PEnd;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.gui.GUIContext;
 
 /**
  *
