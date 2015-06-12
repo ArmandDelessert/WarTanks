@@ -19,6 +19,7 @@ import java.util.Date;
 public class StateGame implements Serializable {
 
 	public Date lastUpdate;
+	public boolean gameEnd = false;
 
 	public InfoPlayer player1;
 	public InfoPlayer player2;

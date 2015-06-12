@@ -164,6 +164,7 @@ public class ClientHandler implements Runnable {
 	private void clientHandler() throws IOException {
 
 		boolean clientConnected = true;
+		boolean gameRunning;
 
 		// Réception des infos du client
 		this.infoClient = this.communicationProtocol.receiveInfoClient();
@@ -197,7 +198,8 @@ public class ClientHandler implements Runnable {
 			this.communicationProtocol.sendStringMessage("Start");
 
 			// Boucle principale pour la communication pendant la partie
-			for (int i = 0; i < 4; i ++) {
+			gameRunning = true;
+			while (gameRunning) {
 
 				// Réception des commandes des clients
 				if (this.communicationProtocol.isAvailable()) {
@@ -226,6 +228,12 @@ public class ClientHandler implements Runnable {
 				if (this.newStateGameAvailable) {
 					System.out.println("[" + this.getClass() + " " + this.id + "]: " + "Envoie du StateGame au client.");
 					this.communicationProtocol.sendStateGame(this.getStateGame());
+				}
+
+				if (this.getStateGame() != null && this.getStateGame().gameEnd) {
+					// Fin de la partie
+					System.out.println("[" + this.getClass() + " " + this.id + "]: " + "Fin de la partie.");
+					gameRunning = false;
 				}
 			}
 
