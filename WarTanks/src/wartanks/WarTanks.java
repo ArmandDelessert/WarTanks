@@ -34,7 +34,7 @@ public class WarTanks {
 
 		System.out.println("Projet WarTanks - Test du serveur.");
 
-		// Lancement du serveur
+		// Lancement du GameManager (serveur du jeu)
 		gameManager = new GameManager();
 		gameManagerThread = new Thread(gameManager);
 		gameManagerThread.start();

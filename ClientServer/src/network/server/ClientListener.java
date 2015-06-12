@@ -11,6 +11,7 @@ package network.server;
 
 import com.sun.media.jfxmediaimpl.MediaDisposer.Disposable;
 import java.io.IOException;
+import java.net.DatagramSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.LinkedList;
@@ -37,17 +38,17 @@ public class ClientListener implements Runnable, Disposable {
 	private int nbMaxClientHandler;
 
 	public final List<ClientHandler> clientHandlerList;
-	private final List<Thread> threadList;
+	private final List<Thread> clientHandlerThreadList;
 	public boolean allClientHandlerReady;
 	public final Lock start;
 
 	/**
 	 * 
 	 * @param nbMaxClient
-	 * @param numeroPort
+	 * @param portNumber
 	 * @throws IOException 
 	 */
-	public ClientListener(int nbMaxClient, int numeroPort) throws IOException {
+	public ClientListener(int nbMaxClient, int portNumber) throws IOException {
 
 		nbActualClientHandler = 0;
 		nbTotalClientHandler = 0;
@@ -55,15 +56,24 @@ public class ClientListener implements Runnable, Disposable {
 
 		// Création du socket d'écoute des clients
 		try {
-			socket = new ServerSocket(numeroPort);
+			socket = new ServerSocket(portNumber);
 		}
+
+//		while (!portNumberAvailable(portNumber) && portNumber < portNumber + 10) {
+//			portNumber ++;
+//		}
+//		try {
+//			if (portNumber < portNumber + 10) {
+//				socket = new ServerSocket(portNumber);
+//			}
+//		}
 		catch (IOException ex) {
 			Logger.getLogger(ClientListener.class.getName()).log(Level.SEVERE, null, ex);
 			throw new IOException("Problème interne à Server.Server() lors de la création du socket.");
 		}
 
 		this.clientHandlerList = new LinkedList<ClientHandler>();
-		this.threadList = new LinkedList<Thread>();
+		this.clientHandlerThreadList = new LinkedList<Thread>();
 		this.allClientHandlerReady = false;
 		this.start = new ReentrantLock();
 
@@ -84,6 +94,43 @@ public class ClientListener implements Runnable, Disposable {
 			Logger.getLogger(ClientListener.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
+	
+	/**
+	 * Checks to see if a specific port is available.
+	 *
+	 * @param portNumber the port to check for availability
+	 * @return 
+	 */
+	public static boolean portNumberAvailable(int portNumber) {
+		if (portNumber < 0 || portNumber > 65534) {
+			throw new IllegalArgumentException("Invalid start port: " + portNumber);
+		}
+
+		ServerSocket ss = null;
+		DatagramSocket ds = null;
+		try {
+			ss = new ServerSocket(portNumber);
+			ss.setReuseAddress(true);
+			ds = new DatagramSocket(portNumber);
+			ds.setReuseAddress(true);
+			return true;
+		} catch (IOException ex) {
+		} finally {
+			if (ds != null) {
+				ds.close();
+			}
+
+			if (ss != null) {
+				try {
+					ss.close();
+				} catch (IOException ex) {
+					/* Should not be thrown */
+				}
+			}
+		}
+
+		return false;
+	}
 
 	/**
 	 * 
@@ -96,11 +143,12 @@ public class ClientListener implements Runnable, Disposable {
 		// Création des ClientHandler
 		for (nbTotalClientHandler = 0; nbTotalClientHandler < nbMaxClientHandler; nbTotalClientHandler ++) {
 			try {
+				// Attente sur la connexion d'un nouveau client
 				newSocket = socket.accept();
 
 				// Création d'un serveur spécifique au client
 				clientHandlerList.add(new ClientHandler(newSocket, this));
-				threadList.add(new Thread(clientHandlerList.get(clientHandlerList.size()-1)));
+				clientHandlerThreadList.add(new Thread(clientHandlerList.get(clientHandlerList.size()-1)));
 				nbActualClientHandler ++;
 				System.out.println("[" + this.getClass() + "]: " + "nbActualClientHandler : " + nbActualClientHandler + " ; " + "nbTotalClientHandler : " + nbTotalClientHandler);
 			}
@@ -111,11 +159,11 @@ public class ClientListener implements Runnable, Disposable {
 		}
 
 		// Lancement des ClientHandler
-		for (Object i : threadList) {
+		for (Object i : clientHandlerThreadList) {
 			((Thread)i).start();
 		}
 
-		// Attente sur les ClientHandler
+		// Attente sur l'initialisation des ClientHandler
 		boolean readyToStart = false;
 		while (!readyToStart) {
 			readyToStart = true;
@@ -134,7 +182,7 @@ public class ClientListener implements Runnable, Disposable {
 
 		// Join sur les threads ClientHandler
 		try {
-			for (Object i : threadList) {
+			for (Object i : clientHandlerThreadList) {
 				((Thread)i).join();
 			}
 		} catch (InterruptedException ex) {
@@ -142,7 +190,8 @@ public class ClientListener implements Runnable, Disposable {
 			Logger.getLogger(ClientListener.class.getName()).log(Level.SEVERE, null, ex);
 		}
 
-		socket.close();
+		// Fermeture du socket du serveur
+		this.dispose();
 
 		System.out.println("[" + this.getClass() + "]: " + "I have finished my work. Goodbye!");
 	}

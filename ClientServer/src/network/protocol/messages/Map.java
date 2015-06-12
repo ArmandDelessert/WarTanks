@@ -1,5 +1,5 @@
 /**
- * Projet : WarTanks
+ * Projet : ClientServer
  * Auteur : Armand Delessert
  * Date   : 31.05.2015
  * 

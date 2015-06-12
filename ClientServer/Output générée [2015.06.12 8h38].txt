@@ -1,0 +1,83 @@
+run:
+Projet ClientServer - Test de la communication client-serveur.
+Test de communication entre le serveur et un ou deux client(s).
+Création et lancement du serveur.
+[class network.server.ClientListener]: Hello from <class network.server.ClientListener>!
+Création des clients.
+[class network.client.Client 0]: Hello from <class network.client.Client>!
+[class network.server.ClientHandler 0]: Hello from <class network.server.ClientHandler>!
+[class network.server.ClientListener]: nbActualClientHandler : 1 ; nbTotalClientHandler : 0
+[class network.client.Client 1]: Hello from <class network.client.Client>!
+[class network.server.ClientHandler 1]: Hello from <class network.server.ClientHandler>!
+[class network.server.ClientListener]: nbActualClientHandler : 2 ; nbTotalClientHandler : 1
+[class network.server.ClientHandler 1]: infoClient reçu
+[class network.server.ClientHandler 0]: infoClient reçu
+[class network.client.Client 1]: Connecté au serveur
+[class network.client.Client 0]: Connecté au serveur
+[class network.server.ClientHandler 1]: Prêt !
+[class network.server.ClientHandler 1]: Avant le start.wait()
+[class network.server.ClientHandler 0]: Prêt !
+[class network.server.ClientHandler 0]: Avant le start.wait()
+[class network.server.ClientListener]: Tous les ClientHandler sont prêt.
+[class network.client.Client 1]: infoPlayer : 2 Joueur2 [RED]
+[class network.client.Client 0]: infoPlayer : 1 Joueur1 [BLUE]
+Envoi du signal de ynchronisation des clients pour le lancement de la partie.
+Attente de la fin des clients.
+[class network.server.ClientHandler 0]: Après le start.wait()
+[class network.server.ClientHandler 1]: Après le start.wait()
+[class network.server.ClientHandler 0]: nbClientHandler restants : 1
+[class network.server.ClientHandler 0]: I have finished my work. Goodbye!
+[class network.server.ClientHandler 1]: nbClientHandler restants : 0
+[class network.server.ClientHandler 1]: I have finished my work. Goodbye!
+[class network.server.ClientListener]: I have finished my work. Goodbye!
+java.io.IOException: Problème interne à CommunicationProtocol.sendCommand().
+juin 12, 2015 8:38:36 AM network.protocol.CommunicationProtocol sendCommand
+GRAVE: null
+java.io.IOException: Problème interne à CommunicationProtocol.receiveStateGame().
+java.net.SocketException: Software caused connection abort: socket write error
+	at java.net.SocketOutputStream.socketWrite0(Native Method)
+Arrêt du serveur.
+Fin du test de la communication client-serveur.
+	at java.net.SocketOutputStream.socketWrite(SocketOutputStream.java:109)
+	at java.net.SocketOutputStream.write(SocketOutputStream.java:153)
+	at java.io.ObjectOutputStream$BlockDataOutputStream.drain(ObjectOutputStream.java:1877)
+	at java.io.ObjectOutputStream$BlockDataOutputStream.setBlockDataMode(ObjectOutputStream.java:1786)
+	at java.io.ObjectOutputStream.writeNonProxyDesc(ObjectOutputStream.java:1286)
+	at java.io.ObjectOutputStream.writeClassDesc(ObjectOutputStream.java:1231)
+	at java.io.ObjectOutputStream.writeOrdinaryObject(ObjectOutputStream.java:1427)
+	at java.io.ObjectOutputStream.writeObject0(ObjectOutputStream.java:1178)
+	at java.io.ObjectOutputStream.writeFatalException(ObjectOutputStream.java:1577)
+	at java.io.ObjectOutputStream.writeObject(ObjectOutputStream.java:351)
+	at network.protocol.CommunicationProtocol.sendCommand(CommunicationProtocol.java:365)
+	at network.client.Client.client(Client.java:118)
+	at network.client.Client.run(Client.java:67)
+	at java.lang.Thread.run(Thread.java:745)
+
+juin 12, 2015 8:38:36 AM network.protocol.CommunicationProtocol receiveStateGame
+GRAVE: null
+java.io.EOFException
+	at java.io.ObjectInputStream$BlockDataInputStream.peekByte(ObjectInputStream.java:2601)
+	at java.io.ObjectInputStream.readObject0(ObjectInputStream.java:1319)
+	at java.io.ObjectInputStream.readObject(ObjectInputStream.java:371)
+	at network.protocol.CommunicationProtocol.receiveStateGame(CommunicationProtocol.java:314)
+	at network.client.Client.client(Client.java:121)
+	at network.client.Client.run(Client.java:67)
+	at java.lang.Thread.run(Thread.java:745)
+
+juin 12, 2015 8:38:36 AM network.client.Client run
+GRAVE: null
+java.io.IOException: Problème interne à CommunicationProtocol.sendCommand().
+	at network.protocol.CommunicationProtocol.sendCommand(CommunicationProtocol.java:369)
+	at network.client.Client.client(Client.java:118)
+	at network.client.Client.run(Client.java:67)
+	at java.lang.Thread.run(Thread.java:745)
+
+juin 12, 2015 8:38:36 AM network.client.Client run
+GRAVE: null
+java.io.IOException: Problème interne à CommunicationProtocol.receiveStateGame().
+	at network.protocol.CommunicationProtocol.receiveStateGame(CommunicationProtocol.java:318)
+	at network.client.Client.client(Client.java:121)
+	at network.client.Client.run(Client.java:67)
+	at java.lang.Thread.run(Thread.java:745)
+
+BUILD SUCCESSFUL (total time: 3 seconds)

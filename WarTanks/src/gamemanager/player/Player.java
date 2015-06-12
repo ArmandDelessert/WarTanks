@@ -1,21 +1,21 @@
 /**
- * Projet : ClientServer
+ * Projet : WarTanks
  * Auteur : Armand Delessert
- * Date   : 31.05.2015
+ * Date   : 12.06.2015
  * 
  * Description :
  * Classe pour le stockage des informations concernant un joueur.
  */
 
-package network.protocol.messages;
+package gamemanager.player;
 
-import java.io.Serializable;
+import network.protocol.messages.InfoPlayer;
 
 /**
  *
  * @author Armand Delessert
  */
-public class InfoPlayer implements Serializable {
+public class Player {
 
 	public final static int maxPlayer = 2;
 
@@ -39,7 +39,7 @@ public class InfoPlayer implements Serializable {
 	 * @param name
 	 * @param color
 	 */
-	public InfoPlayer(int id, String name, ColorPlayer color) {
+	public Player(int id, String name, ColorPlayer color) {
 
 		this.id = id;
 		this.name = name;
@@ -50,11 +50,12 @@ public class InfoPlayer implements Serializable {
 	 * 
 	 * @param id
 	 * @param name
+	 * @param color
 	 * @param positionX
 	 * @param positionY
 	 * @param direction
 	 */
-	public InfoPlayer(int id, String name, int positionX, int positionY, int direction) {
+	public Player(int id, String name, ColorPlayer color, int positionX, int positionY, int direction) {
 
 		this.id = id;
 		this.name = name;
@@ -63,6 +64,16 @@ public class InfoPlayer implements Serializable {
 		this.positionX = positionX;
 		this.positionY = positionY;
 		this.direction = direction;
+	}
+
+	public void setPosition(int positionX, int positionY, int direction) {
+		this.positionX = positionX;
+		this.positionY = positionY;
+		this.direction = direction;
+	}
+
+	public InfoPlayer getInfoPlayer() {
+		return new InfoPlayer(this.id, this.name, this.positionX, this.positionY, this.direction);
 	}
 
 	@Override

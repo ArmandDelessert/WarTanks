@@ -1,5 +1,5 @@
 /**
- * Projet : WarTanks
+ * Projet : ClientServer
  * Auteur : Armand Delessert
  * Date   : 31.05.2015
  * 
@@ -10,12 +10,15 @@
 package network.protocol.messages;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  *
  * @author Armand Delessert
  */
 public class StateGame implements Serializable {
+
+	public Date lastUpdate;
 
 	public InfoPlayer player1;
 	public InfoPlayer player2;
@@ -29,5 +32,14 @@ public class StateGame implements Serializable {
 
 		this.player1 = player1;
 		this.player2 = player2;
+	}
+
+	/**
+	 * 
+	 * @return 
+	 */
+	@Override
+	public String toString() {
+		return StateGame.class.toGenericString() + " (Last update: " + this.lastUpdate.toString() + ")";
 	}
 }

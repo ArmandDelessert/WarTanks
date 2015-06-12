@@ -11,8 +11,12 @@ package gamemanager;
 
 import java.io.IOException;
 import static java.lang.Thread.sleep;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import network.protocol.messages.Command;
 import network.protocol.messages.StateGame;
 import network.server.ClientHandler;
 import network.server.ClientListener;
@@ -26,7 +30,7 @@ public class GameManager implements Runnable {
 	public final int nbJoueurs = 2;
 	private boolean running = true;
 
-	private StateGame stateMap = new StateGame();
+	private final StateGame stateGame = new StateGame();
 
 	@Override
 	public void run() {
@@ -46,18 +50,20 @@ public class GameManager implements Runnable {
 	public void gameManager() throws IOException, InterruptedException {
 
 		ClientListener clientListener;
-		Thread networkServer;
+		Thread clientListenerThread;
+
+		LinkedList<LinkedList<Command>> commandQueues = new LinkedList<LinkedList<Command>>();
 
 		String ipAddress = "localhost";
-		int numeroPort = 1991;
+		int portNumber = 1991;
 
 		/**
 		 * Création et démarrage du serveur pour la communication avec les clients
 		 */
 		System.out.println("[" + this.getClass() + "]: " + "Démarrage du test avec " + nbJoueurs + " client(s).");
-		clientListener = new ClientListener(nbJoueurs, numeroPort);
-		networkServer = new Thread(clientListener);
-		networkServer.start();
+		clientListener = new ClientListener(nbJoueurs, portNumber);
+		clientListenerThread = new Thread(clientListener);
+		clientListenerThread.start();
 
 		/**
 		 * Démarrage de la partie
@@ -65,7 +71,7 @@ public class GameManager implements Runnable {
 		// Attente du démarrage des ClientHandler
 		System.out.println("[" + this.getClass() + "]: " + "Attente que tous les ClientHandler soient démarrés.");
 		while (!clientListener.allClientHandlerReady) {
-			System.out.println("[" + this.getClass() + "]: " + "Waiting...");
+			System.out.println("[" + this.getClass() + "]: " + "Tous les ClientHandler ne sont pas encore prêt...");
 			sleep(200); // Attente de 0.2 seconde
 		}
 		System.out.println("[" + this.getClass() + "]: " + "Tous les ClientHandler sont prêt.");
@@ -92,13 +98,26 @@ public class GameManager implements Runnable {
 		// Boucle principale du déroulement de la partie
 		while (running) {
 
-			// Récupération des commandes des clients
-			
+			/*
+				À faire dans cette boucle :
+				 - Vérifier la validité des commandes
+				 - Appliquer les commandes sur le jeu
+				 - Vérifier les conditions de victoire et défaite
+			*/
 
-			// Envoi de la mise à jour de l'état de la carte
+			// Récupération des commandes des clients
 			for (Object i : clientListener.clientHandlerList) {
-				System.out.println("[" + this.getClass() + "]: " + "this.stateMap : " + this.stateMap);
-				((ClientHandler)i).setStateMap(this.stateMap);
+				commandQueues.add(((ClientHandler)i).getCommandQueue());
+			}
+
+			// Mise à jour de la carte
+			this.stateGame.lastUpdate = new Date(System.currentTimeMillis());
+//		this.stateGame.lastUpdate.setTime(System.currentTimeMillis());
+
+			// Envoi de la mise à jour de l'état de la carte à tous les ClientHandler
+			System.out.println("[" + this.getClass() + "]: " + "Envoi de this.stateGame aux clients : " + this.stateGame);
+			for (Object i : clientListener.clientHandlerList) {
+				((ClientHandler)i).setStateGame(stateGame);
 			}
 
 			/**
@@ -110,7 +129,7 @@ public class GameManager implements Runnable {
 		/**
 		 * Fin du serveur
 		 */
-		networkServer.join(); // Fermeture du serveur
+		clientListenerThread.join(); // Fermeture du serveur
 
 
 /*
@@ -125,18 +144,5 @@ Déroulement d'un rafraîchissement du jeu :
 5. Envoyer le nouveau plateau de jeu aux clients.
 	Il ne devrait pas y avoir besoin d'un thread pour cette tâche.
 */
-
-		// Récupération des commandes des joueurs
-		/*
-		Stocker les commandes de chacun des clients dans un buffer qu'on viendra lire en début de boucle
-		*/
-
-		// Vérifier la validité des commandes
-		// Appliquer les commandes sur le jeu
-		// Vérifier les conditions de victoire et défaite
-
-		// Envoyer le nouveau plateau de jeu aux clients
-		
-
 	}
 }

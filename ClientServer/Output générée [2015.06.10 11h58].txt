@@ -1,0 +1,58 @@
+run:
+Projet WarTanks - Test du serveur.
+[class wartanks.WarTanks]: Création du client1 pour tester la communication.
+[class gamemanager.GameManager]: Démarrage du test avec 2 client(s).
+[class network.server.ClientListener]: Hello from <class network.server.ClientListener>!
+[class gamemanager.GameManager]: Attente que tous les ClientHandler soient démarrés.
+[class gamemanager.GameManager]: Waiting...
+[class gamemanager.GameManager]: Waiting...
+[class gamemanager.GameManager]: Waiting...
+[class network.server.ClientHandler 0]: Hello from <class network.server.ClientHandler>!
+[class network.client.Client 0]: Hello from <class network.client.Client>!
+[class wartanks.WarTanks]: Création du client2 pour tester la communication.
+[class network.server.ClientListener]: nbActualClientHandler : 1 ; nbTotalClientHandler : 0
+[class network.client.Client 1]: Hello from <class network.client.Client>!
+[class network.server.ClientHandler 1]: Hello from <class network.server.ClientHandler>!
+[class network.server.ClientListener]: nbActualClientHandler : 2 ; nbTotalClientHandler : 1
+[class network.server.ClientHandler 1]: infoClient reçu
+[class network.server.ClientHandler 0]: infoClient reçu
+[class network.client.Client 1]: Connecté au serveur
+[class network.client.Client 0]: Connecté au serveur
+[class network.server.ClientHandler 1]: Prêt !
+[class network.server.ClientHandler 1]: Avant le start.wait()
+[class network.server.ClientHandler 0]: Prêt !
+[class network.server.ClientHandler 0]: Avant le start.wait()
+[class network.client.Client 0]: infoPlayer : 1 Joueur1 [BLUE]
+[class network.client.Client 1]: infoPlayer : 2 Joueur2 [RED]
+[class network.server.ClientListener]: Tous les ClientHandler sont prêt.
+[class gamemanager.GameManager]: Tous les ClientHandler sont démarrés.
+[class gamemanager.GameManager]: Avant le start.notifyAll()
+[class gamemanager.GameManager]: Après le start.notifyAll()
+[class network.server.ClientHandler 1]: Après le start.wait()
+[class network.server.ClientHandler 0]: Après le start.wait()
+[class network.server.ClientHandler 0]: Commande reçue : [network.protocol.messages.Movement@3a38bec3]
+[class network.server.ClientHandler 1]: Commande reçue : [network.protocol.messages.Movement@6a220641]
+[class network.client.Client 0]: StateMap reçu : null
+[class network.client.Client 1]: StateMap reçu : null
+[class network.server.ClientHandler 0]: Commande reçue : [network.protocol.messages.Movement@3a38bec3, network.protocol.messages.Movement@3a38bec3]
+[class network.server.ClientHandler 1]: Commande reçue : [network.protocol.messages.Movement@6a220641, network.protocol.messages.Movement@6a220641]
+[class network.client.Client 0]: StateMap reçu : null
+[class network.client.Client 1]: StateMap reçu : null
+[class network.server.ClientHandler 0]: Commande reçue : [network.protocol.messages.Movement@3a38bec3, network.protocol.messages.Movement@3a38bec3, network.protocol.messages.Movement@3a38bec3]
+[class network.server.ClientHandler 1]: Commande reçue : [network.protocol.messages.Movement@6a220641, network.protocol.messages.Movement@6a220641, network.protocol.messages.Movement@6a220641]
+[class network.client.Client 0]: StateMap reçu : null
+[class network.client.Client 1]: StateMap reçu : null
+[class network.server.ClientHandler 0]: Commande reçue : [network.protocol.messages.Movement@3a38bec3, network.protocol.messages.Movement@3a38bec3, network.protocol.messages.Movement@3a38bec3, network.protocol.messages.Movement@3a38bec3]
+[class network.server.ClientHandler 0]: nbClientHandler restants : 1
+[class network.server.ClientHandler 0]: I have finished my work. Goodbye!
+[class network.server.ClientHandler 1]: Commande reçue : [network.protocol.messages.Movement@6a220641, network.protocol.messages.Movement@6a220641, network.protocol.messages.Movement@6a220641, network.protocol.messages.Movement@6a220641]
+[class network.server.ClientHandler 1]: nbClientHandler restants : 0
+[class network.server.ClientHandler 1]: I have finished my work. Goodbye!
+[class network.client.Client 0]: StateMap reçu : null
+[class network.client.Client 0]: I have finished my work. Goodbye!
+[class network.client.Client 1]: StateMap reçu : null
+[class network.client.Client 1]: I have finished my work. Goodbye!
+[class network.server.ClientListener]: I have finished my work. Goodbye!
+[class gamemanager.GameManager]: this.stateMap : network.protocol.messages.StateGame@32c6c39d
+[class gamemanager.GameManager]: this.stateMap : network.protocol.messages.StateGame@32c6c39d
+BUILD SUCCESSFUL (total time: 0 seconds)
