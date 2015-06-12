@@ -8,7 +8,6 @@ package network.server;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,7 +34,7 @@ public class ClientHandler implements Runnable {
 	private TiledMapMessage tiledMapMessage;
 	private StateGame stateGame;
 	private boolean newStateGameAvailable;
-	private final List<Command> commandQueue;
+	private final LinkedList<Command> commandQueue;
 
 	public boolean readyToStart;
 	private Semaphore semaphore;
@@ -152,6 +151,14 @@ public class ClientHandler implements Runnable {
 
 	/**
 	 * 
+	 * @return 
+	 */
+	public LinkedList<Command> getCommandQueue() {
+		return this.commandQueue;
+	}
+
+	/**
+	 * 
 	 * @throws IOException 
 	 */
 	private void clientHandler() throws IOException {
@@ -191,12 +198,13 @@ public class ClientHandler implements Runnable {
 			this.communicationProtocol.sendStringMessage("Start");
 
 			// Boucle principale pour la communication pendant la partie
-//			Command command;
 			for (int i = 0; i < 4; i ++) {
+
 				// Réception des commandes des clients
 				if (this.communicationProtocol.isAvailable()) {
 					try {
-						commandQueue.add(this.communicationProtocol.receiveCommand());
+						this.commandQueue.add(this.communicationProtocol.receiveCommand());
+						System.out.println("[" + this.getClass() + " " + this.id + "]: " + "Commande(s) reçue(s) : " + this.commandQueue);
 					} catch (CommunicationProtocol.UnknownCommand ex) {
 						System.out.println(ex);
 						Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);

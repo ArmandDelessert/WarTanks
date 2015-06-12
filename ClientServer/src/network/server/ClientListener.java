@@ -11,7 +11,6 @@ package network.server;
 
 import com.sun.media.jfxmediaimpl.MediaDisposer.Disposable;
 import java.io.IOException;
-import java.net.BindException;
 import java.net.DatagramSocket;
 import java.net.ServerSocket;
 import java.net.Socket;

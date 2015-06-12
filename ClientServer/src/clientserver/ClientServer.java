@@ -62,10 +62,28 @@ public class ClientServer {
 				threadList.get(i).start();
 			}
 
-			sleep(3000);
+			// Attente du démarrage des ClientHandler
+			System.out.println("Attente que tous les ClientHandler soient démarrés.");
+			while (!clientListener.allClientHandlerReady) {
+				System.out.println("Tous les ClientHandler ne sont pas encore prêt...");
+				sleep(200); // Attente de 0.2 seconde
+			}
+			System.out.println("Tous les ClientHandler sont prêt.");
+
+			// Attente de l'initialisation des ClientHandler
+			boolean readyToStart = false;
+			while (!readyToStart) {
+				readyToStart = true;
+				for (Object i : clientListener.clientHandlerList) {
+					if (!((ClientHandler)i).readyToStart) {
+						readyToStart = false;
+						break;
+					}
+				}
+			}
 
 			// Synchronisation des clients pour le lancement de la partie
-			System.out.println("Envoi du signal de ynchronisation des clients pour le lancement de la partie.");
+			System.out.println("Envoi du signal de synchronisation des clients pour le lancement de la partie.");
 			synchronized(clientListener.start) {
 				clientListener.start.notifyAll();
 			}
