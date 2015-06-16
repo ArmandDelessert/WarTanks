@@ -1,8 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * Projet : ClientServer
+ * Auteur : Armand Delessert
+ * Date   : 12.06.2015
+ * 
+ * Description :
+ * Serveur spécifique au client pour la communication client-serveur.
  */
+
 package network.server;
 
 import java.io.IOException;

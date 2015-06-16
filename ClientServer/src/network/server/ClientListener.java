@@ -4,7 +4,7 @@
  * Date   : 01.05.2015
  * 
  * Description :
- * Serveur de test de la communication client-serveur.
+ * Serveur à l'écoute des nouveaux clients pour la communication client-serveur.
  */
 
 package network.server;
