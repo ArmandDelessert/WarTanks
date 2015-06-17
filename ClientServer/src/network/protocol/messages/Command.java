@@ -15,7 +15,7 @@ import java.io.Serializable;
  *
  * @author Armand Delessert
  */
-public class Command implements Serializable {
+public abstract class Command implements Serializable {
 /*
 	public CommandType typeCmd;
 	public Command_Movement cmdMovement;
