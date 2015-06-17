@@ -35,7 +35,7 @@ public class Bonus {
     private final int width = 32;
 
 
-    public Bonus(Map map, int type, int x, int y) {
+    public Bonus(int type, int x, int y) {
         this.x = x;
         this.y = y;
         this.type = type;

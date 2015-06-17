@@ -30,7 +30,7 @@ public class Factory {
         int type = (int) (Math.random() * (9 + 1 - 1)) + 1;
         int randX = (int) (Math.random() * (32 * (this.map.getWidth() - 1)));
         int randY = (int) (Math.random() * (32 * (this.map.getHeight() - 1)));
-        return new Bonus(map,4,randX,randY);
+        return new Bonus(type,randX,randY);
     }
 
     public Ennemy ennemyFactory(int ID) {

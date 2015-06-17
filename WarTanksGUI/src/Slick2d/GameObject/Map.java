@@ -24,7 +24,7 @@ public class Map {
     TiledMap tiledMap;
 
     public void init() throws SlickException {
-        this.tiledMap = new TiledMap("src/ressources/map/maps/map1.tmx");
+        this.tiledMap = new TiledMap("src/ressources/map/maps/ULTIMATE_EPICNESS_MAP.tmx");
 
     }
 

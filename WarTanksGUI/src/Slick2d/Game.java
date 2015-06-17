@@ -21,9 +21,12 @@ import Slick2d.PEnd.Victory;
 import Slick2d.PEnd.Defeat;
 import Slick2d.HUD.Hud;
 import Slick2d.bullet.Laser;
+import client.ConnectionHandler;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import network.protocol.messages.Position;
+import network.protocol.messages.Shoot;
 
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
@@ -53,14 +56,17 @@ public class Game extends BasicGame {
     private Player player;
     private float xCamera;
     private float yCamera;
+    
+    private ConnectionHandler conn;
 
-    public Game(int nbrPlayer, int nbrBonus, int gameTimeSec) throws SlickException {
+    public Game(int nbrPlayer, int nbrBonus, int gameTimeSec, ConnectionHandler conn) throws SlickException {
         super("Wartanks");
         shot = new Sound("src/ressources/sound/2.ogg");
         factory = new Factory();
         this.nbrPlayer = nbrPlayer;
         this.nbrBonus = nbrBonus;
         this.gameTimeSec = gameTimeSec;
+        this.conn = conn;
     }
 
     public void setNbPlayer(int n) {
@@ -218,6 +224,7 @@ public class Game extends BasicGame {
         isCollisionWithBonus(delta);
         Input input = container.getInput();
          if (input.isKeyDown(Input.KEY_UP)) {
+             this.player.setDirection(0);
              if(player.getCol()) {
                  System.out.println("coll");
                  this.player.setMoving(false);
@@ -260,6 +267,8 @@ public class Game extends BasicGame {
                  this.player.setMoving(true);
              }
          }
+         
+         conn.addCmd(new Position((int)this.player.getX(), (int)this.player.getY()));
     }
 
     boolean isCollisionBulletEnnemy(Ennemy e, Bullet b, int delta) {
@@ -442,6 +451,7 @@ public class Game extends BasicGame {
                     this.player.setMoving(true);
                     break;
                 case Input.KEY_SPACE: {
+                    conn.addCmd(new Shoot());
                     try {
                         player.shoot();
                     } catch (SlickException ex) {
