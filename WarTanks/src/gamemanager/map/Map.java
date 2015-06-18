@@ -16,7 +16,7 @@ import gamemanager.vehicle.Vehicle;
  * @author Armand
  */
 public class Map {
-	String name;
+	private String name;
 	private int sizeX;
 	private int sizeY;
 	private Cell map[][] = null;

@@ -37,7 +37,6 @@ public class Player {
 	 * 
 	 * @param id
 	 * @param name
-	 * @param color
 	 */
 	public Player(int id, String name) {
 
