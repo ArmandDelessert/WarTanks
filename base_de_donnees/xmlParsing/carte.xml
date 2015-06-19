@@ -1,0 +1,30 @@
+<?xml version = "1.0" encoding="UTF-8" standalone="yes" ?>
+
+<!DOCTYPE carte [
+	<!-- Contenu de la carte -->
+	<!ELEMENT carte (nom, taille, description)>
+		<!ELEMENT nom (#PCDATA)>
+		<!-- Représentation d'une taille -->
+		<!ELEMENT taille EMPTY>
+			<!ATTLIST taille largeur CDATA #REQUIRED>
+			<!ATTLIST taille longeur CDATA #REQUIRED>
+		<!ELEMENT description (#PCDATA)>
+		<!ATTLIST carte id CDATA #REQUIRED>
+		<!ATTLIST carte max CDATA #REQUIRED>
+		<!ATTLIST carte path_file CDATA #REQUIRED>
+		<!ATTLIST carte path_img_file CDATA #REQUIRED>
+
+]>
+
+<carte id="12" max="6" path_file="E\Onedrive\Semestre4_HEIG\GEN\Mini_projet\Wartanks\carte\" path_img_file="E\Onedrive\Semestre4_HEIG\GEN\Mini_projet\Wartanks\image">
+  <nom>
+    Warrior
+  </nom>
+
+  <taille largeur="640" longeur="800"/>
+  
+  <description>
+    Ceci est une carte de test.
+  </description>
+  
+</carte>

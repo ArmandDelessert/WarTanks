@@ -1,0 +1,83 @@
+<?xml version = "1.0" encoding="UTF-8" standalone="yes" ?>
+
+<!DOCTYPE scores [
+	<!-- descriptions des scores -->
+	<!ELEMENT scores (score*)>
+
+	<!-- Contenu d'un score -->
+	<!ELEMENT score (date_partie, nombre_joueurs, joueur*)>
+
+	<!-- Contenu de la date d'une partie-->
+	<!ELEMENT date_partie EMPTY>
+		<!ATTLIST date_partie annee CDATA #REQUIRED>
+		<!ATTLIST date_partie mois CDATA #REQUIRED>
+		<!ATTLIST date_partie jour CDATA #REQUIRED>
+
+	<!-- Le nombre de joueurs d'une partie -->
+	<!ELEMENT nombre_joueurs (#PCDATA)>
+
+	<!-- joueur -->
+	<!ELEMENT joueur (nom, rang, nbr_tanks_detruits, nbr_tanks_perdus)>
+		<!ELEMENT nom (#PCDATA)>
+		<!ELEMENT rang (#PCDATA)>
+		<!ELEMENT nbr_tanks_detruits (#PCDATA)>
+		<!ELEMENT nbr_tanks_perdus (#PCDATA)>
+		<!ATTLIST joueur idPlayer CDATA #REQUIRED>
+]>
+
+<scores>
+	<score>
+		<date_partie annee="2015" mois="9" jour="16" />
+
+		<nombre_joueurs>2</nombre_joueurs>
+		<joueur idPlayer="1">
+			<nom>player1</nom>
+			<rang>1</rang>
+			<nbr_tanks_detruits>5</nbr_tanks_detruits>
+			<nbr_tanks_perdus> 2</nbr_tanks_perdus>
+		</joueur>
+
+		<joueur idPlayer="2">
+			<nom>player2</nom>
+			<rang> 2 </rang>
+			<nbr_tanks_detruits> 3 </nbr_tanks_detruits>
+			<nbr_tanks_perdus> 3 </nbr_tanks_perdus>
+		</joueur>
+	</score>
+	<score>
+		<date_partie annee="2015" mois="9" jour="16" />
+
+		<nombre_joueurs> 2 </nombre_joueurs>
+		<joueur idPlayer="1">
+			<nom>player1</nom>
+			<rang> 1 </rang>
+			<nbr_tanks_detruits> 5 </nbr_tanks_detruits>
+			<nbr_tanks_perdus> 2 </nbr_tanks_perdus>
+		</joueur>
+
+		<joueur idPlayer="2">
+			<nom>player2</nom>
+			<rang> 3 </rang>
+			<nbr_tanks_detruits> 3 </nbr_tanks_detruits>
+			<nbr_tanks_perdus> 3 </nbr_tanks_perdus>
+		</joueur>
+	</score>
+	<score>
+		<date_partie annee="2015" mois="9" jour="16" />
+
+		<nombre_joueurs> 2 </nombre_joueurs>
+		<joueur idPlayer="1">
+			<nom>player1</nom>
+			<rang> 1 </rang>
+			<nbr_tanks_detruits> 5 </nbr_tanks_detruits>
+			<nbr_tanks_perdus> 2 </nbr_tanks_perdus>
+		</joueur>
+
+		<joueur idPlayer="2">
+			<nom>player2</nom>
+			<rang> 4 </rang>
+			<nbr_tanks_detruits> 3 </nbr_tanks_detruits>
+			<nbr_tanks_perdus> 3 </nbr_tanks_perdus>
+		</joueur>
+	</score>
+</scores>
