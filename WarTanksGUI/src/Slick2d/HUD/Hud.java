@@ -34,11 +34,11 @@ public class Hud implements Observer {
     private Image actionbar;
     private Image lifebar;
     private Player p;
-    private LinkedList listBonusImg = new LinkedList();
-    private LinkedList shortCut = new LinkedList();
-    private LinkedList AmountAmmo = new LinkedList();
+    private final LinkedList listBonusImg = new LinkedList();
+    private final LinkedList shortCut = new LinkedList();
+    private final LinkedList AmountAmmo = new LinkedList();
     private LinkedList ListEnnemy = new LinkedList();
-    private MouseOverArea[] areas = new MouseOverArea[4];
+    private final MouseOverArea[] areas = new MouseOverArea[4];
 
     private static final int P_BAR_X = 10;
     private static final int P_BAR_Y = 10;
@@ -51,7 +51,7 @@ public class Hud implements Observer {
 
     private static final int P_BONUS_X = 255;
     private static final int P_BONUS_Y = 525 + 35;
-    GameContainer container;
+    private final GameContainer container;
 
     public Hud(GameContainer container) {
         this.container = container;

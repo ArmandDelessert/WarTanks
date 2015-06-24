@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_wartanksgui" default="compile.module.wartanksgui">
+  <dirname property="module.wartanksgui.basedir" file="${ant.file.module_wartanksgui}"/>
+  
+  <property name="module.jdk.home.wartanksgui" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.wartanksgui" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.wartanksgui" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.wartanksgui" value="-encoding UTF-8 -source 1.6 ${compiler.args}"/>
+  
+  <property name="wartanksgui.output.dir" value="${module.wartanksgui.basedir}/out/production/WarTanksGUI"/>
+  <property name="wartanksgui.testoutput.dir" value="${module.wartanksgui.basedir}/out/test/WarTanksGUI"/>
+  
+  <path id="wartanksgui.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="wartanksgui.module.production.classpath">
+    <path refid="${module.jdk.classpath.wartanksgui}"/>
+    <path refid="library.lib1.classpath"/>
+    <path refid="library.libs.classpath"/>
+    <path refid="library.lib.classpath"/>
+    <path refid="library.jar.classpath"/>
+    <path refid="library.lwjgl.classpath"/>
+    <pathelement location="${slick.output.dir}"/>
+  </path>
+  
+  <path id="wartanksgui.runtime.production.module.classpath">
+    <pathelement location="${wartanksgui.output.dir}"/>
+    <path refid="library.lib1.classpath"/>
+    <path refid="library.libs.classpath"/>
+    <path refid="library.lib.classpath"/>
+    <path refid="library.jar.classpath"/>
+    <path refid="library.lwjgl.classpath"/>
+    <path refid="slick.runtime.production.module.classpath"/>
+  </path>
+  
+  <path id="wartanksgui.module.classpath">
+    <path refid="${module.jdk.classpath.wartanksgui}"/>
+    <pathelement location="${wartanksgui.output.dir}"/>
+    <path refid="library.lib1.classpath"/>
+    <path refid="library.libs.classpath"/>
+    <path refid="library.lib.classpath"/>
+    <path refid="library.jar.classpath"/>
+    <path refid="library.lwjgl.classpath"/>
+    <pathelement location="${slick.testoutput.dir}"/>
+    <pathelement location="${slick.output.dir}"/>
+  </path>
+  
+  <path id="wartanksgui.runtime.module.classpath">
+    <pathelement location="${wartanksgui.testoutput.dir}"/>
+    <pathelement location="${wartanksgui.output.dir}"/>
+    <path refid="library.lib1.classpath"/>
+    <path refid="library.libs.classpath"/>
+    <path refid="library.lib.classpath"/>
+    <path refid="library.jar.classpath"/>
+    <path refid="library.lwjgl.classpath"/>
+    <path refid="slick.runtime.module.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.wartanksgui">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.wartanksgui">
+    <patternset refid="excluded.from.module.wartanksgui"/>
+  </patternset>
+  
+  <path id="wartanksgui.module.sourcepath">
+    <dirset dir="${module.wartanksgui.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.wartanksgui" depends="compile.module.wartanksgui.production,compile.module.wartanksgui.tests" description="Compile module WarTanksGUI"/>
+  
+  <target name="compile.module.wartanksgui.production" depends="register.custom.compilers,compile.module.slick" description="Compile module WarTanksGUI; production classes">
+    <mkdir dir="${wartanksgui.output.dir}"/>
+    <javac2 destdir="${wartanksgui.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.wartanksgui}/javac">
+      <compilerarg line="${compiler.args.wartanksgui}"/>
+      <bootclasspath refid="wartanksgui.module.bootclasspath"/>
+      <classpath refid="wartanksgui.module.production.classpath"/>
+      <src refid="wartanksgui.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.wartanksgui"/>
+    </javac2>
+    
+    <copy todir="${wartanksgui.output.dir}">
+      <fileset dir="${module.wartanksgui.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.wartanksgui.tests" depends="register.custom.compilers,compile.module.wartanksgui.production" description="compile module WarTanksGUI; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.wartanksgui" description="cleanup module">
+    <delete dir="${wartanksgui.output.dir}"/>
+    <delete dir="${wartanksgui.testoutput.dir}"/>
+  </target>
+</project>

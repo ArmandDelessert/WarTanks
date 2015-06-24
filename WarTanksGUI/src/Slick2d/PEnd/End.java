@@ -13,13 +13,13 @@ import org.newdawn.slick.Image;
  * @author Simon
  */
 public class End {
-    protected static final int P_DefeatVictory_X = 300;
-    protected static final int P_DefeatVictory_Y = 100;
-    protected static final int P_PLAY_X = 300;
-    protected static final int P_PLAY_Y = 420;
+    private static final int P_DefeatVictory_X = 300;
+    private static final int P_DefeatVictory_Y = 100;
+    private static final int P_PLAY_X = 300;
+    private static final int P_PLAY_Y = 420;
     
-    protected Image DefeatVictory;
-    protected Image play;
+    Image DefeatVictory;
+    Image play;
     
     public void render(Graphics g) {
         g.resetTransform();

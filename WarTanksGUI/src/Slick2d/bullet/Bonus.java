@@ -24,18 +24,19 @@ import org.newdawn.slick.SlickException;
  */
 public class Bonus {
     
-    int avaliable = -1; //-1 si le bonus est au sol
+    private int avaliable = -1; //-1 si le bonus est au sol
     public String name = "bonus";
     private float x = 200, y = 200;
     private Image bonus;
     private int type = 1;
 
 
-    private final int height = 32;
-    private final int width = 32;
+    private final int height;
+    private final int width;
 
 
-    public Bonus(int type, int x, int y) {
+    public Bonus(Map map, int type, int x, int y) {
+        this.height = this.width = 32;
         this.x = x;
         this.y = y;
         this.type = type;

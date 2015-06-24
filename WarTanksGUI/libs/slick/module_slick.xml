@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_slick" default="compile.module.slick">
+  <dirname property="module.slick.basedir" file="${ant.file.module_slick}"/>
+  
+  <property name="module.jdk.home.slick" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.slick" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.slick" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.slick" value="-encoding UTF-8 -source 1.6 ${compiler.args}"/>
+  
+  <property name="slick.output.dir" value="${module.slick.basedir}/../../out/production/slick"/>
+  <property name="slick.testoutput.dir" value="${module.slick.basedir}/../../out/test/slick"/>
+  
+  <path id="slick.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="slick.module.production.classpath">
+    <path refid="${module.jdk.classpath.slick}"/>
+    <path refid="library.lib1.classpath"/>
+    <path refid="library.libs.classpath"/>
+    <path refid="library.lib.classpath"/>
+    <path refid="library.jar.classpath"/>
+    <path refid="library.lwjgl.classpath"/>
+  </path>
+  
+  <path id="slick.runtime.production.module.classpath">
+    <pathelement location="${slick.output.dir}"/>
+    <path refid="library.lib1.classpath"/>
+    <path refid="library.libs.classpath"/>
+    <path refid="library.lib.classpath"/>
+    <path refid="library.jar.classpath"/>
+    <path refid="library.lwjgl.classpath"/>
+  </path>
+  
+  <path id="slick.module.classpath">
+    <path refid="${module.jdk.classpath.slick}"/>
+    <pathelement location="${slick.output.dir}"/>
+    <path refid="library.lib1.classpath"/>
+    <path refid="library.libs.classpath"/>
+    <path refid="library.lib.classpath"/>
+    <path refid="library.jar.classpath"/>
+    <path refid="library.lwjgl.classpath"/>
+  </path>
+  
+  <path id="slick.runtime.module.classpath">
+    <pathelement location="${slick.testoutput.dir}"/>
+    <pathelement location="${slick.output.dir}"/>
+    <path refid="library.lib1.classpath"/>
+    <path refid="library.libs.classpath"/>
+    <path refid="library.lib.classpath"/>
+    <path refid="library.jar.classpath"/>
+    <path refid="library.lwjgl.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.slick">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.slick">
+    <patternset refid="excluded.from.module.slick"/>
+  </patternset>
+  
+  <path id="slick.module.sourcepath">
+    <dirset dir="${module.slick.basedir}">
+      <include name="src"/>
+      <include name="tools"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.slick" depends="compile.module.slick.production,compile.module.slick.tests" description="Compile module slick"/>
+  
+  <target name="compile.module.slick.production" depends="register.custom.compilers" description="Compile module slick; production classes">
+    <mkdir dir="${slick.output.dir}"/>
+    <javac2 destdir="${slick.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.slick}/javac">
+      <compilerarg line="${compiler.args.slick}"/>
+      <bootclasspath refid="slick.module.bootclasspath"/>
+      <classpath refid="slick.module.production.classpath"/>
+      <src refid="slick.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.slick"/>
+    </javac2>
+    
+    <copy todir="${slick.output.dir}">
+      <fileset dir="${module.slick.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.slick.basedir}/tools">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.slick.tests" depends="register.custom.compilers,compile.module.slick.production" description="compile module slick; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.slick" description="cleanup module">
+    <delete dir="${slick.output.dir}"/>
+    <delete dir="${slick.testoutput.dir}"/>
+  </target>
+</project>

@@ -21,9 +21,9 @@ import org.newdawn.slick.SlickException;
 public class Laser extends Bullet {
 
     private boolean strick = false;
-    boolean finished = false;
+    private boolean finished = false;
 
-    Player launcher;
+    private Player launcher;
 
     public Laser(Map map, int x, int y, int direction, Player p) throws SlickException {
         super(map, x, y, direction);
@@ -43,7 +43,7 @@ public class Laser extends Bullet {
 
     @Override
     public void render(final Graphics g) throws SlickException {
-        if (finished == false) {
+        if (!finished) {
             g.setColor(new Color(0, 0, 0, .5f));
             if (launcher.getDirection() == UP || launcher.getDirection() == DOWN) {
                 height = 200;

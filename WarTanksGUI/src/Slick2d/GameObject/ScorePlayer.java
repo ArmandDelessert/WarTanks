@@ -14,7 +14,7 @@ import Slick2d.Fightable.IFightable;
 public class ScorePlayer {
     int kill;
     int death;
-    IFightable player;
+    private final IFightable player;
     
     public ScorePlayer(IFightable player)
     {

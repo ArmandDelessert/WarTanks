@@ -19,8 +19,8 @@ import org.newdawn.slick.SpriteSheet;
  */
 public class Ennemy implements IFightable{
 
-    int playerID = 1; //sera attribuer par le serveur
-    String name;
+    private int playerID = 1; //sera attribuer par le serveur
+    private final String name;
     private float x = 350, y = 350;
     private Explosion e;
     private int HP;
@@ -28,18 +28,18 @@ public class Ennemy implements IFightable{
     private float speed;
     private int direction = 0;
     private boolean moving = false;
-    private Animation[] animations = new Animation[8];
+    private final Animation[] animations = new Animation[8];
     private Animation[] diedAnimation = new Animation[32];
 
-    private Map map;
+    private final Map map;
 
     private final int height = 32;
     private final int width = 32;
 
-    public static final int UP = 0;
-    public static final int LEFT = 1;
-    public static final int DOWN = 2;
-    public static final int RIGHT = 3;
+    private static final int UP = 0;
+    private static final int LEFT = 1;
+    private static final int DOWN = 2;
+    private static final int RIGHT = 3;
 
     public Ennemy(Map map, int x, int y, int randDirection, int id) {
         this.x = x;

@@ -32,7 +32,7 @@ import org.newdawn.slick.SpriteSheet;
 public class Player extends Observable implements IFightable{
 
     int playerID = 1; //sera attribuer par le serveur
-    String name;
+    private final String name;
     private float x = 300, y = 300;
     private int HP;
     private int score;
@@ -40,22 +40,23 @@ public class Player extends Observable implements IFightable{
     private float speed;
     private int direction;
     private boolean moving = false;
-    boolean collision;
-    private LinkedList listBonus = new LinkedList();
-    private LinkedList listBullet = new LinkedList();
-    private LinkedList listEnnemy = new LinkedList();
+    private boolean collision;
+    private final LinkedList<Bonus> listBonus = new LinkedList();
+    private final LinkedList<Bullet> listBullet = new LinkedList();
+    private LinkedList<Ennemy> listEnnemy = new LinkedList();
 
-    private Animation[] animations = new Animation[8];
+    private final Animation[] animations = new Animation[8];
 
-    private Map map;
+    private final Map map;
 
     private final int height = 32;
     private final int width = 32;
 
-    public static final int UP = 0;
-    public static final int LEFT = 1;
-    public static final int DOWN = 2;
-    public static final int RIGHT = 3;
+    private static final int UP = 0;
+    private static final int LEFT = 1;
+    private static final int DOWN = 2;
+    private static final int RIGHT = 3;
+    int olddir = 0;
 
     public Player(Map map, int x, int y, int randDirection, int id, Observer o) {
         this.map = map;
@@ -63,6 +64,7 @@ public class Player extends Observable implements IFightable{
         this.x = x;
         this.y = y;
         this.direction = 1;
+        olddir = direction;
         score = 0;
         HP = 3;
         speed = .1f;
@@ -119,7 +121,8 @@ public class Player extends Observable implements IFightable{
             if (this.moving) {
                 float futurX = getFuturX(delta);
                 float futurY = getFuturY(delta);
-                collision = this.map.isCollision(futurX, futurY, this.width, this.height, this.direction);
+                    collision = this.map.isCollision(futurX, futurY, this.width, this.height, this.direction);
+
                 if (collision) {
                     this.moving = false;
                 } else {
@@ -142,8 +145,8 @@ public class Player extends Observable implements IFightable{
                 }
             }
             for (int i = 0; i < listBullet.size(); i++) {
-                ((Bullet) listBullet.get(i)).update(delta);
-                if (((Bullet) listBullet.get(i)).getCollison()) {
+                (listBullet.get(i)).update(delta);
+                if ((listBullet.get(i)).getCollison()) {
                     listBullet.remove(i);
                 }
             }
@@ -249,22 +252,22 @@ public class Player extends Observable implements IFightable{
         this.listEnnemy = ennemyList;
     }
 
-    public LinkedList getlistBullet() {
+    public LinkedList<Bullet> getlistBullet() {
         return listBullet;
     }
 
     public Bonus getBonus(int index) {
         if (index < listBonus.size()) {
-            return (Bonus) listBonus.get(index);
+            return listBonus.get(index);
         }
         return null;
     }
 
-    public LinkedList getListBonus() {
+    public LinkedList<Bonus> getListBonus() {
         return listBonus;
     }
 
-    public void lauchSpell(int type) throws SlickException {
+    public void launcheSpell(int type) throws SlickException {
         switch (type) {
             case 1:
                 playerLauncheSpeedUp();
@@ -279,9 +282,11 @@ public class Player extends Observable implements IFightable{
                 playerLauncheLaser();
                 break;
             case 8:
-                playerlauncheALPHASTRIK();
+                playerLauncheALPHASTRIK();
             case 9:
                 playerLauncheHeal();
+            case 10:
+                playerLauncheRandomAttack();
                 break;
 
         }
@@ -331,7 +336,7 @@ public class Player extends Observable implements IFightable{
         listBullet.add(new Bullet(map, (int) x, (int) y, 3));
     }
 
-    void playerlauncheALPHASTRIK() {
+    void playerLauncheALPHASTRIK() {
         try {
             if (direction == UP) {
                 listBullet.add(new AlphaStrick(map, (int) x, (int) y - 160, direction));
@@ -350,8 +355,20 @@ public class Player extends Observable implements IFightable{
             Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    void playerLauncheRandomAttack()
+    {
+        int randomNum = 0 + (int)(Math.random()*listEnnemy.size()+1);
+        System.out.println(randomNum);
+        if(randomNum == 10)
+            this.HP--;
+        else
+        {
+         this.listEnnemy.get(randomNum).setHp();
+        }
 
-    LinkedList listEnnemy() {
+    }
+
+    LinkedList<Ennemy> listEnnemy() {
         return listEnnemy;
     }
     void setScore(int s)

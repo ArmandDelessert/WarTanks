@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="32" tileheight="32" nextobjectid="6">
+ <tileset firstgid="1" name="brackish" tilewidth="32" tileheight="32">
+  <image source="../../../../../../../../WarTanksGUI/src/ressources/map/tuiles/LPC Base Assets/tiles/brackish.png" width="96" height="192"/>
+ </tileset>
+ <tileset firstgid="19" name="grass" tilewidth="32" tileheight="32">
+  <image source="../../../../../../../../WarTanksGUI/src/ressources/map/tuiles/LPC Base Assets/tiles/grass.png" width="96" height="192"/>
+ </tileset>
+ <tileset firstgid="37" name="treetop" tilewidth="32" tileheight="32">
+  <image source="../../../../../../../../WarTanksGUI/src/ressources/map/tuiles/LPC Base Assets/tiles/treetop.png" width="192" height="224"/>
+ </tileset>
+ <tileset firstgid="79" name="hyptosis_til-art-batch-2" tilewidth="32" tileheight="32">
+  <image source="../../../../../../../../WarTanksGUI/src/ressources/map/tuiles/hyptosis_til-art-batch-2.png" width="960" height="960"/>
+ </tileset>
+ <tileset firstgid="979" name="hyptosis_tile-art-batch-1" tilewidth="32" tileheight="32">
+  <image source="../../../../../../../../WarTanksGUI/src/ressources/map/tuiles/hyptosis_tile-art-batch-1.png" width="960" height="960"/>
+ </tileset>
+ <layer name="Calque de Tile 1" width="32" height="32">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3NwQ0AEBBFwRVVoxAUIqrZXpDo4Yu8w5zHg5kDwCNSNMtbiZq/7rcJ/3HvLvqPc0/hr7wBAAB+tgBEGWXOABAAAA==
+  </data>
+ </layer>
+ <layer name="Calque 2" width="32" height="32">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3NQQ5AMBRF0Zd2r9gCptgCptUtlO15iekf/wrvJHd8AZF36CMwGI3R57/ysxntTv/Cz2l0Of3l0QSgZV2o85/4ndny03/i92C50l9ERETky278fWACABAAAA==
+  </data>
+ </layer>
+ <layer name="Calque 3" width="32" height="32">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3SwQmAMAyF4VCDc6iDqOs5SNo5PIs7mYtYS3sQmuZgfnjgqZ8WASyrTVuvZ+8VbYcAHQ+x3plfGtgdeZOSP7O78FYl/y+dTtc/lP00j++R0P9HkVHySdgPmfMpcnPvVytf8KXvPfVz90+C353z42dq7FPi3gvCfsBnPnmP0MC3LMuy5LsA34PLmgAQAAA=
+  </data>
+ </layer>
+ <layer name="Calque 4" width="32" height="32">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC2NgGAWUgC42BobjWHA3EPew0d7+FWh2yLAg2KsGwH5k0MGGiulpPygcjrAh8EEgXk4DN+DzP3L4Lx21f9R+Gth/DEf5A8In6GA/sWCk2z8KRsEoGAWjYBSMglEwWAAAfxEj0wAQAAA=
+  </data>
+ </layer>
+ <layer name="Calque 5" width="32" height="32">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3OMREAAAgEoJ/sn8OUjibwXCABCXCh63sAAACwBopK714AEAAA
+  </data>
+ </layer>
+</map>

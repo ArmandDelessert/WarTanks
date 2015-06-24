@@ -34,7 +34,7 @@ public class Mine extends Bullet {
     }
 
     @Override
-    public void init() throws SlickException {
+    void init() throws SlickException {
         bullet = new Image("src/ressources/bullet/2.png");
     }
 

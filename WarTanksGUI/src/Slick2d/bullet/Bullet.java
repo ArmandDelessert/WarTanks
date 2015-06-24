@@ -19,22 +19,23 @@ public class Bullet {
 
     //nombre de fois que le spell est disponible
     protected int avaliable = 0;
-    protected float x = 0, y = 0;
-    protected float speed;
-    protected int direction = 0;
-    protected boolean moving = true;
-    protected Image bullet;
-    protected boolean collision = false;
+    float x = 0;
+    float y = 0;
+    private final float speed;
+    int direction = 0;
+    private boolean moving = true;
+    Image bullet;
+    boolean collision = false;
 
-    protected Map map;
+    Map map;
 
-    protected int height = 16;
-    protected int width = 6;
+    int height = 16;
+    int width = 6;
 
-    protected static final int UP = 0;
-    protected static final int LEFT = 1;
-    protected static final int DOWN = 2;
-    protected static final int RIGHT = 3;
+    static final int UP = 0;
+    static final int LEFT = 1;
+    static final int DOWN = 2;
+    static final int RIGHT = 3;
 
     public Bullet(Map map, int x, int y, int direction) throws SlickException {
         this.map = map;
@@ -45,7 +46,7 @@ public class Bullet {
         this.init();
     }
 
-    public void init() throws SlickException {
+    void init() throws SlickException {
         bullet = new Image("src/ressources/bullet/1.png");
         if (direction == 0) {
             bullet.rotate(-90);
@@ -97,7 +98,7 @@ public class Bullet {
         }
     }
 
-    public float getFuturX(int delta) {
+    float getFuturX(int delta) {
         float futurX = this.x;
         switch (this.direction) {
             case 1:
@@ -110,7 +111,7 @@ public class Bullet {
         return futurX;
     }
 
-    public float getFuturY(int delta) {
+    float getFuturY(int delta) {
         float futurY = this.y;
         switch (this.direction) {
             case UP:

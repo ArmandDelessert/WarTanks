@@ -42,7 +42,7 @@ public class AlphaStrick extends Bullet {
     }
 
     @Override
-    public void init() throws SlickException {
+    void init() throws SlickException {
         
         bullet = new Image("src/ressources/bullet/glyphe64.png");
     }

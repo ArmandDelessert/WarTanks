@@ -15,6 +15,9 @@
  <tileset firstgid="979" name="hyptosis_tile-art-batch-1" tilewidth="32" tileheight="32">
   <image source="../../../../../../../../WarTanksGUI/src/ressources/map/tuiles/hyptosis_tile-art-batch-1.png" width="960" height="960"/>
  </tileset>
+ <tileset firstgid="1879" name="tuto-slick2d-037-tuile-logic" tilewidth="32" tileheight="32" margin="1">
+  <image source="../tuiles/tuto-slick2d-037-tuile-logic.png" trans="008a76" width="160" height="160"/>
+ </tileset>
  <layer name="Calque de Tile 1" width="32" height="32">
   <data encoding="base64" compression="gzip">
    H4sIAAAAAAAAC+3NwQ0AEBBFwRVVoxAUIqrZXpDo4Yu8w5zHg5kDwCNSNMtbiZq/7rcJ/3HvLvqPc0/hr7wBAAB+tgBEGWXOABAAAA==
@@ -35,9 +38,9 @@
    H4sIAAAAAAAAC2NgGAWUgC42BobjWHA3EPew0d7+FWh2yLAg2KsGwH5k0MGGiulpPygcjrAh8EEgXk4DN+DzP3L4Lx21f9R+Gth/DEf5A8In6GA/sWCk2z8KRsEoGAWjYBSMglEwWAAAfxEj0wAQAAA=
   </data>
  </layer>
- <layer name="Calque 5" width="32" height="32">
+ <layer name="logic" width="32" height="32">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+3OMREAAAgEoJ/sn8OUjibwXCABCXCh63sAAACwBopK714AEAAA
+   H4sIAAAAAAAAC2NgGAWUgHB2/Jge9pMjRw/76QEGs/0DHf6j9o8M+wey/BkFo2AUjIJRMApGwSgYBUMLAAA8/IumABAAAA==
   </data>
  </layer>
 </map>

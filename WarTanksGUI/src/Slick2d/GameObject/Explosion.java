@@ -21,14 +21,14 @@ public class Explosion {
 
     int playerID = 1; //sera attribuer par le serveur
     private float x = 300, y = 300;
-    Sound shot;
-    boolean finished = false;
+    private Sound shot;
+    private boolean finished = false;
 
-    private Animation[] animations = new Animation[4];
+    private final Animation[] animations = new Animation[4];
 
 
-    private final int height = 64;
-    private final int width = 64;
+    private final int height;
+    private final int width;
 
     public static final int UP = 0;
     public static final int LEFT = 1;
@@ -38,6 +38,7 @@ public class Explosion {
     public Explosion(int x, int y) throws SlickException {
         this.x = x;
         this.y = y;
+        this.height = this.width = 64;
         shot = new Sound("src/ressources/sound/DeathFlash.ogg");
     }
 
@@ -60,7 +61,7 @@ public class Explosion {
     }
 
     public synchronized void render(Graphics g) throws SlickException {
-        if (finished == false) {
+        if (!finished) {
             g.drawAnimation(animations[0], x, y);
         }
         TimerTask task;
